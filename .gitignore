@@ -36,3 +36,4 @@ pip-log.txt
 *.log
 *.pot
 *.pyc
+/connbackend/models.pyc

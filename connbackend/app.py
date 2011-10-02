@@ -9,7 +9,7 @@ from google.appengine.ext.webapp import util
 from google.appengine.api import users
 
 
-from models import User
+from models import Menu, MenuItem, UIProfile, Restaurant
 from constants import *
 
 
