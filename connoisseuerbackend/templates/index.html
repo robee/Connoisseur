@@ -1,63 +1,258 @@
+<!DOCTYPE html>
 <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Connoisseur</title>
 
-	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-	<!-- Custom Javascript -->
-	<script language="javascript" src="js/customJS.js"></script>
-	<head>
-		
-		 <!-- Blueprint CSS -->
-    	<link rel="stylesheet" href="/css/blueprint/screen.css" type="text/css" media="screen, projection">
-    	<link rel="stylesheet" href="/css/blueprint/print.css" type="text/css" media="print">
-		<link rel="stylesheet" href="/css/blueprint/plugins/fancy-type/screen.css" type="text/css" media="screen, projection" /> 
-		<link rel="stylesheet" href="/css/customCSS.css" type="text/css" media="screen, projection" /> 
-    	<!--[if lt IE 8]><link rel="stylesheet" href="/client/static/blueprint/css/ie.css" type="text/css" media="screen, projection"><![endif]-->
+<script type="application/javascript" src="iscroll.js"></script>
 
-    <title>Seven Cubed Template App</title>
-	</head>
+<script type="text/javascript">
+
+var scrollContent,
+	scrollNav;
+
+function loaded() {
+	scrollContent = new iScroll('contentWrapper');
+	scrollNav = new iScroll('navWrapper');
+}
+
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+document.addEventListener('DOMContentLoaded', loaded, false);
+
+</script>
+
+<style type="text/css" media="all">
+html,body {
+	height:100%;
+}
+
+body,ul,li,header,nav,aside,section,article,p {
+	padding:0;
+	margin:0;
+	border:0;
+}
+
+body {
+	font-size:12px;
+	-webkit-user-select:none;
+    -webkit-text-size-adjust:none;
+	font-family:helvetica;
+	background:#424242;
+}
+
+#header {
+	position:absolute; z-index:2;
+	top:0; left:0;
+	width:100%;
+	height:45px;
+	line-height:45px;
+	background-color:#d51875;
+	background-image:-webkit-gradient(linear, 0 0, 0 100%, color-stop(0, #fe96c9), color-stop(0.05, #d51875), color-stop(1, #7b0a2e));
+	background-image:-moz-linear-gradient(top, #fe96c9, #d51875 5%, #7b0a2e);
+	background-image:-o-linear-gradient(top, #fe96c9, #d51875 5%, #7b0a2e);
+	padding:0;
+	color:#eee;
+	font-size:20px;
+	text-align:center;
+}
+
+#header a {
+	color:#f3f3f3;
+	text-decoration:none;
+	font-weight:bold;
+	text-shadow:0 -1px 0 rgba(0,0,0,0.5);
+}
+
+
+p {
+	margin-bottom:1.5em;
+	line-height:150%;
+}
+
+header,nav,aside,section,article {
+	display:block;
+}
+
+#page {
+	width:100%; height:100%;
+	position:relative;
+	display:-webkit-box;
+	display:-moz-box;
+	display:-o-box;
+	display:box;
 	
-	<body>
-
-    <div class="container">
+	-webkit-box-orient:horizontal;
+	-moz-box-orient:horizontal;
+	-o-box-orient:horizontal;
+	box-orient:horizontal;
 	
-		<div id="header" class="prepend-top span-24 last">
-	 		<h2>SevenCubed Template App</h2>
-		</div> <!--header -->
-		
-		<div id="login" class="span-6 prepend-18 last">
-			{{LOGIN}}
-		</div>
-		
-		<!-- For Use With Horizontal Navigation-->
-		<div id="navHorizontal" class="span-24 last">
-			
-			<ul>
-			    <li>
+	background:#424242;
+}
+
+#sidebar {
+	width:150px;
+	margin-right:1px;
+}
+
+#content {
+	-webkit-box-flex:1;
+	-moz-box-flex:1;
+	-o-box-flex:1;
+	box-flex:1;
+}
+
+#sidebar, #content {
+	position:relative;
+	height:100%;
+}
+
+header {
+	height:43px; line-height:43px;
+	border-bottom:1px solid #838a9a;
+	background-color:#424242;
+	background-image:-webkit-gradient(linear, 0 0, 0 100, from(#f4f5f7), to(#999da9));
+	background-image:-moz-linear-gradient(top, #f4f5f7, #999da9);
+	background-image:-o-linear-gradient(top, #f4f5f7, #999da9);
+	
+	color:#717880;
+	font-size:18px; font-weight:bold;
+	text-align:center;
+	text-shadow:0 1px 0 #fff;
+	-webkit-border-top-left-radius:4px;
+	-moz-border-top-left-radius:4px;
+	-o-border-top-left-radius:4px;
+	border-top-left-radius:4px;
+	
+	-webkit-border-top-right-radius:4px;
+	-moz-border-top-right-radius:4px;
+	-o-border-top-right-radius:4px;
+	border-top-right-radius:4px;
+}
+
+#navScroller > li {
+	padding:0 10px;
+	border-bottom:1px solid #ccc;
+	height:40px; line-height:40px;
+}
+
+#contentScroller {
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	box-sizing:border-box;
+	padding:20px;
+}
+
+nav, article {
+	position:absolute;
+	top:44px; bottom:0; left:0; right:0;
+	font-size:15px;
+	background:#fff;
+	
+}
+
+.menu{
+    width: 100%;
+    background-color: #331000; 
+    position:absolute; z-index:2;
+	top:0; 
+	left:0;
+	width:100%;
+	height:45px;
+	line-height:45px;
+	padding:0;
+	color:#eee;
+	font-size:20px;
+	text-align:center;
+    
+    }
+
+.menu ul{
+    margin: 0; padding: 0;
+    float: left;}
+ 
+.menu ul li{
+	float: left;
+    display: inline;}
+ 
+.menu ul li a{
+    float: left; text-decoration: none;
+    color: white;
+    padding-left: 11px;
+    padding-right: 11px;
+    background-color: #331000; }
+ 
+.menu ul li a:visited{
+    color: white;}
+ 
+.menu ul li a:hover, .menu ul li .current{
+    color: #fff;
+    background-color:#0b75b2;}
+
+#item{
+	text-align: center;
+		font-weight: bold;
+}
+
+#description{
+	font-style: italic;
+}
+
+#price{
+	text-align: center;
+}
+
+</style>
+</head>
+<body>
+
+<div id="page">
+<div id="header">
+	
+	<div class="menu">
+	<ul>
+	<li style="margin:0 10px 0"><img height="44px" src="logo.png"/></li>
+	<li><a href="#">Starters</a></li>
+	<li><a href="#">Entrees</a></li>
+	<li><a href="#">Desert</a></li>
+	<li><a href="#">Wine List</a></li>
+	</ul>
+	<br style="clear:left"/>
+	</div>
+
+</div>
+
+	<div id="sidebar">
+		<nav id="navWrapper">
+			<ul id="navScroller">
+				<li>Lamb</li>
+				<li>Pasta</li>
+				<li>Steak</li>
+				<li>Salmon</li>
+				<li>Tilapia</li>
+				<li>Chicken</li>
+				<li>Salad</li>
 			</ul>
-			
-		</div>
-		
-	    <div id="content" class="span-24 last">
-			{{CONTENT}}
-		</div> 
+		</nav>
+	</div>
 
-		
-		<!-- For Use With Vertical Navigation-->
-		<!--
-		<div id="navVertical" class="span-8">
-			
-		</div>
-		
-	    <div id="body" class="span-16 last">
-			{{BODY}}
-		</div> 
-		-->
-		
-		<div id="footer" class="prepend-top span-24 last">
-			
-			<p> This Should be Fun </p>
-			
-		</div> 
-		
-    </div>
-  </body>
+	<div id="content">
+	
+		<article id="contentWrapper">
+			<div id="contentScroller">
+			<img src="fish.jpg" />
+				<p id="item">Mediterranean Grilled Tilapia</p>
+				<p id="description">Lightly seasoned grilled tilapia served with roasted asparagus and tomatoes</p>
+				</br></br>
+				<p id="price">24</p>
+			</div>
+		</article>
+	</div>
+</div>
+
+</body>
 </html>
