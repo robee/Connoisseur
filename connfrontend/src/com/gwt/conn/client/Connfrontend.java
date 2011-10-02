@@ -39,9 +39,9 @@ public class Connfrontend implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		final Button sendButton = new Button("Send");
+		final Button sendButton = new Button("Submit");
 		final TextBox nameField = new TextBox();
-		nameField.setText("GWT User");
+		nameField.setText("menu/restaurant id");
 		final Label errorLabel = new Label();
 
 		// We can add style names to widgets
