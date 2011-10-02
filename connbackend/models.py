@@ -7,18 +7,21 @@ from google.appengine.ext import db
 from google.appengine.api import users
 
 
-class User(db.Model):
-    google_user = db.UserProperty()
-    firstName = db.StringProperty()
-    lastName = db.StringProperty()
-    friends = db.ListProperty(users.User, indexed=True)
+class Restaurant(db.Model):
+    restaurant_id = db.StringProperty(required=True)
+    name = db.StringProperty(required=True)
+    menu = db.ReferenceProperty(Menu)
+    schedule = db.StringProperty()
 
     @staticmethod
-    def get_by_google_user(g_user):
-        return User.all().filter('google_user = ', g_user).get()
+    def get_restaurant_by_id(r_id):
+        return Restaurant.all().filter('restaurant_id = ', r_id).get()
         
+    @staticmethod
+    def save_restaurant(name, menu, schedule=""):
+        pass
     
-class SomeEntity(db.Model):
+class Menu(db.Model):
     name = db.StringProperty(required=True)
     user = db.ReferenceProperty(User)
     tags = db.ListProperty(db.Category)

@@ -5,13 +5,13 @@ api_version: 1
 
 handlers:
 
-- url: /css
+- url: /static/css
   static_dir: static/css
   
-- url: /imgs
-  static_dir: static/imgs
+- url: /static/img
+  static_dir: static/img
   
-- url: /js
+- url: /static/js
   static_dir: static/js
   
 - url: .*
