@@ -31,31 +31,14 @@ class MainHandler(webapp.RequestHandler):
            
         }
        
-        self.response.out.write(RenderFullPage('index.html', content_template_values))
-
-
-
-# Gets
-class GetMethod(webapp.RequestHandler):
-    def get(self):
-        return 0
-
-
-
-# Posts
-class PostMethod(webapp.RequestHandler):
-    def post(self):
-        return 0
-
-
-        
+        self.response.out.write(template.render('templates/index.html', content_template_values))
 
 
 
 
-appRoute = webapp.WSGIApplication( [('/page1', PageHandler1),
-										('/page2', PageHandler2),
-										('/save', SaveUser),
+
+
+appRoute = webapp.WSGIApplication( [
 										('/', MainHandler)
 										], debug=True)
 										

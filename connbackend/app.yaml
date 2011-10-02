@@ -1,4 +1,4 @@
-application: conoisseuerbackend
+application: connoisseurmenu
 version: 1
 runtime: python
 api_version: 1
@@ -15,6 +15,6 @@ handlers:
   static_dir: static/js
   
 - url: .*
-  script: cubed.py
+  script: app.py
 
 
