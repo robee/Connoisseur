@@ -9,15 +9,14 @@ from google.appengine.ext import db
 class Restaurant(db.Model):
     restaurant_id = db.StringProperty(required=True)
     name = db.StringProperty(required=True)
-    schedule = db.StringProperty()
 
     @staticmethod
     def get_by_id(r_id):
         return Restaurant.all().filter('restaurant_id = ', r_id).get()
         
     @staticmethod
-    def save(name_p, menu_p=None, schedule_p="{}"):
-        rest = Restaurant(restaurant_id = uuid.uuid4().hex[:16], name=name_p, menus = menu_p, schedule = schedule_p)
+    def save(name_p, menu_p=None):
+        rest = Restaurant(restaurant_id = uuid.uuid4().hex[:16], name=name_p, menus = menu_p)
         rest.put()
     
 class Menu(db.Model):

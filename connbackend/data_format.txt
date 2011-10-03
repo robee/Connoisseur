@@ -1,5 +1,8 @@
 {
      "menu_id": "09jv903rjv",
+     "restaurant_id":"34534f34f",
+     "restaurant_name":"NAME",
+     "logo_url": "http://i.imgur.com/eCcSx.jpg",
      "name": "Full Menu",
      "template": "classy",
      "ui_profile":
@@ -9,6 +12,7 @@
      },
      "menuitems":
      [
+         "dinner": 
          {
            "menuitem_id": "soiv303g",
            "name": "Pizza",
@@ -16,6 +20,8 @@
            "image": "http://i.imgur.com/eCcSx.jpg",
            "description":"Delicious pizza ice cream"
          },
+         
+         "appetizer": 
          {
             "menuitem_id": "3ivmn3rio",
             "name": "Burger",

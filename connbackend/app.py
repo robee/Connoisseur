@@ -6,8 +6,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp import util
-from google.appengine.api import users
-
+from django.utils import simplejson as json
 
 from models import Menu, MenuItem, UIProfile, Restaurant
 from constants import *
@@ -74,7 +73,7 @@ class UpdateMenu(webapp.RequestHandler):
         self.response.out.write(template.render('templates/index.html', content_template_values))
 # Home Page Handler
 class CreateMenu(webapp.RequestHandler):
-    def get(self):
+    def post(self):
 
         content_template_values = {
 
@@ -84,7 +83,7 @@ class CreateMenu(webapp.RequestHandler):
 
 # Home Page Handler
 class DeleteMenu(webapp.RequestHandler):
-    def get(self):
+    def post(self):
 
         content_template_values = {
 
@@ -95,7 +94,7 @@ class DeleteMenu(webapp.RequestHandler):
 
 # Home Page Handler
 class UpdateRestaurant(webapp.RequestHandler):
-    def get(self):
+    def post(self):
 
         content_template_values = {
 
@@ -104,7 +103,7 @@ class UpdateRestaurant(webapp.RequestHandler):
         self.response.out.write(template.render('templates/index.html', content_template_values))
 # Home Page Handler
 class CreateRestaurant(webapp.RequestHandler):
-    def get(self):
+    def post(self):
 
         content_template_values = {
 
@@ -123,6 +122,7 @@ appRoute = webapp.WSGIApplication( [    ('/restaurant/create',  CreateRestaurant
 										('/menu/create',        CreateMenu),
 										('/menu/update',        UpdateMenu),
 										('/menu/delete',        DeleteMenu),
+										('/menu/',              Menu),
 										('/', MainHandler)
 										], debug=True)
 										
