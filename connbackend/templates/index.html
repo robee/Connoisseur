@@ -8,16 +8,30 @@
 <title>Connoisseur</title>
 
 <script type="application/javascript" src="../static/js/iscroll.js"></script>
+<script type="text/javascript" src="../static/js/jquery-1.6.4.min.js"></script>
 
 <script type="text/javascript">
 
 var scrollContent,
-	scrollNav;
+	scrollNav, myScroll;
 
 function loaded() {
-	scrollContent = new iScroll('contentWrapper');
+
+	 $("#scroller li").css("width",(document.width - 150) + "px");
+	 $("#wrapper").css("width",(document.width - 150) + "px");
 	scrollNav = new iScroll('navWrapper');
+	
+	myScroll = new iScroll('wrapper', {
+	snap: true,
+	momentum: false,
+	hScrollbar: false,
+	vScrollbar: false });
+
+	
+
 }
+
+
 
 document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 
@@ -133,6 +147,55 @@ header {
 	border-top-right-radius:4px;
 }
 
+#wrapper {
+	
+	height:90%;
+	margin-top: 60px;
+	margin-left: 10px;
+	float:left;
+	position:relative;	/* On older OS versions "position" and "z-index" must be defined, */
+	z-index:1;			/* it seems that recent webkit is less picky and works anyway. */
+	overflow:hidden;
+
+	background:#aaa;
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	-o-border-radius:10px;
+	border-radius:10px;
+	background:#e3e3e3;
+}
+
+#scroller {
+	width:21000px;
+	height:100%;
+	float:left;
+	padding:0;
+}
+
+#scroller ul {
+	list-style:none;
+	display:block;
+	float:left;
+	width:100%;
+	height:100%;
+	padding:0;
+	margin:0;
+	text-align:left;
+}
+
+#scroller li {
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	box-sizing:border-box;
+	display:block; float:left;
+	width:300px; height:160px;
+	text-align:center;
+	font-family:georgia;
+	font-size:18px;
+	line-height:140%;
+}
+
 #navScroller > li {
 	padding:0 10px;
 	border-bottom:1px solid #ccc;
@@ -170,6 +233,10 @@ nav, article {
 	text-align:center;
     
     }
+#itemPage {
+	padding: 50px;
+	width: 550px;
+}
 
 .menu ul{
     margin: 0; padding: 0;
@@ -206,29 +273,40 @@ nav, article {
 	text-align: center;
 }
 
+
+
+
 </style>
 </head>
 <body>
 
 <div id="page">
-<div id="header">
+	<div id="header">
+		
+		<div class="menu">
+		<ul>
+		<li style="margin:0 10px 0"><img height="44px" src="../static/img/logo.png"/></li>
+		<li><a href="javascript:scrollNav.scrollToElement('#starters', 1000)">Starters</a></li>
+		<li><a href="javascript:scrollNav.scrollToElement('#entrees', 1000)">Entrees</a></li>
+		<li><a href="javascript:scrollNav.scrollToElement('#wine', 1000)">Wine</a></li>
+		<li><a href="javascript:scrollNav.scrollToElement('#dessert', 1000)">Dessert</a></li>
+		</ul>
+		<br style="clear:left"/>
+		</div>
 	
-	<div class="menu">
-	<ul>
-	<li style="margin:0 10px 0"><img height="44px" src="../static/img/logo.png"/></li>
-	<li><a href="#">Starters</a></li>
-	<li><a href="#">Entrees</a></li>
-	<li><a href="#">Desert</a></li>
-	<li><a href="#">Wine List</a></li>
-	</ul>
-	<br style="clear:left"/>
 	</div>
-
-</div>
 
 	<div id="sidebar">
 		<nav id="navWrapper">
 			<ul id="navScroller">
+				<li id="starters"><b>Starters</b></li>
+				<li>Bread</li>
+				<li>Salad</li>
+				<li>Soup</li>
+				<li>Calimari</li>
+				<li>Shrimp</li>
+				<li></li>
+				<li id="entrees"><b>Entrees</b></li>
 				<li>Lamb</li>
 				<li>Pasta</li>
 				<li>Steak</li>
@@ -236,13 +314,72 @@ nav, article {
 				<li>Tilapia</li>
 				<li>Chicken</li>
 				<li>Salad</li>
+				<li>Pizza</li>
+				<li>Veal</li>
+				<li>Pork</li>
+				<li>Ham</li>
+				<li></li>
+				<li id="wine"><b>Wine</b></li>
+				<li>White</li>
+				<li>Red</li>
+				<li></li>
+				<li id="dessert"><b>Dessert</b></li>
+				<li>Chocolate Mousse</li>
+				<li>Cheesecake</li>
+				<li>Ice Cream</li>
+				<li>Blueberry Pie</li>
+				<li>Sourbet</li>
+				<li></li>
 			</ul>
 		</nav>
 	</div>
 
-	<div id="content">
 	
-		<article id="contentWrapper">
+		
+	<div id="wrapper">
+		<div id="scroller">
+			<ul id="thelist">
+				<li><img src="../static/img/fish.jpg" />
+					<p id="item">Mediterranean Grilled Tilapia</p>
+					<p id="description">Lightly seasoned grilled tilapia served with roasted asparagus and tomatoes</p>
+					</br></br>
+					<p id="price">24</p></li>
+				<li><img src="../static/img/fish.jpg" />
+					<p id="item">Mediterranean Grilled Tilapia</p>
+					<p id="description">Lightly seasoned grilled tilapia served with roasted asparagus and tomatoes</p>
+					</br></br>
+					<p id="price">24</p></li>
+				<li><img src="../static/img/fish.jpg" />
+					<p id="item">Mediterranean Grilled Tilapia</p>
+					<p id="description">Lightly seasoned grilled tilapia served with roasted asparagus and tomatoes</p>
+					</br></br>
+					<p id="price">24</p></li>
+				<li>					<img src="../static/img/fish.jpg" />
+					<p id="item">Mediterranean Grilled Tilapia</p>
+					<p id="description">Lightly seasoned grilled tilapia served with roasted asparagus and tomatoes</p>
+					</br></br>
+					<p id="price">24</p></li>
+				<li>					<img src="../static/img/fish.jpg" />
+					<p id="item">Mediterranean Grilled Tilapia</p>
+					<p id="description">Lightly seasoned grilled tilapia served with roasted asparagus and tomatoes</p>
+					</br></br>
+					<p id="price">24</p></li>
+				<li>					<img src="../static/img/fish.jpg" />
+					<p id="item">Mediterranean Grilled Tilapia</p>
+					<p id="description">Lightly seasoned grilled tilapia served with roasted asparagus and tomatoes</p>
+					</br></br>
+					<p id="price">24</p></li>
+				<li>
+					<img src="../static/img/fish.jpg" />
+					<p id="item">Mediterranean Grilled Tilapia</p>
+					<p id="description">Lightly seasoned grilled tilapia served with roasted asparagus and tomatoes</p>
+					</br></br>
+					<p id="price">24</p>
+				</li>
+			</ul>
+		</div>
+	</div>
+		<!--article id="contentWrapper">
 			<div id="contentScroller">
 			<img src="../static/img/fish.jpg" />
 				<p id="item">Mediterranean Grilled Tilapia</p>
@@ -250,9 +387,8 @@ nav, article {
 				</br></br>
 				<p id="price">24</p>
 			</div>
-		</article>
+		</article-->
+	
 	</div>
-</div>
-
 </body>
 </html>
