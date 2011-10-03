@@ -8,27 +8,44 @@
      "ui_profile":
      {
          "color": "red",
-         "font": "helvetica",
+         "font": "helvetica"
      },
      "menuitems":
-     [
+     {
          "dinner": 
-         {
-           "menuitem_id": "soiv303g",
-           "name": "Pizza",
-           "price": 330,
-           "image": "http://i.imgur.com/eCcSx.jpg",
-           "description":"Delicious pizza ice cream"
-         },
-         
+         [      
+            {
+                   "menuitem_id": "soiv303g",
+                   "name": "Pizza",
+                   "price": 330,
+                   "image": "http://i.imgur.com/eCcSx.jpg",
+                   "description":"Delicious pizza ice cream"
+             },
+             {
+                    "menuitem_id": "soiv303g",
+                    "name": "Pizza",
+                    "price": 330,
+                    "image": "http://i.imgur.com/eCcSx.jpg",
+                    "description":"Delicious pizza ice cream"
+              }
+         ],
          "appetizer": 
-         {
-            "menuitem_id": "3ivmn3rio",
-            "name": "Burger",
-            "price": 2330,
-            "image": "http://i.imgur.com/Eua8M.png",
-            "description":"Burgers are really good"
-          }
-     ]
+         [
+            {   
+                "menuitem_id": "3ivmn3rio",
+                "name": "Burger",
+                "price": 2330,
+                "image": "http://i.imgur.com/Eua8M.png",
+                "description":"Burgers are really good"
+            },
+            {
+                  "menuitem_id": "3ivmn3rio",
+                  "name": "Burger",
+                  "price": 2330,
+                  "image": "http://i.imgur.com/Eua8M.png",
+                  "description":"Burgers are really good"
+            }
+          ]  
+     }
  }
  
