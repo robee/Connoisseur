@@ -53,6 +53,65 @@ class MainHandler(webapp.RequestHandler):
        
         self.response.out.write(template.render('templates/index.html', content_template_values))
 
+# Home Page Handler
+class MainHandler(webapp.RequestHandler):
+    def get(self):
+
+        content_template_values = {
+
+        }
+
+        self.response.out.write(template.render('templates/index.html', content_template_values))
+
+# Home Page Handler
+class UpdateMenu(webapp.RequestHandler):
+    def get(self):
+
+        content_template_values = {
+
+        }
+
+        self.response.out.write(template.render('templates/index.html', content_template_values))
+# Home Page Handler
+class CreateMenu(webapp.RequestHandler):
+    def get(self):
+
+        content_template_values = {
+
+        }
+
+        self.response.out.write(template.render('templates/index.html', content_template_values))
+
+# Home Page Handler
+class DeleteMenu(webapp.RequestHandler):
+    def get(self):
+
+        content_template_values = {
+
+        }
+
+        self.response.out.write(template.render('templates/index.html', content_template_values))
+
+
+# Home Page Handler
+class UpdateRestaurant(webapp.RequestHandler):
+    def get(self):
+
+        content_template_values = {
+
+        }
+
+        self.response.out.write(template.render('templates/index.html', content_template_values))
+# Home Page Handler
+class CreateRestaurant(webapp.RequestHandler):
+    def get(self):
+
+        content_template_values = {
+
+        }
+
+        self.response.out.write(template.render('templates/index.html', content_template_values))
+
 
 
 
