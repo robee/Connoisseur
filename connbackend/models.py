@@ -58,10 +58,11 @@ class MenuItem(db.Model):
 
 
 class UIProfile(db.Model):
+    profile_id = db.StringProperty(required=True)
     menu = db.ReferenceProperty(Menu, required=True)
     color = db.StringProperty()
     font = db.StringProperty()
-    price = db.FloatProperty()
+   
     
 
 

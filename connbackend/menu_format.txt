@@ -1,0 +1,28 @@
+{
+     "menu_id": "09jv903rjv",
+     "name": "Full Menu",
+     "template": "classy",
+     "ui_profile":
+     {
+         "color": "red",
+         "font": "helvetica",
+     },
+     "menuitems":
+     [
+         {
+           "menuitem_id": "soiv303g",
+           "name": "Pizza",
+           "price": 330,
+           "image": "http://i.imgur.com/eCcSx.jpg",
+           "description":"Delicious pizza ice cream"
+         },
+         {
+            "menuitem_id": "3ivmn3rio",
+            "name": "Burger",
+            "price": 2330,
+            "image": "http://i.imgur.com/Eua8M.png",
+            "description":"Burgers are really good"
+          }
+     ]
+ }
+ 
