@@ -41,6 +41,7 @@ class MenuItem(db.Model):
     menuitem_id = db.StringProperty(required=True)
     menu = db.ReferenceProperty(Menu, required=True)
     name = db.StringProperty(required=True)
+    category = db.StringProperty()
     price = db.FloatProperty(required=True)
     image = db.StringProperty()
     description = db.StringProperty()
@@ -51,8 +52,8 @@ class MenuItem(db.Model):
         return Menu.all().filter('menuitem_id = ', i_id).get()
         
     @staticmethod
-    def save(name_p, menu_p, price_p=100.0, image_p="", description_p=""):
-        menuitem = Menu(menuitem_id = uuid.uuid4().hex[:16], menu=menu_p, name=name_p, price = price_p, image = image_p, description=description_p)
+    def save(name_p, menu_p, category_p="", price_p=100.0, image_p="", description_p=""):
+        menuitem = Menu(menuitem_id = uuid.uuid4().hex[:16], menu=menu_p, name=name_p, price = price_p, image = image_p, description=description_p, category=category_p)
         menuitem.put()
 
 
