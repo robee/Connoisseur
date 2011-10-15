@@ -3,11 +3,14 @@ package com.gwt.conn.client;
 import com.gwt.conn.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.IFrameElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -16,6 +19,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Frame;
+import com.google.gwt.storage.client.Storage;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -34,11 +39,30 @@ public class Connfrontend implements EntryPoint {
 	 */
 	private final GreetingServiceAsync greetingService = GWT
 			.create(GreetingService.class);
-
+	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		final Frame f = new Frame();
+		f.getElement().setAttribute("style", "width:100%; height:100%; border:0");
+		
+		final Storage s = Storage.getLocalStorageIfSupported();
+		if (s != null) {
+			int n = s.getLength();
+			if (n > 0) {
+				f.setUrl(s.getItem("1"));
+				RootPanel.get().add(f, 0, 0);
+			}
+			/*
+			for (int i=0; i < n; i++) {
+			    String key = s.key(i);
+			    //stocksFlexTable.setText(i+1, 0, s.getItem(key));
+			    //stocksFlexTable.setWidget(i+1, 2, new Label());
+			}
+			*/
+		}
+		
 		final Button sendButton = new Button("Submit");
 		final TextBox nameField = new TextBox();
 		nameField.setText("menu/restaurant id");
@@ -57,6 +81,7 @@ public class Connfrontend implements EntryPoint {
 		nameField.setFocus(true);
 		nameField.selectAll();
 
+		/*
 		// Create the popup dialog box
 		final DialogBox dialogBox = new DialogBox();
 		dialogBox.setText("Remote Procedure Call");
@@ -84,7 +109,8 @@ public class Connfrontend implements EntryPoint {
 				sendButton.setFocus(true);
 			}
 		});
-
+		*/
+		
 		// Create a handler for the sendButton and nameField
 		class MyHandler implements ClickHandler, KeyUpHandler {
 			/**
@@ -109,14 +135,19 @@ public class Connfrontend implements EntryPoint {
 			private void sendNameToServer() {
 				// First, we validate the input.
 				errorLabel.setText("");
-				String textToServer = nameField.getText();
-				if (!FieldVerifier.isValidName(textToServer)) {
+				String txt = nameField.getText();
+				if (!FieldVerifier.isValidName(txt)) {
 					errorLabel.setText("Please enter at least four characters");
 					return;
 				}
 
 				// Then, we send the input to the server.
 				sendButton.setEnabled(false);
+				f.setUrl(txt);
+				RootPanel.get().add(f, 0, 0);
+				s.setItem("1", txt);
+				return;
+				/*
 				textToServerLabel.setText(textToServer);
 				serverResponseLabel.setText("");
 				greetingService.greetServer(textToServer,
@@ -141,6 +172,7 @@ public class Connfrontend implements EntryPoint {
 								closeButton.setFocus(true);
 							}
 						});
+				*/
 			}
 		}
 
