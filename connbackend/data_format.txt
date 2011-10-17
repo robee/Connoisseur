@@ -2,11 +2,11 @@
      "menu_id": "09jv903rjv",
      "restaurant_id":"34534f34f",
      "restaurant_name":"NAME",
-     "logo_url": "http://i.imgur.com/eCcSx.jpg",
-     "name": "Full Menu",
-     "template": "classy",
+     "menu_name": "Full Menu",
      "ui_profile":
      {
+         "template":"classy"
+         "logo_url": "http://i.imgur.com/eCcSx.jpg",
          "color": "red",
          "font": "helvetica"
      },
