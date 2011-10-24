@@ -5,6 +5,7 @@
      "menu_name": "Full Menu",
      "ui_profile":
      {
+         "profile_id": 3454gse,
          "template":"classy"
          "logo_url": "http://i.imgur.com/eCcSx.jpg",
          "color": "red",
