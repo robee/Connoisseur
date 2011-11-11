@@ -24,14 +24,18 @@ class Restaurant(db.Model):
         
         rest = Restaurant.get_by_id(r_id)
         
-        try:
-            rest.delete()
-        except:
-            return False
+       
+            
         menus = Menu.get_menus_by_rest_id(r_id)
         for menu in menus:
             Menu.delete_by_id(menu.menu_id)
         
+        
+        try:
+            rest.delete()
+        except:
+            return False
+            
         return True
     
     @staticmethod
@@ -71,7 +75,7 @@ class Menu(db.Model):
     @staticmethod
     def get_menus_by_rest_id(rest_id):
         rest = Restaurant.get_by_id(rest_id)
-        return Menu.all.filter('restaurant =', rest).fetch(100)
+        return Menu.all().filter('restaurant =', rest).fetch(100)
         
     @staticmethod
     def create(name_p, restaurant_p):
@@ -108,7 +112,7 @@ class MenuItem(db.Model):
         
     @staticmethod
     def get_by_id(i_id):
-        return Menu.all().filter('menuitem_id =', i_id).get()
+        return MenuItem.all().filter('menuitem_id =', i_id).get()
         
     @staticmethod
     def create(name_p, menu_p, price_p=100.0, category_p="",  image_p="", description_p=""):

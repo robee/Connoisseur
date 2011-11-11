@@ -1,0 +1,158 @@
+
+										
+										
+
+API Spec
+NOTE: Authentication is currently turned off so if you do it wrong it won't matter, it turn it on when ready
+NOTE: there will probably be python stack traces sent to you as well, just email them to me
+
+Create Restaurant
+
+    address: http://connoisseurmenu.appspot.com/restaurant/create
+    method: POST
+    arguments: 
+       auth_code : our auth code is 4a0e36be6e7d439f83ef8aa8d3f4a40f - keep this secret!!!
+       name: the name of the Restaurant
+    return:
+        A JSON formatted string that looks something like this:
+            {"secret_key": "ef7fe1ef1b814df79e47727058412543", "restaurant_id": "41cd5b8f76954c05a5afec28a56daea8"}
+    errors:
+        AUTH FAILED - you did the authentication wrong
+
+Delete Restaurant
+
+    address: http://connoisseurmenu.appspot.com/restaurant/delete
+    method: POST
+    arguments: 
+        message         : used for security, in this case it will be the restaurant_id
+        timestamp       : used for security as a way to randomize the message_hash
+        message_hash    : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+        restaurant_id   : need to know who is trying to do this
+    return:
+        A string that says: Menu Successfully Deleted
+    errors:
+        AUTH FAILED - you did the authentication wrong
+        ERROR: Could not delete - the restaurant_id doesn't exist or there is a bug in the backend
+
+    
+Create Menu
+
+    address: http://connoisseurmenu.appspot.com/menu/create
+    method: POST
+    arguments: 
+        menu_name       : name of the menu
+        message         : used for security, in this case it will be the menu_name + restaurant_id concat together
+        timestamp       : used for security as a way to randomize the message_hash
+        message_hash    : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+        restaurant_id   : need to know who is trying to do this
+    return:
+        The big menu DOC - see below for sample DOC
+    errors:
+        AUTH FAILED - you did the authentication wrong
+        Invalid restaurant_id - you gave the wrong restaurant_id or one that doesn't exist or there is a bug
+
+Update Menu
+
+    address: http://connoisseurmenu.appspot.com/menu/update
+    method: POST
+    arguments: 
+        doc             : the big JSON doc representing the menu - see below for SAMPLE DOC
+        message         : used for security, in this case it will be a copy of the doc 
+        timestamp       : used for security as a way to randomize the message_hash
+        message_hash    : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+        restaurant_id   : need to know who is trying to do this
+    return:
+        A String that says Update Successful
+    else:
+        self.response.out.write('ERROR: Incomplete or Malformed doc')
+        
+    errors:
+        AUTH FAILED - you did the authentication wrong
+        ERROR: Incomplete or Malformed doc - you gave me a malformed DOC string
+
+        
+Delete Menu
+
+    address: http://connoisseurmenu.appspot.com/menu/delete
+    method: POST
+    arguments: 
+        menu_id         : the unique id for the menu 
+        message         : used for security, in this case it will be the menu_id and the restaurant_id concated
+        timestamp       : used for security as a way to randomize the message_hash
+        message_hash    : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+        restaurant_id   : need to know who is trying to do this
+    return:
+        A String that says - Menu Successfully Deleted
+    errors:
+        AUTH FAILED - you did the authentication wrong
+        ERROR: Could not delete - the menu_id is bad
+
+Get Menu
+
+    address: http://connoisseurmenu.appspot.com/menu
+    method: GET
+    arguments: 
+        menu_id         : the id for the menu you want to get
+        message         : used for security, in this case it will be the menu_id and the restaurant_id concated
+        timestamp       : used for security as a way to randomize the message_hash
+        message_hash    : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+        restaurant_id   : need to know who is trying to do this
+    return:
+        The big menu DOC - see below for sample DOC
+    errors:
+        AUTH FAILED - you did the authentication wrong
+        ERROR: Invalid restaurant_id or menu_id - self explaitory
+
+        
+SAMPLE DOC
+
+{
+    "menu_id": "70d92ac71e1e4b1f", 
+    "restaurant_id": "19968b3ba550485dbfd8bf431c6851ef", 
+    "menu_name": "Updated NEWMENU2", 
+    "ui_profile": 
+        {
+            "logo_url": "http:\/\/www.virginialogos.com\/Portals\/57ad7180-c5e7-49f5-b282-c6475cdb7ee7\/Food.jpg",                     
+            "color": "black", 
+            "menu": null,
+            "profile_id": "0b945dcd26db419b", 
+            "template": "classy", 
+            "font": "Helvetica"
+        }, 
+    "restaurant_name": "Updated TEST", 
+    "menuitems": 
+    {
+            "Drink": 
+            [
+                {
+                    "category": "Drink", 
+                    "menuitem_id": "6cfb79454bc2446d", 
+                    "description": "UPDATED", 
+                    "menu": null, 
+                    "image": "This is a sample menu Item", 
+                    "price": 11.0, 
+                    "name": "Starter Item 2"
+                }
+            ], 
+            "Appy": 
+            [
+                {
+                    "category": "Updated Appy", 
+                    "menuitem_id": "18aedbf42a8b41ad", 
+                    "description": "", 
+                    "menu": null, 
+                    "image": "Updated This is a sample menu Item", 
+                    "price": 1000.0, 
+                    "name": "Updated Starter Item 1"
+                }
+            ]
+    }
+
+}
+
+
+OOOOORRRRRR
+
+
+{"menu_id": "2cf4a945c8494d7c", "restaurant_id": "02673146be10439280ec624bc031815d", "menu_name": "NEWMENU2", "ui_profile": {"logo_url": "http:\/\/www.virginialogos.com\/Portals\/57ad7180-c5e7-49f5-b282-c6475cdb7ee7\/Food.jpg", "color": "black", "menu": null, "profile_id": "641a99bb245241d7", "template": "classy", "font": "Helvetica"}, "restaurant_name": "TEST", "menuitems": {"Drink": [{"category": "Drink", "menuitem_id": "c9564d1c9fc9447a", "description": "", "menu": null, "image": "This is a sample menu Item", "price": 11.0, "name": "Starter Item 2"}], "Appy": [{"category": "Appy", "menuitem_id": "55d1ee39678b49af", "description": "", "menu": null, "image": "This is a sample menu Item", "price": 10.0, "name": "Starter Item 1"}]}}
+   
