@@ -160,7 +160,7 @@ def MenuFromDoc(jsonString):
         return False
 
 def DocFromModels(rest_id, menu_id):
-    #try:
+    try:
         rest = Restaurant.get_by_id(rest_id)
         menu = Menu.get_by_id(menu_id)
         ui_profile = UIProfile.get_by_menu(menu)
@@ -189,8 +189,8 @@ def DocFromModels(rest_id, menu_id):
     
         return json.dumps(obj)
         #return str(obj)
-    #except:
-    #    return 'ERROR: Invalid restaurant_id or menu_id'
+    except:
+        return 'ERROR: Invalid restaurant_id or menu_id'
 
 def verifyMessage( request ):
     #message, secret_key, timestamp, request_hash
@@ -241,6 +241,7 @@ class CreateMenu(webapp.RequestHandler):
             self.response.out.write('Invalid restaurant_id')
             return
             
+    
         menu = Menu.create(menu_name, rest)
         uiProfile = UIProfile.create(menu)
         menu_item_1 = MenuItem.create('Starter Item 1', menu, 10.00, 'Appy', 'This is a sample menu Item')
