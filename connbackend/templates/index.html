@@ -13,462 +13,349 @@
 
 
 <script type="text/javascript">
-
-var scrollContent,
-	scrollNav, myScroll, scrolling;
-
-function loaded() {
-
 	
-	scrolling = myScroll = new iScroll('soup', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
+	var scrollContent,
+		scrollNav, myScroll, scrolling;
 	
-	scrolling = myScroll = new iScroll('puree', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	scrolling = myScroll = new iScroll('arugula', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
+	function loaded() {
 	
-	scrolling = myScroll = new iScroll('brie', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
+		items = [
+		{% for item in menuitems %}
+		
+		'{{item.name}}',
+		
+		{% endfor %}
+		];
+		
+		for(i in items){
+			scrolling = myScroll = new iScroll(items[i], {
+				snap: false,
+				momentum: false,
+				hScrollbar: false,
+				vScrollbar: false });
+		}
 	
-	scrolling = myScroll = new iScroll('tart', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	
-	scrolling = myScroll = new iScroll('white', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	
-	scrolling = myScroll = new iScroll('sopressata', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	
-	scrolling = myScroll = new iScroll('salmon', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	
-	scrolling = myScroll = new iScroll('oysters', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	
-	scrolling = myScroll = new iScroll('poutine', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	
-	scrolling = myScroll = new iScroll('roastedsalmon', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	
-	scrolling = myScroll = new iScroll('pickerel', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	
-	scrolling = myScroll = new iScroll('chicken', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	
-	scrolling = myScroll = new iScroll('steak', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	
-	scrolling = myScroll = new iScroll('duck', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	
-	scrolling = myScroll = new iScroll('porkchop', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	
-	header = new iScroll('header', {
-	snap: false,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-	var w = $(window).width();
-	
-	$("#scroller li").css("width",(w - 170) + "px");
-	$("#wrapper").css("width",(w - 170) + "px");
-    $("#header").css("width",(w - 135) + "px");
-     
-	$.event.add(window, "resize", resizeFrame);
-	
-	function resizeFrame() 
-	{  
+		
+		header = new iScroll('category', {
+		snap: false,
+		momentum: false,
+		hScrollbar: false,
+		vScrollbar: false });
 		var w = $(window).width();
+		
 		$("#scroller li").css("width",(w - 170) + "px");
 		$("#wrapper").css("width",(w - 170) + "px");
-	    $("#header").css("width",(w - 150) + "px");
-	}
-
-     
-
-
-	scrollNav = new iScroll('navWrapper');
+	    $("#category").css("width",(w - 135) + "px");
+	     
+		$.event.add(window, "resize", resizeFrame);
+		
+		function resizeFrame() 
+		{  
+			var w = $(window).width();
+			$("#scroller li").css("width",(w - 170) + "px");
+			$("#wrapper").css("width",(w - 170) + "px");
+		    $("#category").css("width",(w - 150) + "px");
+		}
+		
+		scrollNav = new iScroll('navWrapper');
+		
+		myScroll = new iScroll('wrapper', {
+		snap: true,
+		momentum: false,
+		hScrollbar: false,
+		vScrollbar: false });
 	
-	myScroll = new iScroll('wrapper', {
-	snap: true,
-	momentum: false,
-	hScrollbar: false,
-	vScrollbar: false });
-
-
-}
-
-
-
-document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-
-document.addEventListener('DOMContentLoaded', loaded, false);
-
-function scrollToItem(item){
-	myScroll.scrollToElement('#' + item, 1000)
-}
+	
+	}
+	
+	
+	
+	document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+	
+	document.addEventListener('DOMContentLoaded', loaded, false);
+	
+	function scrollToItem(item){
+		myScroll.scrollToElement('#' + item, 1000)
+	}
 </script>
 <link href='http://fonts.googleapis.com/css?family=Corben:400,700|Rokkitt:400,700' rel='stylesheet' type='text/css'>
 <style type="text/css" media="all">
-html,body {
-	height:100%;
-}
-
-body,ul,li,header,nav,aside,section,article,p {
-	padding:0;
-	margin:0;
-	border:0;
-}
-
-body {
-	font-size:12px;
-	-webkit-user-select:none;
-    -webkit-text-size-adjust:none;
-	font-family:helvetica;
-	background:#424242;
-}
-
-.head {
-	background-color:white;
-	width: 150px;
-}
-
-#header {
-	position:absolute; z-index:2;
-	top:0; left:0;
-	width:100%;
-	height:45px;
-	line-height:45px;
-	background-color:#b42038;
-	padding:0;
-	color:#eee;
-	font-size:40px;
-	text-align:center;
-}
-
-#header a {
-	color:#f3f3f3;
-	text-decoration:none;
-	font-weight:bold;
-	text-shadow:0 -1px 0 rgba(0,0,0,0.5);
-}
-
-a {
-	width: 100%;
-	color:black;
-	text-decoration:none;
-	text-shadow:0 -1px 0 rgba(0,0,0,0.5);
-}
-
-
-p {
-	margin-bottom:1.5em;
-	line-height:150%;
-}
-
-header,nav,aside,section,article {
-	display:block;
-}
-
-img {
-	width: 80%;
+	html,body {
+		height:100%;
+	}
 	
-}
-
-.item{
-	margin-top: 5%;
-	font-size: 26px;
-	text-align: center;
-	margin-bottom: 4px;
-}
-
-#page {
-	width:100%; height:100%;
-	position:relative;
-	display:-webkit-box;
-	display:-moz-box;
-	display:-o-box;
-	display:box;
+	body,ul,li,header,nav,aside,section,article,p {
+		padding:0;
+		margin:0;
+		border:0;
+	}
 	
-	-webkit-box-orient:horizontal;
-	-moz-box-orient:horizontal;
-	-o-box-orient:horizontal;
-	box-orient:horizontal;
+	body {
+		font-size:12px;
+		-webkit-user-select:none;
+	    -webkit-text-size-adjust:none;
+		font-family:helvetica;
+		background:#424242;
+	}
 	
-	background:#424242;
-}
-
-#sidebar {
-	width:150px;
-	margin-right:1px;
-}
-
-#content {
-	-webkit-box-flex:1;
-	-moz-box-flex:1;
-	-o-box-flex:1;
-	box-flex:1;
-}
-
-#sidebar, #content {
-	position:relative;
-	height:100%;
-}
-
-header {
-	height:43px; line-height:43px;
-	border-bottom:1px solid #838a9a;
-	background-color:#424242;
-	background-image:-webkit-gradient(linear, 0 0, 0 100, from(#f4f5f7), to(#999da9));
-	background-image:-moz-linear-gradient(top, #f4f5f7, #999da9);
-	background-image:-o-linear-gradient(top, #f4f5f7, #999da9);
+	#logo {
+		background-color:white;
+		width: 150px;
+		height:38px; 
+		position:absolute; 
+		border-bottom:2px solid #ccc;
+	}
 	
-	color:#717880;
-	font-size:18px; font-weight:bold;
-	text-align:center;
-	text-shadow:0 1px 0 #fff;
-	-webkit-border-top-left-radius:4px;
-	-moz-border-top-left-radius:4px;
-	-o-border-top-left-radius:4px;
-	border-top-left-radius:4px;
+	#category {
+		position:absolute; z-index:2;
+		top:0; left:0;
+		width:100%;
+		height:40px;
+		line-height:45px;
+		background-color:#b42038;
+		padding:0;
+		color:#eee;
+		font-size:40px;
+		text-align:center;
+	}
 	
-	-webkit-border-top-right-radius:4px;
-	-moz-border-top-right-radius:4px;
-	-o-border-top-right-radius:4px;
-	border-top-right-radius:4px;
-}
-
-#wrapper {
+	#category a {
+		color:#f3f3f3;
+		text-decoration:none;
+		font-weight:bold;
+		text-shadow:0 -1px 0 rgba(0,0,0,0.5);
+	}
 	
-	height:94%;
-	margin-top: 48px;
-	margin-left: 10px;
-	float:left;
-	position:relative;	/* On older OS versions "position" and "z-index" must be defined, */
-	z-index:1;			/* it seems that recent webkit is less picky and works anyway. */
-	overflow:hidden;
-
-	background:#aaa;
-	-webkit-border-radius:10px;
-	-moz-border-radius:10px;
-	-o-border-radius:10px;
-	border-radius:10px;
-	background:#e3e3e3;
-}
-
-#scroller {
-	width:21000px;
-	height:100%;
-	float:left;
-	padding:0;
-}
-
-#scroller ul {
-	list-style:none;
-	display:block;
-	float:left;
-	width:100%;
-	height:100%;
-	padding:0;
-	margin:0;
-	text-align:left;
-	font-family: 'Corben', cursive;
-}
-
-#scroller li {
-	-webkit-box-sizing:border-box;
-	-moz-box-sizing:border-box;
-	-o-box-sizing:border-box;
-	box-sizing:border-box;
-	display:block; float:left;
-	width:100px; height:100%;
-	text-align:center;
-	font-size:18px;
-	line-height:140%;
-}
-
-#navScroller > li {
-	font-family: 'Rokkitt', serif;
-	font-size: 18px;
-	height:30px; line-height:30px;
-}
-
-#contentScroller {
-	-webkit-box-sizing:border-box;
-	-moz-box-sizing:border-box;
-	-o-box-sizing:border-box;
-	box-sizing:border-box;
-	padding:20px;
-}
-
-nav, article {
-	position:absolute;
-	top:40px; bottom:0; left:0; right:0;
-	font-size:15px;
-	background:#fff;
+	a {
+		width: 100%;
+		color:black;
+		text-decoration:none;
+		text-shadow:0 -1px 0 rgba(0,0,0,0.5);
+	}
 	
-}
-
-#menu{
-   
-     
-    position:absolute; z-index:2;
-	top:0; 
-	left:0;
-	width:100%;
-	height:45px;
-	line-height:45px;
-	padding:0;
-	color:#eee;
-	font-size:40px;
-	text-align:center;
-    
-    }
-    
-    
-    
-#header {
 	
-	height:40px;
-
-}
-
-#menu {
-	width:2100px;
-	height:40px;
-	float:left;
-	padding:0;
-}
-
-#menu ul {
-	list-style:none;
-	display:block;
-	float:left;
-	width:100%;
-	height:100%;
-	padding:0;
-	margin:0;
-	text-align:left;
-}
-
-#menu li {
-	-webkit-box-sizing:border-box;
-	-moz-box-sizing:border-box;
-	-o-box-sizing:border-box;
-	box-sizing:border-box;
-	display:block; float:left;
-	width:140px; 
-	height:40px;
-	text-align:center;
-	font-family: 'Rokkitt', serif;
-	font-style: bold;
-	font-size:22px;
-	line-height:200%;
+	p {
+		margin-bottom:1.5em;
+		line-height:150%;
+	}
 	
-}
-
-#menu a {
-	height: 40px;
-
-}
-
-
-
-
-
-
-
-#itemPage {
-	padding: 50px;
-	width: 550px;
-}
-
-ul li a{
-    float: left; 
-    text-decoration: none;
-    padding-left: 11px;
-    padding-right: 11px;}
-
-
-.navScroller ul li a{
-	width:  100%;
-	color: black;
-    background-color: #FFFFFF;}
- 
-ul li a:visited{
-    color: yellow;
-    background-color:#0b75b2;}
- 
-ul li a:active, .menu ul li .current{
-    color: #fff;
-    background-color:#0b75b2;}
-
-
-
-.description{
+	header,nav,aside,section,article {
+		display:block;
+	}
 	
-}
-
-.price{
+	img {
+		width: 80%;
+		
+	}
 	
-	text-align: center;
-	font-size: 22px;
-}
-
-
-
+	.item{
+		margin-top: 5%;
+		font-size: 26px;
+		text-align: center;
+		margin-bottom: 4px;
+	}
+	
+	#page {
+		width:100%; height:100%;
+		position:relative;
+		display:-webkit-box;
+		display:-moz-box;
+		display:-o-box;
+		display:box;
+		-webkit-box-orient:horizontal;
+		-moz-box-orient:horizontal;
+		-o-box-orient:horizontal;
+		box-orient:horizontal;
+		background:#424242;
+	}
+	
+	#sidebar {
+		width:150px;
+		margin-right:1px;
+	}
+	
+	#content {
+		-webkit-box-flex:1;
+		-moz-box-flex:1;
+		-o-box-flex:1;
+		box-flex:1;
+	}
+	
+	#sidebar, #content {
+		position:relative;
+		height:100%;
+	}
+	
+	header {
+		height:43px; line-height:43px;
+		border-bottom:1px solid #838a9a;
+		background-color:#424242;
+		background-image:-webkit-gradient(linear, 0 0, 0 100, from(#f4f5f7), to(#999da9));
+		background-image:-moz-linear-gradient(top, #f4f5f7, #999da9);
+		background-image:-o-linear-gradient(top, #f4f5f7, #999da9);
+		color:#717880;
+		font-size:18px; font-weight:bold;
+		text-align:center;
+		text-shadow:0 1px 0 #fff;
+		-webkit-border-top-left-radius:4px;
+		-moz-border-top-left-radius:4px;
+		-o-border-top-left-radius:4px;
+		border-top-left-radius:4px;
+		-webkit-border-top-right-radius:4px;
+		-moz-border-top-right-radius:4px;
+		-o-border-top-right-radius:4px;
+		border-top-right-radius:4px;3}
+	
+	#wrapper {
+		height:94%;
+		margin-top: 48px;
+		margin-left: 10px;
+		float:left;
+		position:relative;	/* On older OS versions "position" and "z-index" must be defined, */
+		z-index:1;			/* it seems that recent webkit is less picky and works anyway. */
+		overflow:hidden;
+		background:#aaa;
+		-webkit-border-radius:10px;
+		-moz-border-radius:10px;
+		-o-border-radius:10px;
+		border-radius:10px;
+		background:#e3e3e3;
+	}
+	
+	#scroller {
+		width:21000px;
+		height:100%;
+		float:left;
+		padding:0;
+	}
+	
+	#scroller ul {
+		list-style:none;
+		display:block;
+		float:left;
+		width:100%;
+		height:100%;
+		padding:0;
+		margin:0;
+		text-align:left;
+		font-family: 'Corben', cursive;
+	}
+	
+	#scroller li {
+		-webkit-box-sizing:border-box;
+		-moz-box-sizing:border-box;
+		-o-box-sizing:border-box;
+		box-sizing:border-box;
+		display:block; float:left;
+		width:100px; height:100%;
+		text-align:center;
+		font-size:18px;
+		line-height:140%;
+	}
+	
+	#navScroller > li {
+		font-family: 'Rokkitt', serif;
+		font-size: 18px;
+		height:30px; line-height:30px;
+	}
+	
+	#contentScroller {
+		-webkit-box-sizing:border-box;
+		-moz-box-sizing:border-box;
+		-o-box-sizing:border-box;
+		box-sizing:border-box;
+		padding:20px;
+	}
+	
+	nav, article {
+		position:absolute;
+		top:40px; bottom:0; left:0; right:0;
+		font-size:15px;
+		background:#fff;
+		
+	}
+	
+	#menu{ 
+	 	position:absolute; z-index:2;
+		top:0; 
+		left:0;
+		width:100%;
+		height:45px;
+		line-height:45px;
+		padding:0;
+		color:#eee;
+		font-size:40px;
+		text-align:center;
+	}
+	    
+	#menu {
+		width:2100px;
+		height:40px;
+		float:left;
+		padding:0;
+	}
+	
+	#menu ul {
+		list-style:none;
+		display:block;
+		float:left;
+		width:100%;
+		height:100%;
+		padding:0;
+		margin:0;
+		text-align:left;
+	}
+	
+	#menu li {
+		-webkit-box-sizing:border-box;
+		-moz-box-sizing:border-box;
+		-o-box-sizing:border-box;
+		box-sizing:border-box;
+		display:block; float:left;
+		width:140px; 
+		height:40px;
+		text-align:center;
+		font-family: 'Rokkitt', serif;
+		font-style: bold;
+		font-size:22px;
+		line-height:200%;	
+	}
+	
+	#menu a {
+		height: 40px;
+	
+	}
+	
+	#itemPage {
+		padding: 50px;
+		width: 550px;
+	}
+	
+	ul li a{
+	    float: left; 
+	    text-decoration: none;
+	    padding-left: 11px;
+	    padding-right: 11px;}
+	
+	
+	.navScroller ul li a{
+		width:  100%;
+		color: black;
+	    background-color: #FFFFFF;}
+	 
+	ul li a:visited{
+	    color: yellow;
+	    background-color:#0b75b2;}
+	 
+	ul li a:active, .menu ul li .current{
+	    color: #fff;
+	    background-color:#0b75b2;}
+	
+	.price{
+		
+		text-align: center;
+		font-size: 22px;
+	}
 
 </style>
 </head>
@@ -478,242 +365,49 @@ ul li a:active, .menu ul li .current{
 
 
 <div id="page">
-	<div class="head" style="width:150px; height:38px; position:absolute; border-bottom:2px solid #ccc;" >
-		<img height="100%" style="display: block;   margin-left: auto;   margin-right: auto;" src="../static/img/logo.jpg"/>
+	<div id="logo">
+		<img height="100%" style="display: block;   margin-left: auto;   margin-right: auto;" src="../static/img/{{ui_profile.logo_url}}"/>
 	</div>
-	<div id="header" style="margin-left:150px">
-		
+	<div id="category" style="margin-left:150px">
 		<div id="menu">
 			<ul>
-				<li><a href="javascript:scrollNav.scrollToElement('#soups', 1000)">Soups</a></li>
-				<li><a href="javascript:scrollNav.scrollToElement('#salads', 1000)">Salads</a></li>
-				<li><a href="javascript:scrollNav.scrollToElement('#app', 1000)">Appetizers</a></li>
-				<li><a href="javascript:scrollNav.scrollToElement('#pizzas', 1000)">Pizzas</a></li>
-				<li><a href="javascript:scrollNav.scrollToElement('#meat', 1000)">Meat</a></li>
-				<li><a href="javascript:scrollNav.scrollToElement('#fish', 1000)">Fish & Veg</a></li>
+				{for item in menuitems}
+					<li><a href="javascript:scrollNav.scrollToElement('#{{item.category_id}}', 1000)">{{item.name}}</a></li>
+				{% endfor %}
 			</ul>
-		<br style="clear:left"/>
 		</div>
 	
 	</div>
-	<!--div id="tab" style="border:1px;width:10px; height:100px; z-index:5; position:absolute; top:48px; left:150px; background-color:white" onmousedown="javascript:$('#sidebar').hide(); $('#tab').css('left',0)"><</div-->
 	<div id="sidebar">
 		<nav id="navWrapper">
 			<ul id="navScroller">
-				<li id="soups"><a><b>Soups</b></a></li>
-				<li><a href="javascript:scrollToItem('puree')">Spiced Pumpkin</a></li>
-				<li><a href="javascript:scrollToItem('soup')">Daily Soup</a></li>
-				<li></li>
-				<li id="salads"><a><b>Salads</b></a></li>
-				<li><a href="javascript:scrollToItem('autumn')">Autumn Salad</a></li>
-				<li><a href="javascript:scrollToItem('arugula')">Arugula Salad</a></li>
-				<li><a href="javascript:scrollToItem('bread')">St. Agur Blue Che...</a></li>
-				<li></li>
-				<li id="app"><a><b>Appetizer</b></a></li>
-				<li><a href="javascript:scrollToItem('bread')">Bauer Toasts</a></li>
-				<li><a href="javascript:scrollToItem('brie')">Smoked Brie</a></li>
-				<li><a href="javascript:scrollToItem('tart')">Roasted Tart</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Spanish Onion Rings</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Cheese Board</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Charcuterie Board</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Steak Tatare</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Roasted Marrow</a></li>
-				<li><a href="javascript:scrollToItem('salmon')">Salmon Rillettes</a></li>
-				<li><a href="javascript:scrollToItem('oysters')">Fresh Oysters</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Shrimp Cocktail</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Steamed Mussels</a></li>
-				<li><a href="javascript:scrollToItem('poutine')">Poutine</a></li>
-				<li></li>
-				<li id="pizzas"><a><b>Pizzas</b></a></li>
-				<li><a href="javascript:scrollToItem('prosciutto')">Prosciutto</a></li>
-				<li><a href="javascript:scrollToItem('white')">White Pizza</a></li>
-				<li><a href="javascript:scrollToItem('sopressata')">Sopressata</a></li>
-				<li><a href="javascript:scrollToItem('basil')">Basil Pesto</a></li>
-				<li><a href="javascript:scrollToItem('pork')">Chipotle Pork</a></li>
-				<li></li>
-				<li id="meat"><a><b>Meats</b></a></li>
-				<li><a href="javascript:scrollToItem('steak')">Bauer Steaks</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Beef Bourguignon</a></li>
-				<li><a href="javascript:scrollToItem('duck')">Duck Confit</a></li>
-				<li><a href="javascript:scrollToItem('chicken')">Herb-Brined Chicken</a></li>
-				<li><a href="javascript:scrollToItem('porkchop')">Pork Chop</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Lemon Chicken</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Short Rib Gnocchi</a></li>
-				<li></li>
-				<li id="fish"><a><b>Fish & Veg</b></a></li>
-				<li><a href="javascript:scrollToItem('roastedsalmon')">Roasted Salmon</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Cioppino</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Carbonara</a></li>
-				<li><a href="javascript:scrollToItem('pickerel')">Ontario Pickerel</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Vegetable Gnoccie</a></li>
-				<li><a href="javascript:scrollToItem('bread')">Shrimp & Chorizo Rigatoni</a></li>
-				<li></li>
+				{%for category in menuitems %}
+					<li id="{{category.menuitem_id}}"><a><b>{{category.name}}</b></a></li>
+					{% for item in category%}
+						<li><a href="javascript:scrollToItem('{{item.menuitem_id}}')">{{item.name}}</a></li>
+					{% endfor %}
+					<li></li>
+				{% endfor %}
 			</ul>
 		</nav>
 	</div>
 
-	
-		
 	<div id="wrapper">
 		<div id="scroller">
 			<ul id="thelist">
-			<li id="puree">
+			{%for item in menuItems %}
+			<li id="{{item.menuitem_id}}">
 					<div>
-					<p class="item">Spiced Pumpkin Puree</p>
-					<img src="../static/img/puree.jpg" />
-					<p class="description">toasted pumpkin seeds and chili toasted infused oil </p><p class="price">6.25</p>
-					</br></br>
-					</div>
-					
+					<p class="item">{{item.name}}</p>
+					<img src="{{item.image}}" />
+					<p class="description">{{item.description}}</p>
+					<p class="price">{{item.price}}</p>
+				</div>
 				</li>
-				<li id="soup">
-					<div>
-						<div>
-						<p class="item">Daily Soup</p>
-						<img src="../static/img/soup.jpg"/>
-					<p id="description"></p>
-					</br></br>
-					<p class="price">5.95</p></div>
-					</div>
-				</li>
-				
-				<li id="arugula">
-					<div>
-					<p class="item">Arugula Salad</p>
-					<img src="../static/img/arugula.jpg" />
-					
-					<p class="description"> pickled cantaloupe, bacon jam, candied pecans and crostini</p><p class="price">Half wheel 8.95, Full wheel 13.95</p>
-					</br></br>
-					</div>
-				</li>
-				<li id="brie">
-					<div>
-					<p class="item">Smoked Brie</p>
-					<img src="../static/img/brie.jpg" />
-					
-					<p class="description">crispy duck legs, roasted mini potatoes, squash & parsnips, dark chicken jus and plum orange compote</p><p class="price">21.95</p>
-					</br></br>
-					</div>
-				</li>
-				<li id="salmon">
-					<div>
-					<p class="item">Salmon Rillettes</p>
-					<img src="../static/img/salmon.jpg" />
-					<p class="description">pernod poached salmon, smoked salmon, creme fraiche, shallots, tarragon, chives and crostinis</p><p class="price">10.95</p>
-					</br></br>
-					</div>
-				</li>
-				<li id="tart">
-					<div>
-					<p class="item">Roasted Tomato And Goat Cheese Tart</p>
-					<img src="../static/img/tart.jpg" />
-					
-					<p class="description">cherry tomatoes, onion marmalade, goat cheese, lemon thyme tart shell, basil oil and balsamic reduction </p><p class="price">11.95</p>
-					</br></br>
-					</div>
-				</li>
-				<li id="oysters">
-					<div>
-					<p class="item">Fresh Shucked Oysters</p>
-					<img src="../static/img/oysters.jpg" />
-					<p class="description">Our daily selection with horseradish and ginger lemon mignonette</p><p class="price">2.75 each</p>
-					</br></br>
-					</div>
-				</li>
-								<li id="poutine">
-					<div>
-					<p class="item">Poutine</p>
-					<img src="../static/img/poutine.jpg" />
-					<p class="description">fresh cut fries, Bauer Butcher sausage white gravy and fontina cheese</p>
-					<p class="price">11.95</p>
-					</br></br>
-					</div>
-				</li>
-				<li id="prosciutto">
-					<div>
-					<p class="item">Arugula & Prosciutto</p>
-					<img src="../static/img/prosciutto.jpg" />
-					<p class="description">San Marzano tomato sauce, goat cheese, roasted mushrooms, Pingue prosciutto, baby arugula and extra virgin olive oil </p><p class="price">15.95</p>
-					</br></br>
-					</div>
-				</li>
-				<li id="white">
-					<div>
-					<p class="item">White Pizza</p>
-					<img src="../static/img/white.jpg" />
-					<p class="description">A roasted garlic cream sauce, pancetta, smoked chicken, spinach, vine-ripe tomatoes and provolone cheese</p><p class="price">15.95</p>
-					</br></br>
-					</div>
-				</li>
-				<li id="sopressata">
-					<div>
-					<p class="item">Sopressata</p>
-					<img src="../static/img/sopressata.jpg" />
-					<p class="description">spicy Italian dry cured salami, San Marzano tomato sauce, fontina, bocconcini, Parmigiano Reggiano and fresh basil</p><p class="price">13.95</p>
-					</br></br>
-					</div>
-				</li>
-				
-			<li id="steak">
-					<div>
-					<p class="item">Bauer Steaks</p>
-					<img src="../static/img/steaks.jpg" />
-					<p class="description">BAUER STEAKS					NY STRIPLOIN, grilled vegetables and fresh cut fries </p><p class="price">10oz 29.95, 14oz 34.95</p> BEEF TENDERLOIN, grilled vegetables and mashed potatoes </p><p class="price">7oz 31.95</p>
-					</br></br>
-					</div>
-				</li>
-				<li id="duck">
-					<div>
-					<p class="item">Duck Confit</p>
-					<img src="../static/img/duck.jpg" />
-					<p class="description"> crispy duck legs, roasted mini potatoes, squash & parsnips, dark chicken jus and plum orange compote</p><p class="price">23.95</p>
-					</br></br>
-					</div>
-				</li>
-				<li id="chicken">
-					<div>
-					<p class="item">Herb-Brined Chicken Supreme</p>
-					<img src="../static/img/herbchicken.jpg" />
-					<p class="description"> porcini brandy cream sauce, roasted potatoes and seasonal vegetables</p><p class="price">22.95</p>
-					</br></br>
-					</div>
-				</li>
-				<li id="porkchop">
-					<div>
-					<p class="item">Willowgrove Hill Farm Pork Chop</p>
-					<img src="../static/img/porkchop.jpg" />
-					<p class="description">herb brined, pulled pork & aged cheddar mashed potatoes, braised red cabbage, apple date jus and scallions</p><p class="price">22.95</p>
-					</br></br>
-					</div>
-				</li>
-				<li id="roastedsalmon">
-					<div>
-					<p class="item">Roasted Salmon</p>
-					<img src="../static/img/roastedsalmon.jpg" />
-					<p class="description"> grains and lentils, seasonal vegetables, hollandaise, roasted onion and caperberry butter, smoked parika oil</p><p class="price">23.95</p>
-					</br></br>
-					</div>
-				</li>
-				<li id="pickerel">
-					<div>
-					<p class="item">Ontario Pickerel</p>
-					<img src="../static/img/pickerel.jpg" />
-					<p class="description">Prosciutto wrapped pickerel, stewed leeks, roasted root vegetables, maple chipotle squash puree and sage brown butter</p><p class="price">22.95</p>
-					</br></br>
-					</div>
-				</li>
+				{% endfor %}
 			</ul>
 		</div>
 	</div>
-		<!--article id="contentWrapper">
-			<div id="contentScroller">
-			<img src="../static/img/fish.jpg" />
-				<p id="item">Mediterranean Grilled Tilapia</p>
-				<p id="description">Lightly seasoned grilled tilapia served with roasted asparagus and tomatoes</p>
-				</br></br>
-				<p id="price">24</p>
-			</div>
-		</article-->
 	
 	</div>
 </body>
