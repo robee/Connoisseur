@@ -226,7 +226,7 @@ public class Dashboard extends StorageContainer {
 
 				addMenu(menuName); // to storage (implemented in StorageContainer.java)
 				//String json = createDefaultJSON(); // get default JSON object
-				String json = getJSON(menuName);
+				String json = getMenu(menuName);
 				sendButton.setEnabled(false);
 				submitBox.hide();
 				visualEditor.loadVisualEditor(dashboardBox, json); // start editing
@@ -279,7 +279,7 @@ public class Dashboard extends StorageContainer {
 				/** Fired when the user clicks cancel. */
 				public void onClick(ClickEvent event) {
 					editBox.hide();
-					String json = getJSON(menuName);
+					String json = getMenu(menuName);
 					visualEditor.loadVisualEditor(dashboardBox, json); // start editing
 				}
 			}

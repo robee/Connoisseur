@@ -28,12 +28,12 @@ public class StorageContainer {
 		numMenus++;
 		storage.setItem("numMenus", Integer.toString(numMenus));
 		storage.setItem("menu" + Integer.toString(numMenus), menuName);
-		storage.setItem(menuName, menuName + "!"); // remember menu name and associated JSON data
-		storage.setItem(menuName, Communicate.getMenuFromBackend(menuName));
+		//storage.setItem(menuName, menuName + "!"); // remember menu name and associated JSON data
+		storage.setItem(menuName, Communicate.getMenu(menuName, ""));
 	}
 	
 	/** Returns a string in JSON format representing a menu. */
-	protected static String getJSON(String menuName) {
+	protected static String getMenu(String menuName) {
 		return storage.getItem(menuName);
 	}
 	
