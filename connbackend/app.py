@@ -63,52 +63,52 @@ PASSCODE = '4a0e36be6e7d439f83ef8aa8d3f4a40f'
 }
 """
 
-def MenuFromDoc(jsonString):
-    #try:
-    obj = json.loads(jsonString)
-    menu_id = obj['menu_id']
-    rest_id = obj['restaurant_id']
-    profile_id = obj['ui_profile']['profile_id']
+def ModelsFromDoc(jsonString):
+    try:
+        obj = json.loads(jsonString)
+        menu_id = obj['menu_id']
+        rest_id = obj['restaurant_id']
+        profile_id = obj['ui_profile']['profile_id']
 
-    # Create or Update Rest
-    rest = Restaurant.get_by_id(rest_id)
-    rest.name = obj['restaurant_name']
+        # Create or Update Rest
+        rest = Restaurant.get_by_id(rest_id)
+        rest.name = obj['restaurant_name']
 
-    #Create or Update Menu
-    menu = Menu.get_by_id(menu_id)
+        #Create or Update Menu
+        menu = Menu.get_by_id(menu_id)
 
-    menu.name = obj['menu_name']
-    menu.resturant = rest
+        menu.name = obj['menu_name']
+        menu.resturant = rest
 
-    #Create or Update UI Profile
-    ui_profile = UIProfile.get_by_id(profile_id)
-    ui_profile.template = obj['ui_profile']['template']
-    ui_profile.color = obj['ui_profile']['color']
-    ui_profile.font = obj['ui_profile']['font']
-    ui_profile.logo_url = obj['ui_profile']['logo_url']
-    #logging.info(str(obj))
-    #Create or Update menuitems
+        #Create or Update UI Profile
+        ui_profile = UIProfile.get_by_id(profile_id)
+        ui_profile.template = obj['ui_profile']['template']
+        ui_profile.color = obj['ui_profile']['color']
+        ui_profile.font = obj['ui_profile']['font']
+        ui_profile.logo_url = obj['ui_profile']['logo_url']
+        #logging.info(str(obj))
+        #Create or Update menuitems
     
-    menu_items_dict = obj['menuitems']
-    logging.info(type(menu_items_dict))
-    for category in menu_items_dict.keys():
-        category_list = menu_items_dict[category]
-        logging.info(type(category_list))
-        for menu_item_dict in category_list:
-            logging.info(type(menu_item_dict))
-            menuitem = MenuItem.get_by_id(menu_item_dict['menuitem_id'])
-            menuitem.name = menu_item_dict['name']
-            menuitem.category = category
-            menuitem.price = menu_item_dict['price']
-            menuitem.image = menu_item_dict['image']
-            menuitem.description = menu_item_dict['description']
-            menuitem.put()
-    ui_profile.put()
-    menu.put()
-    rest.put()
-    return True
-    #except:
-     #   return False
+        menu_items_dict = obj['menuitems']
+        logging.info(type(menu_items_dict))
+        for category in menu_items_dict.keys():
+            category_list = menu_items_dict[category]
+            logging.info(type(category_list))
+            for menu_item_dict in category_list:
+                logging.info(type(menu_item_dict))
+                menuitem = MenuItem.get_by_id(menu_item_dict['menuitem_id'])
+                menuitem.name = menu_item_dict['name']
+                menuitem.category = category
+                menuitem.price = menu_item_dict['price']
+                menuitem.image = menu_item_dict['image']
+                menuitem.description = menu_item_dict['description']
+                menuitem.put()
+        ui_profile.put()
+        menu.put()
+        rest.put()
+        return True
+    except:
+        return False
 
 def DocFromModels(rest_id, menu_id):
     try:
@@ -160,8 +160,33 @@ class MainHandler(webapp.RequestHandler):
         if AUTH_ENABLED and not verifyMessage(self.request): 
             self.response.out.write('AUTH FAILED')
             return
+        
+        rest_id = self.request.get('restaurant_id')
+        rest = Restaurant.get_by_id(rest_id)
+        if not rest:
+            self.response.out.write('Restaurant does not exist')
+            return
+            
+        menu_id = Menu.get_menus_by_rest_id(rest_id)[0].menu_id
+        doc = DocFromModels(rest_id, menu_id)
+        doc_obj = doc.loads(doc)
+        self.response.out.write(template.render('templates/index.html', doc_obj))
+
+class Preview(webapp.RequestHandler):
+    def get(self):
+        if AUTH_ENABLED and not verifyMessage(self.request): 
+            self.response.out.write('AUTH FAILED')
+            return
+        
+        rest_id = self.request.get('restaurant_id')
+        rest = Restaurant.get_by_id(rest_id)
+        if not rest:
+            self.response.out.write('Restaurant does not exist')
+            return
+            
         doc = self.request.get('doc')
-        self.response.out.write(template.render('templates/index.html', doc))
+        doc_obj = json.loads(doc)
+        self.response.out.write(template.render('templates/index.html', doc_obj))
 
 #check
 #curl -d "doc=%7B%22menu_id%22%3A%20%2270d92ac71e1e4b1f%22%2C%20%22restaurant_id%22%3A%20%2219968b3ba550485dbfd8bf431c6851ef%22%2C%20%22menu_name%22%3A%20%22Updated%20NEWMENU2%22%2C%20%22ui_profile%22%3A%20%7B%22logo_url%22%3A%20%22http%3A%5C%2F%5C%2Fwww.virginialogos.com%5C%2FPortals%5C%2F57ad7180-c5e7-49f5-b282-c6475cdb7ee7%5C%2FFood.jpg%22%2C%20%22color%22%3A%20%22black%22%2C%20%22menu%22%3A%20null%2C%20%22profile_id%22%3A%20%220b945dcd26db419b%22%2C%20%22template%22%3A%20%22classy%22%2C%20%22font%22%3A%20%22Helvetica%22%7D%2C%20%22restaurant_name%22%3A%20%22Updated%20TEST%22%2C%20%22menuitems%22%3A%20%7B%22Drink%22%3A%20%5B%7B%22category%22%3A%20%22Drink%22%2C%20%22menuitem_id%22%3A%20%226cfb79454bc2446d%22%2C%20%22description%22%3A%20%22UPDATED%22%2C%20%22menu%22%3A%20null%2C%20%22image%22%3A%20%22This%20is%20a%20sample%20menu%20Item%22%2C%20%22price%22%3A%2011.0%2C%20%22name%22%3A%20%22Starter%20Item%202%22%7D%5D%2C%20%22Appy%22%3A%20%5B%7B%22category%22%3A%20%22Updated%20Appy%22%2C%20%22menuitem_id%22%3A%20%2218aedbf42a8b41ad%22%2C%20%22description%22%3A%20%22%22%2C%20%22menu%22%3A%20null%2C%20%22image%22%3A%20%22Updated%20This%20is%20a%20sample%20menu%20Item%22%2C%20%22price%22%3A%201000.0%2C%20%22name%22%3A%20%22Updated%20Starter%20Item%201%22%7D%5D%7D%7D" http://localhost:8087/menu/update
@@ -172,7 +197,7 @@ class Update(webapp.RequestHandler):
             self.response.out.write('AUTH FAILED')
             return
         message = self.request.get('doc')
-        if MenuFromDoc(message):
+        if ModelsFromDoc(message):
             self.response.out.write('Update Successful')
         else:
             self.response.out.write('ERROR: Incomplete or Malformed doc')
@@ -192,7 +217,10 @@ class CreateMenu(webapp.RequestHandler):
         if not rest:  
             self.response.out.write('Invalid restaurant_id')
             return
-            
+        
+        if Menu.get_menus_by_rest_id(rest_id):
+            self.resonse.out.write('Cant create another menu for this restaurant.  It already has one')
+            return
     
         menu = Menu.create(menu_name, rest)
         uiProfile = UIProfile.create(menu)
@@ -264,12 +292,13 @@ class GetMenu(webapp.RequestHandler):
         self.response.out.write(DocFromModels(rest_id, menu_id))
         
 
-appRoute = webapp.WSGIApplication( [    ('/restaurant/create',  CreateRestaurant),
-										('/restaurant/delete',  DeleteRestaurant),
-										('/menu/create',        CreateMenu),
-										('/menu/update',             Update),
-										('/menu/delete',        DeleteMenu),
-										('/menu',              GetMenu),
+appRoute = webapp.WSGIApplication( [    ('/restaurant/create',      CreateRestaurant),
+										('/restaurant/delete',      DeleteRestaurant),
+										('/menu/create',            CreateMenu),
+										('/menu/update',            Update),
+										('/menu/delete',            DeleteMenu),
+										('/menu',                   GetMenu),
+										('/preview',                Preview),
 										('/', MainHandler)
 										], debug=True)
 										

@@ -103,6 +103,36 @@ Get Menu
         AUTH FAILED - you did the authentication wrong
         ERROR: Invalid restaurant_id or menu_id - self explaitory
 
+
+Preview
+
+    address: http://connoisseurmenu.appspot.com/preview
+    method: GET
+    arguments:
+        doc             : the big JSON doc representing the menu - see below for SAMPLE DOC
+        message         : used for security, in this case it will be the menu_id and the restaurant_id concated
+        timestamp       : used for security as a way to randomize the message_hash
+        message_hash    : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+        restaurant_id   : need to know who is trying to do this
+    return:
+        Preview HTML/CSS/JS based on what was sent in the doc
+    errors:
+        AUTH FAILED - you did the authentication wrong
+
+
+Rendered Restaurant
+
+    address: http://connoisseurmenu.appspot.com/
+    method: GET
+    arguments:
+        message         : used for security, in this case it will be the menu_id and the restaurant_id concated
+        timestamp       : used for security as a way to randomize the message_hash
+        message_hash    : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+        restaurant_id   : need to know who is trying to do this
+    return:
+        Actual HTML/CSS/JS based on what was is saved in the database
+    errors:
+        AUTH FAILED - you did the authentication wrong       
         
 SAMPLE DOC
 
