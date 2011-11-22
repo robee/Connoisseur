@@ -371,7 +371,7 @@
 	<div id="category" style="margin-left:150px">
 		<div id="menu">
 			<ul>
-				{for item in menuitems}
+				{% for item in menuitems %}
 					<li><a href="javascript:scrollNav.scrollToElement('#{{item.category_id}}', 1000)">{{item.name}}</a></li>
 				{% endfor %}
 			</ul>
