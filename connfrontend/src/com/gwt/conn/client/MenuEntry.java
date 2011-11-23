@@ -46,5 +46,4 @@ public class MenuEntry {
 		sb.append("}");
 		return sb.toString();
 	}
-	
 }

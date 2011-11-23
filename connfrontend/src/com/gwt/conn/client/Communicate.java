@@ -18,9 +18,9 @@ import java.net.URLConnection;
 
 public class Communicate extends StorageContainer {
 
-	public static void updateMenu(String menuName, String restID) {
+	public static String updateMenu(String menuName, String restID) {   // should return Update successful string
 		// push/update associated json string of given menu in backend
-		
+		StringBuffer sb = new StringBuffer();
 		HttpClient client = new DefaultHttpClient();
 		try {
 			HttpPost httppost = new HttpPost("http://connoisseurmenu.appspot.com/menu/update");
@@ -40,14 +40,23 @@ public class Communicate extends StorageContainer {
 			httppost.setEntity(reqEntity);
 			HttpResponse response = client.execute(httppost);
 			HttpEntity resEntity = response.getEntity();
-			System.out.println(resEntity.toString());	// not sure what will be printed, if its not readable, delete line
-		} 
+			
+			BufferedReader rd = new BufferedReader(new InputStreamReader(resEntity.getContent()));
+			String line;
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+			rd.close();
+		}
 			catch (Exception err) {
         	System.err.println(err);
         }
 			finally {
-	           try { client.getConnectionManager().shutdown(); } catch (Exception e) { System.err.println(e); }
+	           try { client.getConnectionManager().shutdown(); 
+	           		 return sb.toString();
+	           } catch (Exception e) { System.err.println(e); }
 			}
+			return null;
 	}
 	
 	 /* @param endpoint - The URL of the server. http://connoisseurmenu.appspot.com/menu
@@ -65,11 +74,11 @@ public class Communicate extends StorageContainer {
 		 try {
 		// Send data
 			 String urlString = webservice;
-			 if (requestParameters != null && requestParameters.length () > 0) {
+			 if (requestParameters != null && requestParameters.length() > 0) {
 				 urlString += "?" + requestParameters;
 			 }
 			 URL url = new URL(urlString);
-			 URLConnection conn = url.openConnection ();
+			 URLConnection conn = url.openConnection();
 	
 		// Get the response
 			 BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -85,7 +94,14 @@ public class Communicate extends StorageContainer {
 		 }
 	 return json;
 	 }
-
+	 
+	 // CREATE MENU 	POST
+	 // DELETE MENU		POST
+	 // DELETE RESTAURANT	POST
+	 // CREATE RESTAURANT	POST
+	 // De-serialize for Create Restaurant
+	 
+	 	
 	public static void synchronize(String[] menus) {
 		// need to maintain a list of menus that were changed during offline mode
 		// changes can include:
@@ -104,5 +120,4 @@ public class Communicate extends StorageContainer {
 	    catch (NoSuchAlgorithmException none) { System.err.println(none); return null; }
 	    catch (UnsupportedEncodingException unsupported) { System.err.println(unsupported); return null; }
 	}
-	
 }
