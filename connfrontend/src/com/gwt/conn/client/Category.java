@@ -16,6 +16,19 @@ public class Category {
 	public String getTitle() {
 		return this.title;
 	}
+	public void addMenuItem(String itemName) {
+		MenuEntry mi = new MenuEntry(itemName);
+		menuEntries.add(mi);
+	}
+	
+	public void deleteMenuItem (String itemName) {
+		for (int i = 0; i < menuEntries.size(); i++) {
+			if (menuEntries.get(i).getTitle().equalsIgnoreCase(itemName)) {
+				menuEntries.remove(i);
+				break;
+			}
+		}
+	}
 	
 	public String generateJSON() {
 		StringBuilder sb = new StringBuilder();

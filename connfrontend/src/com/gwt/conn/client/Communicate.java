@@ -18,12 +18,85 @@ import java.net.URLConnection;
 
 public class Communicate extends StorageContainer {
 
-	public static String updateMenu(String menuName, String restID) {   // should return Update successful string
+	public static String createRestaurant (String authcode, String restName, String webService) {
+		StringBuffer sb = new StringBuffer();
+		HttpClient client = new DefaultHttpClient();
+		try {
+			HttpPost httppost = new HttpPost(webService);
+			StringBody auth_code = new StringBody(authcode);	// retrieve from storage?
+			StringBody name = new StringBody(restName);
+			
+			// message_hash     : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+			MultipartEntity reqEntity = new MultipartEntity();
+			reqEntity.addPart("auth_code", auth_code);
+			reqEntity.addPart("name", name);
+			
+			httppost.setEntity(reqEntity);
+			HttpResponse response = client.execute(httppost);
+			HttpEntity resEntity = response.getEntity();
+			
+			BufferedReader rd = new BufferedReader(new InputStreamReader(resEntity.getContent()));
+			String line;
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+			rd.close();
+		}
+			catch (Exception err) {
+        	System.err.println(err);
+        }
+			finally {
+	           try { client.getConnectionManager().shutdown(); 
+	           		 return sb.toString();
+	           } catch (Exception e) { System.err.println(e); }
+			}
+			return null;
+	}
+	// returns message "Restaurant Successfully Deleted"
+	public static String deleteRestaurant (String restID, String webService) {
+		StringBuffer sb = new StringBuffer();
+		HttpClient client = new DefaultHttpClient();
+		try {
+			HttpPost httppost = new HttpPost(webService);
+			StringBody securityMessage = null;
+			StringBody timestamp = null;
+			StringBody messageHash = null;	// use getSHA (message+securityCode+timestamp);
+			StringBody restaurantID = new StringBody(restID);
+			// message_hash     : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+			MultipartEntity reqEntity = new MultipartEntity();
+			reqEntity.addPart("message", securityMessage);
+			reqEntity.addPart("timestamp", timestamp);
+			reqEntity.addPart("message_hash", messageHash);
+			reqEntity.addPart("restaurant_id", restaurantID);
+			
+			httppost.setEntity(reqEntity);
+			HttpResponse response = client.execute(httppost);
+			HttpEntity resEntity = response.getEntity();
+			
+			BufferedReader rd = new BufferedReader(new InputStreamReader(resEntity.getContent()));
+			String line;
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+			rd.close();
+		}
+			catch (Exception err) {
+        	System.err.println(err);
+        }
+			finally {
+	           try { client.getConnectionManager().shutdown(); 
+	           		 return sb.toString();
+	           } catch (Exception e) { System.err.println(e); }
+			}
+			return null;
+	}
+		
+	public static String updateMenu(String menuName, String restID, String webService) {   // should return Update successful string
 		// push/update associated json string of given menu in backend
 		StringBuffer sb = new StringBuffer();
 		HttpClient client = new DefaultHttpClient();
 		try {
-			HttpPost httppost = new HttpPost("http://connoisseurmenu.appspot.com/menu/update");
+			HttpPost httppost = new HttpPost(webService);
 			StringBody jsonMenu = null;	// retrieve from storage?
 			StringBody securityMessage = null;
 			StringBody timestamp = null;
@@ -31,11 +104,94 @@ public class Communicate extends StorageContainer {
 			StringBody restaurantID = new StringBody(restID);
 			// message_hash     : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
 			MultipartEntity reqEntity = new MultipartEntity();
-			reqEntity.addPart("json", jsonMenu);
-			reqEntity.addPart("security", securityMessage);
+			reqEntity.addPart("doc", jsonMenu);
+			reqEntity.addPart("message", securityMessage);
 			reqEntity.addPart("timestamp", timestamp);
-			reqEntity.addPart("hash", messageHash);
-			reqEntity.addPart("id", restaurantID);
+			reqEntity.addPart("message_hash", messageHash);
+			reqEntity.addPart("restaurant_id", restaurantID);
+			
+			httppost.setEntity(reqEntity);
+			HttpResponse response = client.execute(httppost);
+			HttpEntity resEntity = response.getEntity();
+			
+			BufferedReader rd = new BufferedReader(new InputStreamReader(resEntity.getContent()));
+			String line;
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+			rd.close();
+		}
+			catch (Exception err) {
+        	System.err.println(err);
+        }
+			finally {
+	           try { client.getConnectionManager().shutdown(); 
+	           		 return sb.toString();
+	           } catch (Exception e) { System.err.println(e); }
+			}
+			return null;
+	}
+	
+	public static String createMenu (String menuName, String restID, String webService) {
+		StringBuffer sb = new StringBuffer();
+		HttpClient client = new DefaultHttpClient();
+		try {
+			HttpPost httppost = new HttpPost(webService);
+			StringBody menu_name = new StringBody(menuName);
+			StringBody securityMessage = null;
+			StringBody timestamp = null;
+			StringBody messageHash = null;	// use getSHA (message+securityCode+timestamp);
+			StringBody restaurantID = new StringBody(restID);
+			// message_hash     : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+			MultipartEntity reqEntity = new MultipartEntity();
+			reqEntity.addPart("menu_name", menu_name);
+			reqEntity.addPart("message", securityMessage);
+			reqEntity.addPart("timestamp", timestamp);
+			reqEntity.addPart("message_hash", messageHash);
+			reqEntity.addPart("restaurant_id", restaurantID);
+			
+			httppost.setEntity(reqEntity);
+			HttpResponse response = client.execute(httppost);
+			HttpEntity resEntity = response.getEntity();
+			
+			BufferedReader rd = new BufferedReader(new InputStreamReader(resEntity.getContent()));
+			String line;
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+			rd.close();
+		}
+			catch (Exception err) {
+        	System.err.println(err);
+        }
+			finally {
+	           try { client.getConnectionManager().shutdown(); 
+	           		 return sb.toString();
+	           } catch (Exception e) { System.err.println(e); }
+			}
+			return null;
+	}
+	
+	// all of the operations except getMenu are done through HTTP POST
+	// There will be only 1 method dealing with all POST requests, the calls will be distinguished by the  
+	// web service parameter
+	public static String deleteMenu (String menuID, String restID, String webService) {
+		StringBuffer sb = new StringBuffer();
+		HttpClient client = new DefaultHttpClient();
+		try {
+			HttpPost httppost = new HttpPost(webService);
+			StringBody menu_id = new StringBody(menuID);
+			StringBody securityMessage = null;
+			StringBody timestamp = null;
+			StringBody messageHash = null;	// use getSHA (message+securityCode+timestamp);
+			StringBody restaurantID = new StringBody(restID);
+			// message_hash     : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+			MultipartEntity reqEntity = new MultipartEntity();
+			reqEntity.addPart("menu_id", menu_id);
+			reqEntity.addPart("message", securityMessage);
+			reqEntity.addPart("timestamp", timestamp);
+			reqEntity.addPart("message_hash", messageHash);
+			reqEntity.addPart("restaurant_id", restaurantID);
 			
 			httppost.setEntity(reqEntity);
 			HttpResponse response = client.execute(httppost);
@@ -94,13 +250,6 @@ public class Communicate extends StorageContainer {
 		 }
 	 return json;
 	 }
-	 
-	 // CREATE MENU 	POST
-	 // DELETE MENU		POST
-	 // DELETE RESTAURANT	POST
-	 // CREATE RESTAURANT	POST
-	 // De-serialize for Create Restaurant
-	 
 	 	
 	public static void synchronize(String[] menus) {
 		// need to maintain a list of menus that were changed during offline mode
