@@ -173,7 +173,7 @@ class MainHandler(webapp.RequestHandler):
             
         menu_id = Menu.get_menus_by_rest_id(rest_id)[0].menu_id
         doc = DocFromModels(rest_id, menu_id)
-        doc_obj = doc.loads(doc)
+        doc_obj = json.loads(doc)
         self.response.out.write(template.render('templates/index.html', doc_obj))
 
 class Preview(webapp.RequestHandler):
@@ -277,6 +277,7 @@ class CreateRestaurant(webapp.RequestHandler):
         }
         
         self.response.out.write(json.dumps(return_obj))
+
 
 #check
 #http://localhost:8087/menu?menu_id=70d92ac71e1e4b1f&restaurant_id=19968b3ba550485dbfd8bf431c6851ef
