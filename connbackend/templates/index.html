@@ -20,11 +20,12 @@
 	function loaded() {
 	
 		items = [
-		{% for item in menuitems %}
-		
-		'{{item.name}}',
-		
+		{% for category in menuitems.items %}
+			{% for item in category.1 %}
+				'{{item.menuitem_id}}',
+			{% endfor %}
 		{% endfor %}
+		'category'
 		];
 		
 		for(i in items){
@@ -35,12 +36,6 @@
 				vScrollbar: false });
 		}
 	
-		
-		header = new iScroll('category', {
-		snap: false,
-		momentum: false,
-		hScrollbar: false,
-		vScrollbar: false });
 		var w = $(window).width();
 		
 		$("#scroller li").css("width",(w - 170) + "px");
@@ -366,13 +361,13 @@
 
 <div id="page">
 	<div id="logo">
-		<img height="100%" style="display: block;   margin-left: auto;   margin-right: auto;" src="../static/img/{{ui_profile.logo_url}}"/>
+		<img height="100%" style="display: block;   margin-left: auto;   margin-right: auto;" src="{{ui_profile.logo_url}}"/>
 	</div>
 	<div id="category" style="margin-left:150px">
 		<div id="menu">
 			<ul>
-				{% for item in menuitems %}
-					<li><a href="javascript:scrollNav.scrollToElement('#{{item.category_id}}', 1000)">{{item.name}}</a></li>
+				{% for item in menuitems.items %}
+					<li><a href="javascript:scrollNav.scrollToElement('#{{item.0}}', 1000)">{{item.0}}</a></li>
 				{% endfor %}
 			</ul>
 		</div>
@@ -381,10 +376,12 @@
 	<div id="sidebar">
 		<nav id="navWrapper">
 			<ul id="navScroller">
-				{%for category in menuitems %}
-					<li id="{{category.menuitem_id}}"><a><b>{{category.name}}</b></a></li>
-					{% for item in category%}
-						<li><a href="javascript:scrollToItem('{{item.menuitem_id}}')">{{item.name}}</a></li>
+				{%for category in menuitems.items %}
+					<li id="{{category.0}}"><a><b>{{category.0}}</b></a></li>
+					{% for m in category.1 %}
+
+						<li><a href="javascript:scrollToItem('{{m.menuitem_id}}')">{{m.name}}</a></li>
+
 					{% endfor %}
 					<li></li>
 				{% endfor %}
@@ -395,7 +392,8 @@
 	<div id="wrapper">
 		<div id="scroller">
 			<ul id="thelist">
-			{%for item in menuItems %}
+			{%for category in menuitems.items %}
+			{% for item in category.1 %}
 			<li id="{{item.menuitem_id}}">
 					<div>
 					<p class="item">{{item.name}}</p>
@@ -404,6 +402,7 @@
 					<p class="price">{{item.price}}</p>
 				</div>
 				</li>
+				{% endfor %}
 				{% endfor %}
 			</ul>
 		</div>
