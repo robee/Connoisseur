@@ -19,6 +19,7 @@ class Restaurant(db.Model):
     def get_by_id(r_id):
         return Restaurant.all().filter('restaurant_id =', r_id).get()
     
+    
     @staticmethod
     def delete_by_id(r_id):
         
