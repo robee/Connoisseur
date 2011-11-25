@@ -1,6 +1,7 @@
 package com.gwt.conn.client;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Menu {
 
@@ -15,6 +16,14 @@ public class Menu {
 	private String font;
 	
 	private ArrayList <Category> Categories = new ArrayList<Category>();
+	
+	public void swapCategories(int first, int second) {
+		Collections.swap(Categories, first, second);
+	}
+	
+	public ArrayList<Category> getCategories() {
+		return this.Categories;
+	}
 	
 	public Menu (String menuName) {
 		this.menuName = menuName;

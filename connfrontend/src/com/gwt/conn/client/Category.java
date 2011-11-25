@@ -2,6 +2,9 @@ package com.gwt.conn.client;
 
 import java.util.ArrayList;
 
+import com.google.gwt.user.client.ui.VerticalPanel;
+import java.util.Collections;
+
 public class Category {
 	private String title;
 	private ArrayList <MenuItem> menuEntries= new ArrayList<MenuItem>();
@@ -10,16 +13,22 @@ public class Category {
 		this.title = title;
 	}
 	
+	public void swapMenuItems(int first, int second) {
+		Collections.swap(menuEntries, first, second);
+	}
+	
 	public void setTitle (String newTitle) {
 		this.title = newTitle;
 	}
 	public String getTitle() {
 		return this.title;
 	}
+	
 	public void addMenuItem(String itemName) {
 		MenuItem mi = new MenuItem(itemName);
 		menuEntries.add(mi);
 	}
+	
 	public void addMenuItem(MenuItem mi) {
 		menuEntries.add(mi);
 	}
@@ -31,7 +40,11 @@ public class Category {
 				break;
 			}
 		}
-	} 	
+	}
+	
+	public ArrayList<MenuItem> getMenuItems() {
+		return menuEntries;
+	}
 	
 	public String generateJSON() {
 		StringBuilder sb = new StringBuilder();
