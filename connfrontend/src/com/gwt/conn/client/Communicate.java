@@ -20,7 +20,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-public class Communicate extends StorageContainer {
+public class Communicate {
 
 	public static String createRestaurant (String authcode, String restName, String webService) {
 		StringBuffer sb = new StringBuffer();
@@ -258,7 +258,7 @@ public class Communicate extends StorageContainer {
 	 // need a method that would return the value of a JSON string, i.e. 
 	 // "menu": "xxx", the method would return xxx; 
 	
-	public String extractJSONValue(String keyValuePair) {
+	public static String extractJSONValue(String keyValuePair) {
 		int start = 0; int  finish = 0;
 		start  = keyValuePair.indexOf("\"", 1);
 		start = keyValuePair.indexOf("\"", start + 1);
@@ -266,7 +266,7 @@ public class Communicate extends StorageContainer {
 		return keyValuePair.substring(start + 1, finish);
 	}
 	 
-	public Menu deserialize(String jsonMenu) {
+	public static Menu deserialize(String jsonMenu) {
 		int start = 0; int finish = 0;
 		int categoryEndIndex = 0;
 		int nextComma = 0;
