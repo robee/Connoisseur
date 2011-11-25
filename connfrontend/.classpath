@@ -5,5 +5,8 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/home/dmitry/Eclipse Projects/httpcomponents-client-4.1.2/lib/httpclient-4.1.2.jar"/>
+	<classpathentry kind="lib" path="/home/dmitry/xstream-1.4.2.jar"/>
+	<classpathentry kind="lib" path="/home/dmitry/xstream/json-20080701.jar"/>
+	<classpathentry kind="lib" path="/home/dmitry/xstream/jettison-1.2.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

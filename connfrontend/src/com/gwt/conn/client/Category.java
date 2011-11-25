@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Category {
 	private String title;
-	private ArrayList <MenuEntry> menuEntries= new ArrayList<MenuEntry>();
+	private ArrayList <MenuItem> menuEntries= new ArrayList<MenuItem>();
 	
 	public Category (String title) {
 		this.title = title;
@@ -17,25 +17,28 @@ public class Category {
 		return this.title;
 	}
 	public void addMenuItem(String itemName) {
-		MenuEntry mi = new MenuEntry(itemName);
+		MenuItem mi = new MenuItem(itemName);
+		menuEntries.add(mi);
+	}
+	public void addMenuItem(MenuItem mi) {
 		menuEntries.add(mi);
 	}
 	
 	public void deleteMenuItem (String itemName) {
 		for (int i = 0; i < menuEntries.size(); i++) {
-			if (menuEntries.get(i).getTitle().equalsIgnoreCase(itemName)) {
+			if (menuEntries.get(i).getName().equalsIgnoreCase(itemName)) {
 				menuEntries.remove(i);
 				break;
 			}
 		}
-	}
+	} 	
 	
 	public String generateJSON() {
 		StringBuilder sb = new StringBuilder();
 		String commaPrefix = "";
 		
 		sb.append("\"" + getTitle() + "\": [");
-		for (MenuEntry me : menuEntries) {
+		for (MenuItem me : menuEntries) {
 			sb.append(commaPrefix);
 			commaPrefix = ",";
 			sb.append(me.generateJSON());

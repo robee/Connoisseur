@@ -11,10 +11,14 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpEntity;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
 public class Communicate extends StorageContainer {
 
@@ -250,8 +254,110 @@ public class Communicate extends StorageContainer {
 		 }
 	 return json;
 	 }
-	 	
-	public static void synchronize(String[] menus) {
+	
+	 // need a method that would return the value of a JSON string, i.e. 
+	 // "menu": "xxx", the method would return xxx; 
+	
+	public String extractJSONValue(String keyValuePair) {
+		int start = 0; int  finish = 0;
+		start  = keyValuePair.indexOf("\"", 1);
+		start = keyValuePair.indexOf("\"", start + 1);
+		finish = keyValuePair.indexOf("\"", start + 1);
+		return keyValuePair.substring(start + 1, finish);
+	}
+	 
+	public Menu deserialize(String jsonMenu) {
+		int start = 0; int finish = 0;
+		int categoryEndIndex = 0;
+		int nextComma = 0;
+		String menuID, restID, menuName, val;
+		XStream xstream = new XStream(new JettisonMappedXmlDriver());
+		xstream.alias(null, MenuItem.class);
+		
+		if (jsonMenu.charAt(0) != '{') {
+			return null;
+		}
+		// parse menu
+		
+		//menu id
+		start = jsonMenu.indexOf("\"menu_id\"");
+		finish = jsonMenu.indexOf("\"", start + "\"menu_id\": \" ".length() );
+		menuID = extractJSONValue(jsonMenu.substring(start, finish + 1));
+		// rest id
+		start = jsonMenu.indexOf("\"restaurant_id\"");
+		finish = jsonMenu.indexOf("\"", start + "\"restaurant_id\": \" ".length() );
+		restID = extractJSONValue(jsonMenu.substring(start, finish + 1));
+		//menu name
+		start = jsonMenu.indexOf("\"menu_name\"");
+		finish = jsonMenu.indexOf("\"", start + "\"menu_name\": \" ".length() );
+		menuName = extractJSONValue(jsonMenu.substring(start, finish + 1));
+		
+		Menu menu = new Menu(menuName);
+		menu.setID(menuID);
+		menu.setRestaurantID(restID);
+		// logo url
+		start = jsonMenu.indexOf("\"logo_url\"");
+		finish = jsonMenu.indexOf("\"", start + "\"logo_url\": \" ".length() );
+		val = extractJSONValue(jsonMenu.substring(start, finish + 1));
+		menu.setLogoURL(val);
+		// color
+		start = jsonMenu.indexOf("\"color\"");
+		finish = jsonMenu.indexOf("\"", start + "\"color\": \" ".length() );
+		val = extractJSONValue(jsonMenu.substring(start, finish + 1));
+		menu.setColor(val);
+		// menu
+		start = jsonMenu.indexOf("\"menu\"");
+		finish = jsonMenu.indexOf("\"", start + "\"menu\": \" ".length() );
+		val = extractJSONValue(jsonMenu.substring(start, finish + 1));
+		menu.setMenu(val);
+		// profile_id
+		start = jsonMenu.indexOf("\"profile_id\"");
+		finish = jsonMenu.indexOf("\"", start + "\"profile_id\": \" ".length() );
+		val = extractJSONValue(jsonMenu.substring(start, finish + 1));
+		menu.setProfile(val);
+		// template
+		start = jsonMenu.indexOf("\"template\"");
+		finish = jsonMenu.indexOf("\"", start + "\"template\": \" ".length() );
+		val = extractJSONValue(jsonMenu.substring(start, finish + 1));
+		menu.setTemplate(val);
+		// font 
+		start = jsonMenu.indexOf("\"font\"");
+		finish = jsonMenu.indexOf("\"", start + "\"font\": \" ".length() );
+		val = extractJSONValue(jsonMenu.substring(start, finish + 1));
+		menu.setFont(val);
+		
+		start = jsonMenu.indexOf("\"menuitems\"");	// find where menuitems starts
+		start = jsonMenu.indexOf("\"", start + "\"menuitems\" ".length());	// extract index of the start of category name
+		finish = jsonMenu.indexOf("\"", start); 	// index of the closing quotation for the first category name
+		
+		// this loop is responsible for finding new categories within the JSON string
+		for (;;) {
+			val = jsonMenu.substring(start + 1, finish);	// extract category name
+			Category cat = new Category(val);
+			categoryEndIndex = jsonMenu.indexOf("]", finish);
+			// this loop is responsible for finding all menuItems within the category and adding them into the category
+			for (;;) {
+				start = jsonMenu.indexOf("{", finish + 1);
+				finish = jsonMenu.indexOf("}", start);
+				MenuItem mi = (MenuItem)xstream.fromXML(jsonMenu.substring(start, finish + 1));
+				cat.addMenuItem(mi);	
+				nextComma = jsonMenu.indexOf(",", finish);
+				if (nextComma == -1 || nextComma > categoryEndIndex) {
+					break;
+				}
+			}
+			menu.addCategory(val);
+			nextComma = jsonMenu.indexOf(",", categoryEndIndex);
+			if (nextComma == -1) {
+				break; 
+			}
+			start = jsonMenu.indexOf("\"", nextComma);
+			finish = jsonMenu.indexOf("\"", start + 1);
+		}
+		return menu;
+	}
+	 
+	public static void synchronize(ArrayList<Menu> menus) {
 		// need to maintain a list of menus that were changed during offline mode
 		// changes can include:
 		// new menu created

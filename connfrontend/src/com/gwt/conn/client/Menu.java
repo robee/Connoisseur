@@ -7,6 +7,13 @@ public class Menu {
 	private String menuName;
 	private String restaurantID;
 	private String id;
+	private String logo_url;
+	private String color;
+	private String menu;
+	private String profile_id;
+	private String template;
+	private String font;
+	
 	private ArrayList <Category> Categories = new ArrayList<Category>();
 	
 	public Menu (String menuName) {
@@ -24,6 +31,27 @@ public class Menu {
 	public void setID (String id) {
 		this.id = id;
 	}
+	public void setLogoURL(String logoURL) {
+		this.logo_url = logoURL;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public void setMenu(String menu) {
+		this.menu = menu;
+	}
+	
+	public void setProfile(String profileID) {
+		this.profile_id = profileID;
+	}
+	
+	public void setTemplate (String template) {
+		this.template = template;
+	}
+	
+	public void setFont(String newFont) {
+		this.font = newFont;
+	}
 	
 	public String[] getCategoryNames() {
 		String [] categoryNames = new String[Categories.size()];
@@ -33,7 +61,7 @@ public class Menu {
 		return categoryNames;
 	}
 	
-	public void createCategory(String newCategoryName) {
+	public void addCategory(String newCategoryName) {
 		Category newCat = new Category (newCategoryName);
 		Categories.add(newCat);
 	}

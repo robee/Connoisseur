@@ -9,17 +9,17 @@ import java.util.ArrayList;
 
 // after deserialization, save the resulting objects' into into the data storage
 
-// getCategoryNames list, array of strings
+// getCategoryNames list, array of strings			check
 
-// createCategory method for Menu (takes string)
+// createCategory method for Menu (takes string)	check
 
 
 
 // swap categories method, fed in 2 indices			DO THIS
 
-// delete menuItem name passed in
+// delete menuItem name passed in					check
 
-// delete Category 
+// delete Category 									check
 
 // when changes are made to the menu, objects should be re-serialized and saved locally
 
@@ -54,6 +54,15 @@ public class Restaurant {
 	public void addMenu(Menu menu) {
 		Menus.add(menu);
 	}	
+	public Menu getMenu (String menuName) {
+		for (Menu m : Menus) {
+			if(m.getName().equalsIgnoreCase(menuName)) {
+				return m;
+			}
+		}
+		return null;
+	}
+	
 	public String generateJSON(String menuName) {
 		for (Menu menu : Menus) {
 			if (menu.getName().equalsIgnoreCase(menuName)) {
@@ -96,7 +105,7 @@ public class Restaurant {
 	public void createCategory (String menuName, String newCategoryName) {
 		for (Menu menu : Menus) {
 			if (menu.getName().equalsIgnoreCase(menuName)) {
-				menu.createCategory(newCategoryName);
+				menu.addCategory(newCategoryName);
 			}
 		}
 	}
