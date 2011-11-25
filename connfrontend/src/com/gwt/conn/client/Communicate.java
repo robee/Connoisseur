@@ -1,4 +1,5 @@
 package com.gwt.conn.client;
+
 import java.io.UnsupportedEncodingException; 
 import java.security.MessageDigest; 
 import java.security.NoSuchAlgorithmException; 
@@ -16,11 +17,12 @@ import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-public class Communicate extends StorageContainer {
+public class Communicate {
 
 	public static String createRestaurant (String authcode, String restName, String webService) {
 		StringBuffer sb = new StringBuffer();
@@ -364,7 +366,7 @@ public class Communicate extends StorageContainer {
 		// existing menu edited
 		// existing menu deleted
 	}
-	public static String getSHA(String convertme)  throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public static String getSHA1(String convertme)  throws NoSuchAlgorithmException, UnsupportedEncodingException {
 	    try {
 	    	MessageDigest md = MessageDigest.getInstance("sha-1"); 
 		    byte[] sha1hash = new byte[40];
@@ -375,4 +377,5 @@ public class Communicate extends StorageContainer {
 	    catch (NoSuchAlgorithmException none) { System.err.println(none); return null; }
 	    catch (UnsupportedEncodingException unsupported) { System.err.println(unsupported); return null; }
 	}
+	
 }

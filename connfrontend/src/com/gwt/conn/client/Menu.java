@@ -69,7 +69,7 @@ public class Menu {
 		}
 		return categoryNames;
 	}
-	
+
 	public void addCategory(String newCategoryName) {
 		Category newCat = new Category (newCategoryName);
 		Categories.add(newCat);

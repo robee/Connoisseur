@@ -47,6 +47,7 @@ public class Restaurant {
 		return this.id;
 	}
 	
+	
 	public Restaurant (String name) {
 		this.name = name;
 	}
@@ -61,6 +62,10 @@ public class Restaurant {
 			}
 		}
 		return null;
+	}
+	public void addMenu(String menuName) {
+		Menu m = new Menu(menuName);
+		Menus.add(m);
 	}
 	
 	public String generateJSON(String menuName) {
