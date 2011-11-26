@@ -1,0 +1,30 @@
+/** Add css rules here for your application. */
+
+
+/** Example rules used by the template application (remove for your app) */
+h1 {
+  	font-size: 2em;
+  	font-weight: bold;
+  	color: #777777;
+  	margin: 100px 0px 70px;
+  	text-align: center;
+}
+
+.myButton {
+  	display: block;
+  	font-size: 16pt;
+}
+
+.errorLabel {
+	color: red;
+}
+
+.marginPanel {
+  	margin: 5px;
+}
+
+.marginlessPanel {
+	margin: 0px;
+}
+
+
