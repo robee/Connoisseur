@@ -436,13 +436,6 @@ public class Communicate {
 		return menu;
 	}
 	 
-	public static void synchronize(ArrayList<Menu> menus) {
-		// need to maintain a list of menus that were changed during offline mode
-		// changes can include:
-		// new menu created
-		// existing menu edited
-		// existing menu deleted
-	}
 	public static char[] getSHA1(String convertme)  throws NoSuchAlgorithmException, UnsupportedEncodingException {
 	    try {
 	    	MessageDigest md = MessageDigest.getInstance("SHA-1"); 
