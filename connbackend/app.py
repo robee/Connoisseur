@@ -102,9 +102,11 @@ def ModelsFromDoc(jsonString):
                     menuitem.image = menu_item_dict['image']
                     menuitem.description = menu_item_dict['description']
                 else:
-                    menuitem=MenuItem.create(   menu_item_dict['name'], 
-                                                menu, menu_item_dict['price'], 
-                                                category,  menu_item_dict['image'], 
+                    menuitem=MenuItem.create(   menu_item_dict['name'],
+                                                menu, 
+                                                menu_item_dict['price'], 
+                                                category,  
+                                                menu_item_dict['image'], 
                                                 menu_item_dict['description'])
                 menuitem.put()
         ui_profile.put()
