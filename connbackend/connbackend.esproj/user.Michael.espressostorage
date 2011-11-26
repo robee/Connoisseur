@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>com.macrabbit.Espresso.FileManager.DisclosureCollapsed</key>
-	<true/>
+	<false/>
 	<key>com.macrabbit.Espresso.Publisher.DisclosureCollapsed</key>
 	<false/>
 	<key>com.macrabbit.Espresso.Workspace.DisclosureCollapsed</key>
@@ -13,18 +13,46 @@
 		<key>Tabs</key>
 		<array>
 			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/templates/scroll.html</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/apiSpec.txt</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/templates/indexBack.html</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/templates/index.html</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/app.py</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
 				<key>StateType</key>
 				<string>PreviewTab</string>
 				<key>Title</key>
 				<string>Connoisseur</string>
 				<key>URL</key>
-				<string>file:///Users/Michael/Sites/Conn/connbackend/templates/index.html</string>
+				<string>file:///Users/Michael/dev/Connoisseur/connbackend/templates/indexBack.html</string>
 			</dict>
 			<dict>
-				<key>DocumentURL</key>
-				<string>file://localhost/Users/Michael/Sites/Conn/connbackend/templates/index.html</string>
 				<key>StateType</key>
-				<string>DefaultTab</string>
+				<string>PreviewTab</string>
 			</dict>
 		</array>
 	</dict>
