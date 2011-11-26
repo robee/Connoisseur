@@ -1,5 +1,5 @@
 package com.gwt.conn.client;
-
+// OBSOLETE?
 public class MenuEntry {
 	
 	private String category;
@@ -25,6 +25,10 @@ public class MenuEntry {
 		return this.title;
 	}
 	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
 	public void setPrice(double price) {
 		this.price = price;
 	}
@@ -39,8 +43,8 @@ public class MenuEntry {
 		sb.append("\"category\": \"" + this.category + "\", ");
 		sb.append("\"menuitem_id\": \"" + this.id + "\", ");
 		sb.append("\"description\": \"" + this.description + "\", ");
-		sb.append("\"menu\": \"" + null + "\", ");
-		sb.append("\"image\": \"" + null + "\", ");
+		sb.append("\"menu\": null, ");
+		sb.append("\"image\": \"" + this.image + "\", ");
 		sb.append("\"price\": \"" + this.price + "\", ");
 		sb.append("\"name\": \"" + this.title + "\"");
 		sb.append("}");

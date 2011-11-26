@@ -1,13 +1,18 @@
 package com.gwt.conn.client;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Category {
 	private String title;
-	private ArrayList <MenuEntry> menuEntries= new ArrayList<MenuEntry>();
+	private ArrayList <MenuItem> menuEntries = new ArrayList<MenuItem>();
 	
 	public Category (String title) {
 		this.title = title;
+	}
+	
+	public void swapMenuItems(int first, int second) {
+		Collections.swap(menuEntries, first, second);
 	}
 	
 	public void setTitle (String newTitle) {
@@ -16,18 +21,27 @@ public class Category {
 	public String getTitle() {
 		return this.title;
 	}
+	
 	public void addMenuItem(String itemName) {
-		MenuEntry mi = new MenuEntry(itemName);
+		MenuItem mi = new MenuItem(itemName);
+		menuEntries.add(mi);
+	}
+	
+	public void addMenuItem(MenuItem mi) {
 		menuEntries.add(mi);
 	}
 	
 	public void deleteMenuItem (String itemName) {
 		for (int i = 0; i < menuEntries.size(); i++) {
-			if (menuEntries.get(i).getTitle().equalsIgnoreCase(itemName)) {
+			if (menuEntries.get(i).getName().equalsIgnoreCase(itemName)) {
 				menuEntries.remove(i);
 				break;
 			}
 		}
+	}
+	
+	public ArrayList<MenuItem> getMenuItems() {
+		return menuEntries;
 	}
 	
 	public String generateJSON() {
@@ -35,7 +49,7 @@ public class Category {
 		String commaPrefix = "";
 		
 		sb.append("\"" + getTitle() + "\": [");
-		for (MenuEntry me : menuEntries) {
+		for (MenuItem me : menuEntries) {
 			sb.append(commaPrefix);
 			commaPrefix = ",";
 			sb.append(me.generateJSON());

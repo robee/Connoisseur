@@ -2,33 +2,47 @@ package com.gwt.conn.client;
 
 /** The Field Verifier Class **
  * 
- * This class checks various things about what the user inputs in order to
- * ensure consistency in the storage system.
+ * This class checks various things about what the user inputs in general in order to
+ * ensure consistency and cleanliness in the storage system.
  * 
  */
-public class FieldVerifier extends StorageContainer {
+public class FieldVerifier {
 
-	/** Verifies that the given string is a valid license key. */
-	public static String isValidLicenseKey(String name) {
-		/** Still need to implement validation with backend. */
-		String test = isLongEnough(name);
+	/** Verifies that the given string is a valid license key.
+	 *  Returns the default json object for the app if valid.
+	 *  Returns an error otherwise.
+	 */
+	public static String isValidLicenseKey(String license, String restID, String menuName) {
+		String test = isLongEnoughAndNotNull(restID);
 		if (!test.equals("")) return "You submitted an invalid license key.";
-		return ""; // empty string means success!
+		return test;
+		//return Communicate.createMenu(menuName, restID, "http://connoisseurmenu.appspot.com/menu/create");
 	}
 	
 	/** Verifies that the given string is a valid menu name. */
 	public static String isValidMenuName(String name) {
-		String test = isLongEnough(name);
+		String test = isLongEnoughAndNotNull(name);
 		if (!test.equals("")) return test;
-		test = isAlphanumeric(name);
+		test = isAlphanumericPlusSpaces(name);
 		if (!test.equals("")) return test;
-		test = doesntExistYet(name);
+		test = menuDoesntExistYet(name);
+		if (!test.equals("")) return test;
+		return ""; // empty string means success!
+	}
+	
+	/** Verifies that the given string is a valid category name. */
+	public static String isValidCategoryName(String name, String[] names) {
+		String test = isLongEnoughAndNotNull(name);
+		if (!test.equals("")) return test;
+		test = isAlphanumericPlusSpaces(name);
+		if (!test.equals("")) return test;
+		test = categoryDoesntExistYet(name, names);
 		if (!test.equals("")) return test;
 		return ""; // empty string means success!
 	}
 	
 	/** Checks to see if the given string has a length of at least 4. */
-	private static String isLongEnough(String name) {
+	private static String isLongEnoughAndNotNull(String name) {
 		if (name == null) return "Must be at least 4 characters long.";
 		else if (name.length() < 4) return "Must be at least 4 characters long.";
 		else return "";
@@ -38,7 +52,7 @@ public class FieldVerifier extends StorageContainer {
 	 * Checks to see if the given string consists entirely of letters, numbers or spaces,
 	 * with no spaces at the beginning or end.
 	 */
-	private static String isAlphanumeric(String name) {
+	private static String isAlphanumericPlusSpaces(String name) {
 		char str[] = name.toCharArray();
 		if (str[0] == ' ' || str[name.length()-1] == ' ') return "Cannot start or end with a space.";
 		for (int i=0; i < name.length(); ++i) {
@@ -54,10 +68,10 @@ public class FieldVerifier extends StorageContainer {
 		return "";
 	}
 	
-	/** Checks to see that no other menu has this name already. */
-	private static String doesntExistYet(String name) {
-		String[] menus = getMenus(); // from StorageContainer.java
-		int numMenus = getNumMenus(); // from StorageContainer.java
+	/** Checks to see that no other menu in storage has this name already. */
+	private static String menuDoesntExistYet(String name) {
+		String[] menus = StorageContainer.getMenus(); // from StorageContainer.java
+		int numMenus = StorageContainer.getNumMenus(); // from StorageContainer.java
 		for (int i=0; i < numMenus; ++i) {
 			String cur = menus[i];
 			if (name.equals(cur)) return "A menu by this name already exists.";
@@ -65,4 +79,12 @@ public class FieldVerifier extends StorageContainer {
 		return "";
 	}
 	
-}
+	/** Checks to see that no other menu in storage has this name already. */
+	private static String categoryDoesntExistYet(String catName, String[] catNames) {
+		for (int i=0; i < catNames.length; ++i) {
+			if (catName.equalsIgnoreCase(catNames[i])) return "A category by this name already exists.";
+		}
+		return "";
+	}
+	
+} // FieldVerifier

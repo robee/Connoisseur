@@ -44,7 +44,6 @@ PASSCODE = '4a0e36be6e7d439f83ef8aa8d3f4a40f'
                 "category": "Drink", 
                 "menuitem_id": "6cfb79454bc2446d", 
                 "description": "UPDATED", 
-                "menu": null, 
                 "image": "This is a sample menu Item", 
                 "price": 11.0, 
                 "name": "Starter Item 2"
@@ -56,7 +55,6 @@ PASSCODE = '4a0e36be6e7d439f83ef8aa8d3f4a40f'
                 "category": "Updated Appy", 
                 "menuitem_id": "18aedbf42a8b41ad", 
                 "description": "", 
-                "menu": null, 
                 "image": "Updated This is a sample menu Item", 
                 "price": 1000.0, 
                 "name": "Updated Starter Item 1"
@@ -101,11 +99,17 @@ def ModelsFromDoc(jsonString):
             for menu_item_dict in category_list:
                 logging.info(type(menu_item_dict))
                 menuitem = MenuItem.get_by_id(menu_item_dict['menuitem_id'])
-                menuitem.name = menu_item_dict['name']
-                menuitem.category = category
-                menuitem.price = menu_item_dict['price']
-                menuitem.image = menu_item_dict['image']
-                menuitem.description = menu_item_dict['description']
+                if menuitem:
+                    menuitem.name = menu_item_dict['name']
+                    menuitem.category = category
+                    menuitem.price = menu_item_dict['price']
+                    menuitem.image = menu_item_dict['image']
+                    menuitem.description = menu_item_dict['description']
+                else:
+                    menuitem=MenuItem.create(   menu_item_dict['name'], 
+                                                menu, menu_item_dict['price'], 
+                                                category,  menu_item_dict['image'], 
+                                                menu_item_dict['description'])
                 menuitem.put()
         ui_profile.put()
         menu.put()
@@ -173,7 +177,7 @@ class MainHandler(webapp.RequestHandler):
             
         menu_id = Menu.get_menus_by_rest_id(rest_id)[0].menu_id
         doc = DocFromModels(rest_id, menu_id)
-        doc_obj = doc.loads(doc)
+        doc_obj = json.loads(doc)
         self.response.out.write(template.render('templates/index.html', doc_obj))
 
 class Preview(webapp.RequestHandler):
@@ -277,6 +281,7 @@ class CreateRestaurant(webapp.RequestHandler):
         }
         
         self.response.out.write(json.dumps(return_obj))
+
 
 #check
 #http://localhost:8087/menu?menu_id=70d92ac71e1e4b1f&restaurant_id=19968b3ba550485dbfd8bf431c6851ef

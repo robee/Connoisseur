@@ -1,11 +1,11 @@
 package com.gwt.conn.client;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -16,107 +16,154 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 /** The Authenticate Class **
  * 
- * This class provides the ability to interact with the editor app.
- * The editor loads the dashboard after authenticating the user.
+ * This authenticator provides the ability to interact with the editor app.
+ * The authenticator loads the dashboard after authenticating the user.
  *
  */
 
-public class Authenticate extends StorageContainer {
+public class Authenticate {
 	
-	/** This creates an instance of the Dashboard class. */
-	private final Dashboard dashboard = GWT.create(Dashboard.class);
+	/** Local storage for saving strings, which persist when the app is shut down.  */
+	private static final Storage storage = StorageContainer.getStorage();
 	
 	/** This is essentially the main method for the editor app. */
-	public void go() {
-		//storage.clear(); // uncomment to completely reset app
+	public static void go() {
+		storage.clear(); // uncomment to completely reset app
 		
 		final DialogBox startupBox = new DialogBox(); // movable box that contains widgets
 		startupBox.setAnimationEnabled(true);
-		
-		final VerticalPanel startupVPanel = new VerticalPanel(); // can contain other widgets
-		startupVPanel.addStyleName("marginPanel"); // interacts with Connfrontend.css
-		startupVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+		final VerticalPanel startupPanel = new VerticalPanel(); // can contain other widgets
+		startupPanel.addStyleName("marginPanel"); // interacts with Connfrontend.css
+		startupPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		
 		// check to see if storage is supported
 		if (storage != null) {
+			
 			// load dashboard if license key has been submitted before
 			if (storage.getLength() > 0) {
-				startup(); // prepares storage for interaction (in StorageContainer.java)
-				dashboard.startDashboard(); // gets the rest of the app started
+				StorageContainer.initStorage(); // prepares storage for interaction
+				Dashboard.loadMenu(Communicate.deserialize(storage.getItem("menu")));
+				//Dashboard.loadDashboard();
 			}
 			
-			// load authentication UI in order to receive license key input
+			// otherwise load authentication UI in order to receive license key input
 			else {
-				final Label errorLabel = new Label(); // dynamic text
-				errorLabel.addStyleName("errorLabel"); // interacts with Connfrontend.css
+				final Button submitButton = new Button("Submit"); // "Submit" appears on button
+				submitButton.addStyleName("myButton"); // interacts with Connfrontend.css
+				final HorizontalPanel buttonPanel = new HorizontalPanel(); // used to center button
+				buttonPanel.addStyleName("marginlessPanel");
 				
-				final Button sendButton = new Button("Submit");
-				sendButton.addStyleName("myButton"); // interacts with Connfrontend.css
+				// license widgets
+				final Label licenseErrorLabel = new Label(); // dynamic text
+				licenseErrorLabel.addStyleName("errorLabel"); // interacts with Connfrontend.css
+				final TextBox submitLicense = new TextBox(); // user can input text using this
+				submitLicense.setText("license key..."); // default text to be seen on load
 				
-				final TextBox submitField = new TextBox(); // user can input text using this
-				submitField.setText("license key..."); // default text to be seen on load
+				// restaurant ID widgets
+				final Label restErrorLabel = new Label();
+				restErrorLabel.addStyleName("errorLabel");
+				final TextBox submitRestID = new TextBox();
+				submitRestID.setText("restaurant ID...");
 				
 				// organize UI
-				final HorizontalPanel startupHPanel = new HorizontalPanel();
-				startupVPanel.add(new HTML("Please enter your license key:"));
-				startupHPanel.add(submitField);
-				startupHPanel.add(sendButton);
-				startupVPanel.add(startupHPanel);
-				startupVPanel.add(errorLabel);
+				startupPanel.add(new HTML("Please enter your license key:"));
+				startupPanel.add(submitLicense);
+				startupPanel.add(licenseErrorLabel);
+				startupPanel.add(new HTML("<br>Please enter your restaurant ID:"));
+				startupPanel.add(submitRestID);
+				startupPanel.add(restErrorLabel);
+				startupPanel.add(new HTML("<br>"));
+				buttonPanel.add(submitButton);
+				startupPanel.add(buttonPanel);
 				
-				// setup startupBox, which is what will be seen
-				startupBox.setWidget(startupVPanel); // connects the two widgets
+				// setup startupBox, which is what will be seen by the user
+				startupBox.setWidget(startupPanel); // connects the two widgets
 				startupBox.center(); // also shows the box
 				
-				// focus the cursor on submitField when startupBox appears
-				submitField.setFocus(true);
-				submitField.selectAll();
+				// focus the cursor on submitLicense when startupBox appears
+				submitLicense.setFocus(true);
+				submitLicense.selectAll();
 				
-				// create a handler for the sendButton and submitField
+				// create a handler for the submitButton and submitLicense
 				class MyHandler implements ClickHandler, KeyUpHandler {
 					/** Fired when the user clicks submit. */
 					public void onClick(ClickEvent event) {
 						submit();
 					}
 					
-					/** Fired when the user presses Enter in submitField. */
+					/** Fired when the user presses Enter in submitLicense. */
 					public void onKeyUp(KeyUpEvent event) {
-						if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-							submit();
-						}
+						if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) submit();
 					}
 					
 					/** Checks the submitted license key for validity. Loads the dashboard if valid. */
 					private void submit() {
 						// validate license key
-						String license = submitField.getText();
-						String test = FieldVerifier.isValidLicenseKey(license); // from FieldVerifier.java
-						if (!test.equals("")) {
-							errorLabel.setText(test);
+						String license = submitLicense.getText(); // unused for now
+						String restID = submitRestID.getText();
+						String json = "{\"menu_id\": \"236e8690d55248ff\", \"restaurant_id\": \"b686d49d8b67424aa1e347613cbb1975\", " +
+							"\"menu_name\": \"menu\", \"ui_profile\": {\"logo_url\": \"http://www.virginialogos.com/Portals/" +
+							"57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg\", \"color\": \"black\", \"menu\": null, \"profile_id\": " +
+							"\"259fdb7df24a4f6d\", \"template\": \"classy\", \"font\": \"Helvetica\"}, \"restaurant_name\": " +
+							"\"restaurantTest\", \"menuitems\": {\"Drink\": [{\"category\": \"Drink\", \"menuitem_id\": " +
+							"\"24c0206c962a4903\", \"description\": \"\", \"menu\": null, \"image\": \"This is a sample menu Item\", " +
+							"\"price\": 11.0, \"name\": \"Starter Item 2\"}], \"Appy\": [{\"category\": \"Appy\", \"menuitem_id\": " +
+							"\"6c1bd016d5b54dc9\", \"description\": \"\", \"menu\": null, \"image\": \"This is a sample menu Item\", " +
+							"\"price\": 10.0, \"name\": \"Starter Item 1\"}]}}";
+						/*String json = FieldVerifier.isValidLicenseKey(license, restID, "menu"); // from FieldVerifier.java
+						if (json.charAt(0) != '{') { // not json
+							restErrorLabel.setText("You submitted an invalid restaurant ID.");
+							submitLicense.selectAll();
 							return;
-						}
+						}*/
 						
-						// clean up, then load dashboard
-						sendButton.setEnabled(false);
+						// clean up
+						submitButton.setEnabled(false);
+						submitLicense.setEnabled(false);
+						submitRestID.setEnabled(false);
 						startupBox.hide();
-						storage.setItem("license", license); // remember license key
+						
+						// set up storage
+						storage.setItem("license", license); // remember restaurant_id
 						storage.setItem("numMenus", Integer.toString(0));
-						dashboard.startDashboard(); // gets the rest of the app started
+						StorageContainer.initStorage();
+						StorageContainer.addMenu("menu", json);
+						
+						//for testing
+						final Menu m = new Menu("menu");
+						m.setID("236e8690d55248ff");
+						m.setRestaurantID("b686d49d8b67424aa1e347613cbb1975");
+						m.setLogoURL("http://www.virginialogos.com/Portals/57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg");
+						m.setColor("black");
+						m.setMenu("null");
+						m.setProfile("259fdb7df24a4f6d");
+						m.setTemplate("classy");
+						m.setFont("Helvetica");
+						m.addCategory("Drink");
+						m.addMenuItem("Drink", "Starter Item 2");
+						m.addCategory("Appy");
+						m.addMenuItem("Appy", "Starter Item 1");
+						Dashboard.loadMenu(m);
+						
+						//Dashboard.loadMenu(Communicate.deserialize(json));
+						//Dashboard.loadDashboard();
 					}
-				}
+				} // MyHandler
 				
 				// attach the handler
 				final MyHandler handler = new MyHandler();
-				sendButton.addClickHandler(handler);
-				submitField.addKeyUpHandler(handler);
+				submitButton.addClickHandler(handler);
+				submitLicense.addKeyUpHandler(handler);
+				submitRestID.addKeyUpHandler(handler);
 			} // else load authentication UI
+			
 		} // if storage supported
 		
 		// storage is not supported, so report error
 		else {
-			startupVPanel.add(new HTML("<font color=red>The app will not function because<br>" +
+			startupPanel.add(new HTML("<font color=red>The app will not function because local<br>" +
 					"storage is not supported on this platform.</font>"));
-			startupBox.setWidget(startupVPanel);
+			startupBox.setWidget(startupPanel);
 			startupBox.center();
 		}
 	} // end go
