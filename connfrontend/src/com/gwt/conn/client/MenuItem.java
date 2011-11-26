@@ -2,13 +2,13 @@ package com.gwt.conn.client;
 
 public class MenuItem {
 	
-	private String category;
-	private String menuitem_id;
-	private String description;
-	private String menu;
-	private String image;
-	private String price;
-	private String name;
+	private String category = null;
+	private String menuitem_id = null;
+	private String description = null;
+	private String menu = null;
+	private String image = null;
+	private String price = null;
+	private String name = null;
 	
 	public MenuItem (String title) {
 		this.name = title;
@@ -49,8 +49,8 @@ public class MenuItem {
 		sb.append("\"category\": \"" + this.category + "\", ");
 		sb.append("\"menuitem_id\": \"" + this.menuitem_id + "\", ");
 		sb.append("\"description\": \"" + this.description + "\", ");
-		sb.append("\"menu\": \"" + null + "\", ");
-		sb.append("\"image\": \"" + null + "\", ");
+		sb.append("\"menu\": \"" + this.menu + "\", ");
+		sb.append("\"image\": \"" + this.image + "\", ");
 		sb.append("\"price\": \"" + this.price + "\", ");
 		sb.append("\"name\": \"" + this.name + "\"");
 		sb.append("}");

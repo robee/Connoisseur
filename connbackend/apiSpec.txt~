@@ -1,6 +1,7 @@
 
 										
-										
+OMGWTF Restaurant {"secret_key": "2bc82f5dda4941679fe5f45b2f1e5055", "restaurant_id": "60c9e51a752246eda8e1f5a00b70a399"}
+							
 
 API Spec
 NOTE: Authentication is currently turned off so if you do it wrong it won't matter, it turn it on when ready
@@ -63,7 +64,7 @@ Update Menu
         restaurant_id   : need to know who is trying to do this
     return:
         A String that says Update Successful
-    else:
+    else:	
         self.response.out.write('ERROR: Incomplete or Malformed doc')
         
     errors:
