@@ -15,7 +15,8 @@ public class FieldVerifier {
 	public static String isValidLicenseKey(String license, String restID, String menuName) {
 		String test = isLongEnoughAndNotNull(restID);
 		if (!test.equals("")) return "You submitted an invalid license key.";
-		return Communicate.createMenu(menuName, restID, "http://connoisseurmenu.appspot.com/menu/create");
+		return test;
+		//return Communicate.createMenu(menuName, restID, "http://connoisseurmenu.appspot.com/menu/create");
 	}
 	
 	/** Verifies that the given string is a valid menu name. */

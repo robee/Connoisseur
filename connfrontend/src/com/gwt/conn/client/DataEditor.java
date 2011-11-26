@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -30,17 +31,19 @@ public class DataEditor {
 	/** Local storage for saving strings, which persist when the app is shut down.  */
 	private static final Storage storage = StorageContainer.getStorage();
 	
-	/** Declare these global for convenience. */
+	/** Declare these as global for convenience. */
 	private static final HorizontalPanel dataEditorPan = new HorizontalPanel();
 	private static final VerticalPanel navigationPan = new VerticalPanel();
 	private static final VerticalPanel nullPage = new VerticalPanel();
-	private static final ArrayList <HorizontalPanel> buttonRows = new ArrayList<HorizontalPanel>();
-	private static final ArrayList <VerticalPanel> catPages = new ArrayList<VerticalPanel>();
-	private static final ArrayList <ArrayList<HorizontalPanel>> miButtonRows = new ArrayList<ArrayList<HorizontalPanel>>();
-	private static final ArrayList <ArrayList<VerticalPanel>> itemPages = new ArrayList<ArrayList<VerticalPanel>>();
+	private static final ArrayList <ButtonRow> buttonRows = new ArrayList<ButtonRow>();
+	private static final ArrayList <ArrayList<ButtonRow>> miButtonRows = new ArrayList<ArrayList<ButtonRow>>();
+	private static final HTML testLabel = new HTML();
 	
 	/** Called when the data editor needs to be loaded. */
 	public static HorizontalPanel getDataEditor(final Menu menu) {
+		// testing
+		testLabel.setText(storage.getItem("menu"));
+		RootPanel.get().add(testLabel, 0, 500);
 		// this is used so that buttons don't do anything when clicked
 		// if the contents that the button would load are already visible
 		// need to use storage to save state of editor when interacting with buttons
@@ -64,9 +67,8 @@ public class DataEditor {
 		// iterate out buttons for all categories and put them in navigationPan
 		for (int i=0; i < catNames.length; ++i) {
 			// setup row of buttons and attach them to navigationPan
-			catPages.add(createNewCategoryContentPanel(cats.get(i))); // make page that will be seen
-			buttonRows.add(createNewCategoryButtonRow(i, catNames[i], menu)); // add page link to button array
-			navigationPan.add(buttonRows.get(i)); // make page visible
+			buttonRows.add(createNewCategoryButtonRow(i, catNames[i], cats.get(i), menu)); // add page link to button array
+			navigationPan.add(buttonRows.get(i).getButtonRow()); // make page visible
 		}
 		
 		// add a create new category button at bottom of navigationPan
@@ -135,10 +137,10 @@ public class DataEditor {
 						menu.addCategory(catName);
 						ArrayList <Category> cats = menu.getCategories();
 						int i = cats.size()-1;
-						catPages.add(createNewCategoryContentPanel(cats.get(i)));
-						buttonRows.add(createNewCategoryButtonRow(i, catName, menu));
-						navigationPan.add(buttonRows.get(i));
+						buttonRows.add(createNewCategoryButtonRow(i, catName, cats.get(i), menu));
+						navigationPan.insert(buttonRows.get(i).getButtonRow(), i);
 						StorageContainer.saveChange(menu); // save change anytime something changes from default
+						testLabel.setText(storage.getItem("menu"));
 						sendButton.setEnabled(false);
 						submitField.setEnabled(false);
 						submitBox.hide();
@@ -182,7 +184,7 @@ public class DataEditor {
 	} // end createNewCategoryContentPanel
 	
 	/** Creates a new row of buttons for the navigation panel. */
-	private static HorizontalPanel createNewCategoryButtonRow(final int i, final String catName, final Menu menu) {
+	private static ButtonRow createNewCategoryButtonRow(final int i, final String catName, final Category cat, final Menu menu) {
 		// button declarations
 		final Button catButton = new Button(catName);
 		catButton.addStyleName("myButton");
@@ -192,12 +194,15 @@ public class DataEditor {
 		downButton.addStyleName("myButton");
 		final Button deleteButton = new Button("x");
 		deleteButton.addStyleName("myButton");
+		
+		// construct actual buttonRow
 		final HorizontalPanel buttonPanel = new HorizontalPanel();
 		buttonPanel.addStyleName("marginlessPanel");
 		buttonPanel.add(catButton);
 		buttonPanel.add(upButton);
 		buttonPanel.add(downButton);
 		buttonPanel.add(deleteButton);
+		final ButtonRow buttonRow = new ButtonRow(buttonPanel, createNewCategoryContentPanel(cat), i);
 		
 		// handler for catButton
 		class CatClickHandler implements ClickHandler {
@@ -217,7 +222,7 @@ public class DataEditor {
 
 					// update current page in storage and mount new content panel in dataEditorPan
 					storage.setItem("curDataPage", catName);
-					VerticalPanel newContentPage = catPages.get(i);
+					VerticalPanel newContentPage = buttonRow.getContentPage();
 					dataEditorPan.add(newContentPage);
 					dataEditorPan.setCellWidth(newContentPage, "66.7%");
 				}
@@ -228,7 +233,8 @@ public class DataEditor {
 		class UpHandler implements ClickHandler {
 			public void onClick(ClickEvent event) {
 				// not first row
-				if (i > 0) swapCategoryButtonRows(i-1, i, menu);
+				int posn = buttonRow.getPosition();
+				if (posn > 0) swapCategoryButtonRows(posn-1, posn, menu);
 			}
 		}
 
@@ -236,7 +242,8 @@ public class DataEditor {
 		class DownHandler implements ClickHandler {
 			public void onClick(ClickEvent event) {
 				// not last row
-				if (i < buttonRows.size() - 1) swapCategoryButtonRows(i, i+1, menu);
+				int posn = buttonRow.getPosition();
+				if (posn < buttonRows.size() - 1) swapCategoryButtonRows(posn, posn+1, menu);
 			}
 		}
 
@@ -259,8 +266,8 @@ public class DataEditor {
 				noButton.addStyleName("myButton");
 
 				// organize UI
-				warningPan.add(new HTML("Hold on! You are about to delete the category<br>" +
-						catName + "<br>and all of its contents. Do you want to continue?<br><br>"));
+				warningPan.add(new HTML("Hold on! You are about to delete the category<br><br><b>" +
+						catName + "</b><br><br>and all of its contents. Do you want to continue?<br><br>"));
 				answerPan.add(yesButton);
 				answerPan.add(noButton);
 				warningPan.add(answerPan);
@@ -279,10 +286,16 @@ public class DataEditor {
 							dataEditorPan.setCellWidth(nullPage, "66.7%");
 						}
 						navigationPan.remove(buttonPanel);
-						buttonRows.remove(i);
-						catPages.remove(i);
+						int posn = buttonRow.getPosition();
+						buttonRows.remove(buttonRow);
 						menu.deleteCategory(catName); // in Menu.java
+						while (posn < buttonRows.size()) { // update position of rows below the one deleted
+							int oldPosn = buttonRows.get(posn).getPosition();
+							buttonRows.get(posn).setPosition(oldPosn-1);
+							posn++;
+						}
 						StorageContainer.saveChange(menu); // in StorageContainer.java
+						testLabel.setText(storage.getItem("menu"));
 						warningBox.hide();
 					}
 				}
@@ -312,7 +325,7 @@ public class DataEditor {
 		final DeleteHandler deleteHandler = new DeleteHandler();
 		deleteButton.addClickHandler(deleteHandler);
 		
-		return buttonPanel;
+		return buttonRow;
 	} // end createNewCategoryButtonRow
 	
 	/** Helper for finding the current page panel, which could be a category or menu item. */
@@ -320,7 +333,7 @@ public class DataEditor {
 		// search category names
 		for (int i=0; i < cats.size(); ++i) {
 			if (cats.get(i).getTitle().equals(curPage)) {
-				return catPages.get(i); // in Category.java
+				return buttonRows.get(i).getContentPage(); // in Category.java
 			}
 		}
 		
@@ -329,7 +342,7 @@ public class DataEditor {
 			ArrayList <MenuItem> items = cats.get(i).getMenuItems();
 			for (int j=0; j < items.size(); ++j) {
 				if (("mi." + items.get(j).getName()).equals(curPage)) {
-					return itemPages.get(i).get(j);
+					return miButtonRows.get(i).get(j).getContentPage();
 				}
 			}
 		}
@@ -339,16 +352,25 @@ public class DataEditor {
 
 	/** Swaps two elements of the buttonRows array. Note: a < b */
 	private static void swapCategoryButtonRows(final int a, final int b, final Menu menu) {
+		// menu object
 		menu.swapCategories(a, b);
-		navigationPan.remove(buttonRows.get(b));
-		navigationPan.insert(buttonRows.get(b), a);
+		
+		// ui
+		navigationPan.remove(buttonRows.get(b).getButtonRow());
+		navigationPan.insert(buttonRows.get(b).getButtonRow(), a);
+		
+		// local array
+		buttonRows.get(a).setPosition(b);
+		buttonRows.get(b).setPosition(a);
 		Collections.swap(buttonRows, a, b);
-		Collections.swap(catPages, a, b);
+		
+		// json
 		StorageContainer.saveChange(menu);
+		testLabel.setText(storage.getItem("menu"));
 	} // end swapCategoryButtonRows
 	
 	/** Swaps two elements of the itemButtonRows array. Note: a < b */
-	private static void swapMenuItemButtonRows(final int a, final int b, final Menu menu,
+/*	private static void swapMenuItemButtonRows(final int a, final int b, final Menu menu,
 			final Category cat, ArrayList <HorizontalPanel> itemButtonRows) {
 		cat.swapMenuItems(a, b);
 		navigationPan.remove(buttonRows.get(b));
@@ -357,5 +379,5 @@ public class DataEditor {
 		Collections.swap(catPages, a, b);
 		StorageContainer.saveChange(menu);
 	} // end swapCategoryButtonRows
-	
+*/	
 } // DataEditor

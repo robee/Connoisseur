@@ -199,22 +199,22 @@ public class Dashboard {
 					buttonPan.add(pushButton);
 					class PushHandler implements ClickHandler {
 						public void onClick(ClickEvent event) {
-							String result = Communicate.updateMenu(menu.getName(), storage.getItem("license"),
+						/*	String result = Communicate.updateMenu(menu.getName(), storage.getItem("license"),
 								"http://connoisseurmenu.appspot.com/menu/update");
 							if (result.equals("Update Successful")) {
 								// make popup dialog box that says "Update Successful"
-								//String json = Communicate.getMenu("http://connoisseurmenu.appspot.com/menu",
-									//"restaurant_id=" + storage.getItem("restID") +
-									//"&doc=" + storage.getItem(menu.getName()));
-								//storage.setItem(menu.getName(), json);
+								String json = Communicate.getMenu("http://connoisseurmenu.appspot.com/menu",
+									"restaurant_id=" + storage.getItem("restID") +
+									"&doc=" + storage.getItem(menu.getName()));
+								storage.setItem(menu.getName(), json);
 								
 								// reset UI
 								RootPanel.get().remove(dashboardPan);
-								//loadMenu(Communicate.deserialize(json));
+								loadMenu(Communicate.deserialize(json));
 							}
 							else {
 								// report error
-							}
+							}*/
 						}
 					}
 					final PushHandler pushHandler = new PushHandler();

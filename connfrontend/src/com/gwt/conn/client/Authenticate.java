@@ -50,6 +50,8 @@ public class Authenticate {
 			else {
 				final Button submitButton = new Button("Submit"); // "Submit" appears on button
 				submitButton.addStyleName("myButton"); // interacts with Connfrontend.css
+				final HorizontalPanel buttonPanel = new HorizontalPanel(); // used to center button
+				buttonPanel.addStyleName("marginlessPanel");
 				
 				// license widgets
 				final Label licenseErrorLabel = new Label(); // dynamic text
@@ -71,7 +73,8 @@ public class Authenticate {
 				startupPanel.add(submitRestID);
 				startupPanel.add(restErrorLabel);
 				startupPanel.add(new HTML("<br>"));
-				startupPanel.add(submitButton);
+				buttonPanel.add(submitButton);
+				startupPanel.add(buttonPanel);
 				
 				// setup startupBox, which is what will be seen by the user
 				startupBox.setWidget(startupPanel); // connects the two widgets
@@ -98,12 +101,21 @@ public class Authenticate {
 						// validate license key
 						String license = submitLicense.getText(); // unused for now
 						String restID = submitRestID.getText();
-						String json = FieldVerifier.isValidLicenseKey(license, restID, "menu"); // from FieldVerifier.java
+						String json = "{\"menu_id\": \"236e8690d55248ff\", \"restaurant_id\": \"b686d49d8b67424aa1e347613cbb1975\", " +
+							"\"menu_name\": \"menu\", \"ui_profile\": {\"logo_url\": \"http://www.virginialogos.com/Portals/" +
+							"57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg\", \"color\": \"black\", \"menu\": null, \"profile_id\": " +
+							"\"259fdb7df24a4f6d\", \"template\": \"classy\", \"font\": \"Helvetica\"}, \"restaurant_name\": " +
+							"\"restaurantTest\", \"menuitems\": {\"Drink\": [{\"category\": \"Drink\", \"menuitem_id\": " +
+							"\"24c0206c962a4903\", \"description\": \"\", \"menu\": null, \"image\": \"This is a sample menu Item\", " +
+							"\"price\": 11.0, \"name\": \"Starter Item 2\"}], \"Appy\": [{\"category\": \"Appy\", \"menuitem_id\": " +
+							"\"6c1bd016d5b54dc9\", \"description\": \"\", \"menu\": null, \"image\": \"This is a sample menu Item\", " +
+							"\"price\": 10.0, \"name\": \"Starter Item 1\"}]}}";
+						/*String json = FieldVerifier.isValidLicenseKey(license, restID, "menu"); // from FieldVerifier.java
 						if (json.charAt(0) != '{') { // not json
 							restErrorLabel.setText("You submitted an invalid restaurant ID.");
 							submitLicense.selectAll();
 							return;
-						}
+						}*/
 						
 						// clean up
 						submitButton.setEnabled(false);
@@ -116,7 +128,24 @@ public class Authenticate {
 						storage.setItem("numMenus", Integer.toString(0));
 						StorageContainer.initStorage();
 						StorageContainer.addMenu("menu", json);
-						Dashboard.loadMenu(Communicate.deserialize(json));
+						
+						//for testing
+						final Menu m = new Menu("menu");
+						m.setID("236e8690d55248ff");
+						m.setRestaurantID("b686d49d8b67424aa1e347613cbb1975");
+						m.setLogoURL("http://www.virginialogos.com/Portals/57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg");
+						m.setColor("black");
+						m.setMenu("null");
+						m.setProfile("259fdb7df24a4f6d");
+						m.setTemplate("classy");
+						m.setFont("Helvetica");
+						m.addCategory("Drink");
+						m.addMenuItem("Drink", "Starter Item 2");
+						m.addCategory("Appy");
+						m.addMenuItem("Appy", "Starter Item 1");
+						Dashboard.loadMenu(m);
+						
+						//Dashboard.loadMenu(Communicate.deserialize(json));
 						//Dashboard.loadDashboard();
 					}
 				} // MyHandler
