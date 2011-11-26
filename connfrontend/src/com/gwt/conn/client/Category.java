@@ -1,13 +1,11 @@
 package com.gwt.conn.client;
 
 import java.util.ArrayList;
-
-import com.google.gwt.user.client.ui.VerticalPanel;
 import java.util.Collections;
 
 public class Category {
 	private String title;
-	private ArrayList <MenuItem> menuEntries= new ArrayList<MenuItem>();
+	private ArrayList <MenuItem> menuEntries = new ArrayList<MenuItem>();
 	
 	public Category (String title) {
 		this.title = title;

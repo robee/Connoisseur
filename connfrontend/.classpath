@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="/home/dmitry/xstream-1.4.2.jar"/>
 	<classpathentry kind="lib" path="/home/dmitry/xstream/json-20080701.jar"/>
 	<classpathentry kind="lib" path="/home/dmitry/xstream/jettison-1.2.jar"/>
+	<classpathentry kind="lib" path="/home/dmitry/Eclipse Projects/commons-codec-1.5/commons-codec-1.5.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

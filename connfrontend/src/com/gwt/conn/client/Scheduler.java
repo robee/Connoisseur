@@ -4,11 +4,11 @@ import com.google.gwt.user.client.ui.DialogBox;
 
 /** The Scheduler Class **
  * 
- * do if there's time
+ * Unsupported.
  * 
  */
 
-public class Scheduler extends StorageContainer {
+public class Scheduler {
 	
 	/** Called when the scheduler needs to be used. */
 	public void loadScheduler(final DialogBox dashboardBox) {

@@ -1,8 +1,10 @@
 package com.gwt.conn.client;
+
 import java.io.UnsupportedEncodingException; 
 import java.security.MessageDigest; 
 import java.security.NoSuchAlgorithmException; 
 
+import java.util.Date;
 import org.apache.http.client.*;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -10,6 +12,7 @@ import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpEntity;
+import org.apache.commons.codec.binary.Hex;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
@@ -20,8 +23,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-public class Communicate extends StorageContainer {
-
+public class Communicate {
+	
 	public static String createRestaurant (String authcode, String restName, String webService) {
 		StringBuffer sb = new StringBuffer();
 		HttpClient client = new DefaultHttpClient();
@@ -60,11 +63,24 @@ public class Communicate extends StorageContainer {
 	public static String deleteRestaurant (String restID, String webService) {
 		StringBuffer sb = new StringBuffer();
 		HttpClient client = new DefaultHttpClient();
+		long Seed;
+		Date currentDate = new Date();
+	    Seed = currentDate.getTime();
+	    String hash = null;
+	    try {
+	    	hash = "" + getSHA1(restID + "67d29607cbb149d79d59cb6279643e74" + Seed);  // message + secret_key + timestamp
+	    }
+	    catch (NoSuchAlgorithmException exc) {
+			System.err.println(exc);
+	    }
+	    catch (UnsupportedEncodingException exc) {
+		System.err.println(exc);
+	    }
 		try {
 			HttpPost httppost = new HttpPost(webService);
-			StringBody securityMessage = null;
-			StringBody timestamp = null;
-			StringBody messageHash = null;	// use getSHA (message+securityCode+timestamp);
+			StringBody securityMessage = new StringBody(restID);
+			StringBody timestamp = new StringBody("" + Seed);
+			StringBody messageHash = new StringBody(hash);	// use getSHA (message+securityCode+timestamp);
 			StringBody restaurantID = new StringBody(restID);
 			// message_hash     : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
 			MultipartEntity reqEntity = new MultipartEntity();
@@ -99,14 +115,18 @@ public class Communicate extends StorageContainer {
 		// push/update associated json string of given menu in backend
 		StringBuffer sb = new StringBuffer();
 		HttpClient client = new DefaultHttpClient();
+		long Seed;
+		Date currentDate = new Date();
+	    Seed = currentDate.getTime();
+	    String doc = StorageContainer.getMenu(menuName);
 		try {
 			HttpPost httppost = new HttpPost(webService);
-			StringBody jsonMenu = null;	// retrieve from storage?
-			StringBody securityMessage = null;
-			StringBody timestamp = null;
-			StringBody messageHash = null;	// use getSHA (message+securityCode+timestamp);
+			StringBody jsonMenu = new StringBody(doc);	
+			StringBody securityMessage = new StringBody(doc);
+			StringBody timestamp = new StringBody("" + Seed);
+			StringBody messageHash = new StringBody(doc + "67d29607cbb149d79d59cb6279643e74" + Seed);
 			StringBody restaurantID = new StringBody(restID);
-			// message_hash     : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+			
 			MultipartEntity reqEntity = new MultipartEntity();
 			reqEntity.addPart("doc", jsonMenu);
 			reqEntity.addPart("message", securityMessage);
@@ -139,12 +159,26 @@ public class Communicate extends StorageContainer {
 	public static String createMenu (String menuName, String restID, String webService) {
 		StringBuffer sb = new StringBuffer();
 		HttpClient client = new DefaultHttpClient();
-		try {
+		String hash = null;
+		long Seed;
+		Date currentDate = new Date();
+	    Seed = currentDate.getTime();
+	    String message = menuName + restID;
+	    try {
+	    	hash = "" + getSHA1(message + "67d29607cbb149d79d59cb6279643e74" + Seed);  // message + secret_key + timestamp
+	    }
+	    catch (NoSuchAlgorithmException exc) {
+			System.err.println(exc);
+	    }
+	    catch (UnsupportedEncodingException exc) {
+		System.err.println(exc);
+	    }
+	    try {
 			HttpPost httppost = new HttpPost(webService);
 			StringBody menu_name = new StringBody(menuName);
-			StringBody securityMessage = null;
-			StringBody timestamp = null;
-			StringBody messageHash = null;	// use getSHA (message+securityCode+timestamp);
+			StringBody securityMessage = new StringBody(message);
+			StringBody timestamp = new StringBody("" + Seed);
+			StringBody messageHash = new StringBody(hash);	// use getSHA (message+securityCode+timestamp);
 			StringBody restaurantID = new StringBody(restID);
 			// message_hash     : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
 			MultipartEntity reqEntity = new MultipartEntity();
@@ -176,20 +210,32 @@ public class Communicate extends StorageContainer {
 			return null;
 	}
 	
-	// all of the operations except getMenu are done through HTTP POST
-	// There will be only 1 method dealing with all POST requests, the calls will be distinguished by the  
-	// web service parameter
 	public static String deleteMenu (String menuID, String restID, String webService) {
 		StringBuffer sb = new StringBuffer();
 		HttpClient client = new DefaultHttpClient();
+		String message = menuID + restID;
+		long Seed;
+		Date currentDate = new Date();
+	    Seed = currentDate.getTime();
+	    String hash = null;
+	    try {
+	    	hash = "" + getSHA1(message + "67d29607cbb149d79d59cb6279643e74" + Seed);  // message + secret_key + timestamp
+	    }
+	    catch (NoSuchAlgorithmException exc) {
+			System.err.println(exc);
+	    }
+	    catch (UnsupportedEncodingException exc) {
+		System.err.println(exc);
+	    }
+	    
 		try {
 			HttpPost httppost = new HttpPost(webService);
 			StringBody menu_id = new StringBody(menuID);
-			StringBody securityMessage = null;
-			StringBody timestamp = null;
-			StringBody messageHash = null;	// use getSHA (message+securityCode+timestamp);
+			StringBody securityMessage = new StringBody(message);
+			StringBody timestamp = new StringBody("" + Seed);
+			StringBody messageHash = new StringBody(hash);	// use getSHA (message+securityCode+timestamp);
 			StringBody restaurantID = new StringBody(restID);
-			// message_hash     : its a hash like this hashlib.sha1( message+secret_key+timestamp ).hexdigest()
+			
 			MultipartEntity reqEntity = new MultipartEntity();
 			reqEntity.addPart("menu_id", menu_id);
 			reqEntity.addPart("message", securityMessage);
@@ -229,20 +275,38 @@ public class Communicate extends StorageContainer {
 	 *  @return - JSON string containing items in the menu
 	 *  HTTP GET
 	 */
-	 public static String getMenu(String webservice, String requestParameters) {
+	 public static String getMenu(String menuID, String restID, String webservice) {
 		 String json = null;
+		 long Seed;
+		 Date currentDate = new Date();
+		 Seed = currentDate.getTime();
+		 String hash = null;
+		 try {
+		    	hash = "" + getSHA1(menuID + restID + "67d29607cbb149d79d59cb6279643e74" + Seed);  // message + secret_key + timestamp
+		 }
+		 catch (NoSuchAlgorithmException exc) {
+			System.err.println(exc);
+		 }
+		 catch (UnsupportedEncodingException exc) {
+			System.err.println(exc);
+		 }
+		 StringBuffer sb = new StringBuffer();
+		 sb.append("menu_id=" + menuID + "&");
+		 sb.append("message=" + menuID + restID + "&");
+		 sb.append("timestamp=" + Seed + "&");
+		 sb.append("message_hash=" + hash + "&");
+		 sb.append("restaurant_id=" + restID);
+		 
 		 try {
 		// Send data
 			 String urlString = webservice;
-			 if (requestParameters != null && requestParameters.length() > 0) {
-				 urlString += "?" + requestParameters;
-			 }
+			 urlString += "?" + sb.toString();
 			 URL url = new URL(urlString);
 			 URLConnection conn = url.openConnection();
 	
 		// Get the response
 			 BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			 StringBuffer sb = new StringBuffer();
+			 sb = new StringBuffer();
 			 String line;
 			 while ((line = rd.readLine()) != null) {
 				 sb.append(line);
@@ -258,21 +322,27 @@ public class Communicate extends StorageContainer {
 	 // need a method that would return the value of a JSON string, i.e. 
 	 // "menu": "xxx", the method would return xxx; 
 	
-	public String extractJSONValue(String keyValuePair) {
+	public static String extractJSONValue(String keyValuePair) {
 		int start = 0; int  finish = 0;
 		start  = keyValuePair.indexOf("\"", 1);
 		start = keyValuePair.indexOf("\"", start + 1);
 		finish = keyValuePair.indexOf("\"", start + 1);
 		return keyValuePair.substring(start + 1, finish);
 	}
-	 
-	public Menu deserialize(String jsonMenu) {
+	
+	// get restaurant name
+	public static Menu deserialize(String jsonMenu) {
 		int start = 0; int finish = 0;
 		int categoryEndIndex = 0;
 		int nextComma = 0;
+		
 		String menuID, restID, menuName, val;
+		
 		XStream xstream = new XStream(new JettisonMappedXmlDriver());
-		xstream.alias(null, MenuItem.class);
+		xstream.alias("MenuItem", MenuItem.class);
+		
+		Category cat;
+		Menu menu;
 		
 		if (jsonMenu.charAt(0) != '{') {
 			return null;
@@ -292,7 +362,7 @@ public class Communicate extends StorageContainer {
 		finish = jsonMenu.indexOf("\"", start + "\"menu_name\": \" ".length() );
 		menuName = extractJSONValue(jsonMenu.substring(start, finish + 1));
 		
-		Menu menu = new Menu(menuName);
+		menu = new Menu(menuName);
 		menu.setID(menuID);
 		menu.setRestaurantID(restID);
 		// logo url
@@ -327,26 +397,30 @@ public class Communicate extends StorageContainer {
 		menu.setFont(val);
 		
 		start = jsonMenu.indexOf("\"menuitems\"");	// find where menuitems starts
-		start = jsonMenu.indexOf("\"", start + "\"menuitems\" ".length());	// extract index of the start of category name
-		finish = jsonMenu.indexOf("\"", start); 	// index of the closing quotation for the first category name
+		start = jsonMenu.indexOf("\"", start + "\"menuitems\"  ".length());	// extract index of the start of category name
+		finish = jsonMenu.indexOf("\"", start + 1); 	// index of the closing quotation for the first category name
 		
 		// this loop is responsible for finding new categories within the JSON string
+		String menuItemJson = null;
 		for (;;) {
+			//System.out.println("start: " + start + ", finish: " + finish);
 			val = jsonMenu.substring(start + 1, finish);	// extract category name
-			Category cat = new Category(val);
+			cat = new Category(val);
 			categoryEndIndex = jsonMenu.indexOf("]", finish);
 			// this loop is responsible for finding all menuItems within the category and adding them into the category
 			for (;;) {
 				start = jsonMenu.indexOf("{", finish + 1);
 				finish = jsonMenu.indexOf("}", start);
-				MenuItem mi = (MenuItem)xstream.fromXML(jsonMenu.substring(start, finish + 1));
+				System.out.println(jsonMenu.substring(start, finish + 1));
+				menuItemJson = jsonMenu.substring(start, finish + 1);
+				MenuItem mi = (MenuItem)xstream.fromXML("{\"MenuItem\":" + menuItemJson + "}");
 				cat.addMenuItem(mi);	
 				nextComma = jsonMenu.indexOf(",", finish);
 				if (nextComma == -1 || nextComma > categoryEndIndex) {
 					break;
 				}
 			}
-			menu.addCategory(val);
+			menu.addCategory(cat);
 			nextComma = jsonMenu.indexOf(",", categoryEndIndex);
 			if (nextComma == -1) {
 				break; 
@@ -354,6 +428,11 @@ public class Communicate extends StorageContainer {
 			start = jsonMenu.indexOf("\"", nextComma);
 			finish = jsonMenu.indexOf("\"", start + 1);
 		}
+		// font 
+		start = jsonMenu.indexOf("\"restaurant_name\"");
+		finish = jsonMenu.indexOf("\"", start + "\"restaurant_name\": \" ".length() );
+		val = extractJSONValue(jsonMenu.substring(start, finish + 1));
+		menu.setRestaurantName(val);
 		return menu;
 	}
 	 
@@ -364,15 +443,17 @@ public class Communicate extends StorageContainer {
 		// existing menu edited
 		// existing menu deleted
 	}
-	public static String getSHA(String convertme)  throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public static char[] getSHA1(String convertme)  throws NoSuchAlgorithmException, UnsupportedEncodingException {
 	    try {
-	    	MessageDigest md = MessageDigest.getInstance("sha-1"); 
+	    	MessageDigest md = MessageDigest.getInstance("SHA-1"); 
 		    byte[] sha1hash = new byte[40];
 		    md.update(convertme.getBytes("iso-8859-1"));
 		    sha1hash = md.digest();
-		    return sha1hash.toString();
+		    char [] encoded = Hex.encodeHex(sha1hash);
+		    return encoded;
 	    }
 	    catch (NoSuchAlgorithmException none) { System.err.println(none); return null; }
 	    catch (UnsupportedEncodingException unsupported) { System.err.println(unsupported); return null; }
 	}
+
 }

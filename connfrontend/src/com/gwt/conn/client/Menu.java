@@ -5,15 +5,17 @@ import java.util.Collections;
 
 public class Menu {
 
-	private String menuName;
-	private String restaurantID;
-	private String id;
-	private String logo_url;
-	private String color;
-	private String menu;
-	private String profile_id;
-	private String template;
-	private String font;
+	// add a restaurant name field
+	private String menuName = null;
+	private String restaurantID = null;
+	private String id = null;
+	private String logo_url = null;
+	private String color = null;
+	private String menu = null;
+	private String profile_id = null;
+	private String template = null;
+	private String font = null;
+	private String restaurant_name = null;
 	
 	private ArrayList <Category> Categories = new ArrayList<Category>();
 	
@@ -69,11 +71,16 @@ public class Menu {
 		}
 		return categoryNames;
 	}
-	
+
 	public void addCategory(String newCategoryName) {
 		Category newCat = new Category (newCategoryName);
 		Categories.add(newCat);
 	}
+	
+	public void addCategory(Category newCategory) {
+		Categories.add(newCategory);
+	}
+	
 	public void addMenuItem (String category, String itemName) {
 		for (Category c : Categories) {
 			if (c.getTitle().equalsIgnoreCase(category)) {
@@ -87,6 +94,9 @@ public class Menu {
 				c.deleteMenuItem(itemName);
 			}
 		}
+	}
+	public void setRestaurantName(String restName) {
+		this.restaurant_name = restName;
 	}
 	public void deleteCategory (String category) {
 		for (int i = 0; i < Categories.size(); i++) {
@@ -106,14 +116,14 @@ public class Menu {
 		sb.append("\"restaurant_id\": \"" + this.restaurantID + "\", ");
 		sb.append("\"menu_name\": \"" + this.menuName + "\", ");
 		sb.append("\"ui_profile\": {");
-		sb.append("\"logo_url\": \"" + null + "\", ");
-		sb.append("\"color\": \"" + null + "\", ");
-		sb.append("\"menu\": \"" + null + "\", ");
-		sb.append("\"profile_id\": \"" + null + "\", ");
-		sb.append("\"template\": \"" + null + "\", ");
-		sb.append("\"font\": \"" + null + "\"");
+		sb.append("\"logo_url\": \"" + this.logo_url + "\", ");
+		sb.append("\"color\": \"" + this.color + "\", ");
+		sb.append("\"menu\": \"" + this.menu + "\", ");
+		sb.append("\"profile_id\": \"" + this.profile_id + "\", ");
+		sb.append("\"template\": \"" + this.template + "\", ");
+		sb.append("\"font\": \"" + this.font + "\"");
 		sb.append("}, ");
-		sb.append("\"restaurant_name\": \"" + null + "\", ");
+		sb.append("\"restaurant_name\": \"" + this.restaurant_name + "\", ");
 		sb.append("\"menuitems\": {");
 		//loop CATEGORY get JSON
 		for (Category c : Categories) {

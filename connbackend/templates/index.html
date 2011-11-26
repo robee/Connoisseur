@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -12,67 +12,6 @@
 
 
 
-<script type="text/javascript">
-	
-	var scrollContent,
-		scrollNav, myScroll, scrolling;
-	
-	function loaded() {
-	
-		items = [
-		{% for category in menuitems.items %}
-			{% for item in category.1 %}
-				'{{item.menuitem_id}}',
-			{% endfor %}
-		{% endfor %}
-		'category'
-		];
-		
-		for(i in items){
-			scrolling = myScroll = new iScroll(items[i], {
-				snap: false,
-				momentum: false,
-				hScrollbar: false,
-				vScrollbar: false });
-		}
-	
-		var w = $(window).width();
-		
-		$("#scroller li").css("width",(w - 170) + "px");
-		$("#wrapper").css("width",(w - 170) + "px");
-	    $("#category").css("width",(w - 135) + "px");
-	     
-		$.event.add(window, "resize", resizeFrame);
-		
-		function resizeFrame() 
-		{  
-			var w = $(window).width();
-			$("#scroller li").css("width",(w - 170) + "px");
-			$("#wrapper").css("width",(w - 170) + "px");
-		    $("#category").css("width",(w - 150) + "px");
-		}
-		
-		scrollNav = new iScroll('navWrapper');
-		
-		myScroll = new iScroll('wrapper', {
-		snap: true,
-		momentum: false,
-		hScrollbar: false,
-		vScrollbar: false });
-	
-	
-	}
-	
-	
-	
-	document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-	
-	document.addEventListener('DOMContentLoaded', loaded, false);
-	
-	function scrollToItem(item){
-		myScroll.scrollToElement('#' + item, 1000)
-	}
-</script>
 <link href='http://fonts.googleapis.com/css?family=Corben:400,700|Rokkitt:400,700' rel='stylesheet' type='text/css'>
 <style type="text/css" media="all">
 	html,body {
@@ -185,9 +124,6 @@
 		height:43px; line-height:43px;
 		border-bottom:1px solid #838a9a;
 		background-color:#424242;
-		background-image:-webkit-gradient(linear, 0 0, 0 100, from(#f4f5f7), to(#999da9));
-		background-image:-moz-linear-gradient(top, #f4f5f7, #999da9);
-		background-image:-o-linear-gradient(top, #f4f5f7, #999da9);
 		color:#717880;
 		font-size:18px; font-weight:bold;
 		text-align:center;
@@ -214,7 +150,9 @@
 		-moz-border-radius:10px;
 		-o-border-radius:10px;
 		border-radius:10px;
-		background:#e3e3e3;
+		background:#E3E3E3;
+		font-family: 'Corben', cursive;
+		
 	}
 	
 	#scroller {
@@ -281,9 +219,6 @@
 		color:#eee;
 		font-size:40px;
 		text-align:center;
-	}
-	    
-	#menu {
 		width:2100px;
 		height:40px;
 		float:left;
@@ -349,10 +284,58 @@
 	.price{
 		
 		text-align: center;
+		font-size: 20px;
+	}
+	
+	.description{
+		text-align: center;
 		font-size: 22px;
 	}
 
+
+	{% if ui_profile.color == "white" %}
+		
+		#category{
+			background-color:#ffffff;
+		}
+		
+		#category a {
+			color:#333333;
+		}
+		
+	
+	
+	{% else%}
+	 	{%if ui_profile.color == "black" %}
+			#category{
+				background-color:#20418E;
+			}
+		
+			#category a {
+				color:#FFFFFF;
+			}
+			
+			#wrapper{
+				background-color: #202020;
+				
+			}
+			
+			#navWrapper{
+				background-color: #424242;
+				
+		
+			}
+			
+			#navWrapper a, .item, .price, .description {
+				color: #FFF;
+			}
+		{% endif %}
+	{% endif %}
+
+
 </style>
+
+
 </head>
 <body>
 
@@ -360,9 +343,14 @@
 
 
 <div id="page">
+	{%if ui_profile.template == "modern"%}
 	<div id="logo">
-		<img height="100%" style="display: block;   margin-left: auto;   margin-right: auto;" src="{{ui_profile.logo_url}}"/>
+		{% if "http" in ui_profile.logo_url %}
+			<img height="100%" style="display: block;   margin-left: auto;   margin-right: auto;" src="{{ui_profile.logo_url}}"/>			
+		{% endif %}
 	</div>
+	
+	
 	<div id="category" style="margin-left:150px">
 		<div id="menu">
 			<ul>
@@ -392,22 +380,118 @@
 	<div id="wrapper">
 		<div id="scroller">
 			<ul id="thelist">
-			{%for category in menuitems.items %}
-			{% for item in category.1 %}
-			<li id="{{item.menuitem_id}}">
-					<div>
-					<p class="item">{{item.name}}</p>
-					<img src="{{item.image}}" />
-					<p class="description">{{item.description}}</p>
-					<p class="price">{{item.price}}</p>
-				</div>
-				</li>
-				{% endfor %}
+				{%for category in menuitems.items %}
+					{% for item in category.1 %}
+					<li id="{{item.menuitem_id}}">
+							<div>
+								<p class="item">{{item.name}}</p>
+								{%if item.image %}
+									<img src="{{item.image}}" />
+								{%endif%}
+								<p class="description">{{item.description}}</p>
+								<p class="price">{{item.price}}</p>
+							</div>
+						</li>
+					{% endfor %}
 				{% endfor %}
 			</ul>
 		</div>
 	</div>
+</div>
+
 	
-	</div>
+	<script type="text/javascript">
+		var scrollContent,
+			scrollNav, myScroll, scrolling;
+		
+		function loaded() {
+		
+			items = [
+			{% for category in menuitems.items %}
+				{% for item in category.1 %}
+					'{{item.menuitem_id}}',
+				{% endfor %}
+			{% endfor %}
+			'category'
+			];
+			
+			for(i in items){
+				scrolling = myScroll = new iScroll(items[i], {
+					snap: false,
+					momentum: false,
+					hScrollbar: false,
+					vScrollbar: false });
+			}
+		
+			var w = $(window).width();
+			
+			$("#scroller li").css("width",(w - 170) + "px");
+			$("#wrapper").css("width",(w - 170) + "px");
+		    $("#category").css("width",(w - 135) + "px");
+		     
+			$.event.add(window, "resize", resizeFrame);
+			
+			function resizeFrame() 
+			{  
+				var w = $(window).width();
+				$("#scroller li").css("width",(w - 170) + "px");
+				$("#wrapper").css("width",(w - 170) + "px");
+			    $("#category").css("width",(w - 150) + "px");
+			}
+			
+			scrollNav = new iScroll('navWrapper');
+			
+			myScroll = new iScroll('wrapper', {
+			snap: true,
+			momentum: false,
+			hScrollbar: false,
+			vScrollbar: false });
+		}
+		
+		
+		
+		document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+		
+		document.addEventListener('DOMContentLoaded', loaded, false);
+		
+		function scrollToItem(item){
+			myScroll.scrollToElement('#' + item, 1000)
+		}
+	</script>
+
+	{% else %}
+	
+	<div id="category">
+		<div id="logo">
+		{% if "http" in ui_profile.logo_url %}
+			<img height="100%" style="display: block;  width:80%; margin-left: auto;   margin-right: auto;" src="{{ui_profile.logo_url}}"/>
+		{% endif %}	
+		</div>
+		</div>
+		<div id="page">
+		<div id="wrapper" style="margin-left:10%; width: 80%">
+			<ul id="thelist">
+				{%for category in menuitems.items %}
+					<li id="{{category.menuitem_id}}">
+						<p class="item">{{category.0}}</p>
+					</li>
+					{% for item in category.1%}
+						<li id="{{item.menuitem_id}}">
+							<p class="item">{{item.name}}</p>
+							<p class="description">{{item.description}}</p>
+							<p class="price">{{item.price}}</p>
+							<img style="width:60%; margin-left:20%" src = "../static/img/hr.gif"/>
+						</li>		
+					{% endfor %}
+				{% endfor %}
+
+			</ul>
+			</div>
+		</div>
+		<style>
+			
+		</style>
+		
+	{% endif %}
 </body>
 </html>
