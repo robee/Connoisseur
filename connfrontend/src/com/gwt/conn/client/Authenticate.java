@@ -42,7 +42,7 @@ public class Authenticate {
 			// load dashboard if license key has been submitted before
 			if (storage.getLength() > 0) {
 				StorageContainer.initStorage(); // prepares storage for interaction
-				Dashboard.loadMenu(Communicate.deserialize(storage.getItem("menu")));
+				Dashboard.loadMenu(Communicate.deserialize(storage.getItem("menu")), "");
 				//Dashboard.loadDashboard();
 			}
 			
@@ -98,9 +98,31 @@ public class Authenticate {
 					
 					/** Checks the submitted license key for validity. Loads the dashboard if valid. */
 					private void submit() {
-						// validate license key
 						String license = submitLicense.getText(); // unused for now
-						String restID = submitRestID.getText();
+						String restID = submitRestID.getText(); // not sure how to validate yet
+				/*		int returnFlag = 0; // so that both tests can be done
+						licenseErrorLabel.setText("");
+						restErrorLabel.setText("");
+						
+						// validate license
+						String result = FieldVerifier.isValidLicenseKey(license); // from FieldVerifier.java
+						if (!result.equals("")) { // error
+							licenseErrorLabel.setText("You submitted an invalid license key.");
+							submitLicense.selectAll();
+							returnFlag = 1;
+						}
+						
+						// validate restID
+						result = FieldVerifier.isValidRestaurantID(restID);
+						if (!result.equals("")) { // error
+							restErrorLabel.setText("You submitted an invalid restaurant ID.");
+							submitRestID.selectAll();
+							returnFlag = 1;
+						}
+						
+						// don't do anything until the errors are resolved
+						if (returnFlag == 1) return;
+						*/
 						String json = "{\"menu_id\": \"236e8690d55248ff\", \"restaurant_id\": \"b686d49d8b67424aa1e347613cbb1975\", " +
 							"\"menu_name\": \"menu\", \"ui_profile\": {\"logo_url\": \"http://www.virginialogos.com/Portals/" +
 							"57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg\", \"color\": \"black\", \"menu\": null, \"profile_id\": " +
@@ -110,12 +132,6 @@ public class Authenticate {
 							"\"price\": 11.0, \"name\": \"Starter Item 2\"}], \"Appy\": [{\"category\": \"Appy\", \"menuitem_id\": " +
 							"\"6c1bd016d5b54dc9\", \"description\": \"\", \"menu\": null, \"image\": \"This is a sample menu Item\", " +
 							"\"price\": 10.0, \"name\": \"Starter Item 1\"}]}}";
-						/*String json = FieldVerifier.isValidLicenseKey(license, restID, "menu"); // from FieldVerifier.java
-						if (json.charAt(0) != '{') { // not json
-							restErrorLabel.setText("You submitted an invalid restaurant ID.");
-							submitLicense.selectAll();
-							return;
-						}*/
 						
 						// clean up
 						submitButton.setEnabled(false);
@@ -124,7 +140,8 @@ public class Authenticate {
 						startupBox.hide();
 						
 						// set up storage
-						storage.setItem("license", license); // remember restaurant_id
+						storage.setItem("license", license); // secret key for security
+						storage.setItem("restID", restID); // used for almost every call to the backend
 						storage.setItem("numMenus", Integer.toString(0));
 						StorageContainer.initStorage();
 						StorageContainer.addMenu("menu", json);
@@ -143,11 +160,11 @@ public class Authenticate {
 						m.addMenuItem("Drink", "Starter Item 2");
 						m.addCategory("Appy");
 						m.addMenuItem("Appy", "Starter Item 1");
-						Dashboard.loadMenu(m);
+						Dashboard.loadMenu(m, "");
 						
-						//Dashboard.loadMenu(Communicate.deserialize(json));
+						//Dashboard.loadMenu(Communicate.deserialize(json), "firstTime");
 						//Dashboard.loadDashboard();
-					}
+					} // end submit
 				} // MyHandler
 				
 				// attach the handler
