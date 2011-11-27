@@ -87,14 +87,14 @@ public class Communicate {
 			String timestamp = new Date().getTime() + "";
 			String secret_key = ""; // TODO get secret key from storage
 			String message = doc + secret_key + timestamp;
-			String hash = "";
-			try {
-				hash = "" + getSHA1(message + secret_key + timestamp); 
-			} catch (NoSuchAlgorithmException exc) {
-				System.err.println(exc);
-			} catch (UnsupportedEncodingException exc) {
-				System.err.println(exc);
-			}
+			String hash = "TEST";
+//			try {
+//				hash = "" + getSHA1(message + secret_key + timestamp); 
+//			} catch (NoSuchAlgorithmException exc) {
+//				System.err.println(exc);
+//			} catch (UnsupportedEncodingException exc) {
+//				System.err.println(exc);
+//			}
 
 			String[] keys = { "doc", "message", "timestamp", "message_hash","restaurant_id" };
 			String[] values = { doc, doc, timestamp, hash, restID };
@@ -467,8 +467,52 @@ public class Communicate {
 		return keyValuePair.substring(start + 1, finish);
 	}
 
-	// get restaurant name
-	public static Menu deserialize(String jsonMenu) {
+	private static MenuItem parseJSONMenuItem(String menuItem) {
+		String category = null;
+		String menuitem_id = null;
+		String description = null;
+		String menu = null;
+		String image = null;
+		String price = null;
+		String name = null;
+		int start = 0;
+		int finish = 0;
+
+		System.out.println(menuItem);
+
+		start = menuItem.indexOf("\"category\"");
+		finish = menuItem.indexOf("\"", start + "\"category\": \" ".length() );
+		category = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		start = menuItem.indexOf("\"menuitem_id\"");
+		finish = menuItem.indexOf("\"", start + "\"menuitem_id\": \" ".length() );
+		menuitem_id = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		start = menuItem.indexOf("\"description\"");
+		finish = menuItem.indexOf("\"", start + "\"description\": \" ".length() );
+		description = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		start = menuItem.indexOf("\"menu\"");
+		finish = menuItem.indexOf("\"", start + "\"menu\": \" ".length() );
+		menu = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		start = menuItem.indexOf("\"image\"");
+		finish = menuItem.indexOf("\"", start + "\"image\": \" ".length() );
+		image = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		start = menuItem.indexOf("\"price\"");
+		finish = menuItem.indexOf("\"", start + "\"price\": \" ".length() );
+		price = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		start = menuItem.indexOf("\"name\"");
+		finish = menuItem.indexOf("\"", start + "\"name\": \" ".length() );
+		name = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		return (new MenuItem(category, menuitem_id, description, menu, image, price, name));
+		}
+
+		// get restaurant name
+		public static Menu deserialize(String jsonMenu) {
 		int start = 0;
 		int finish = 0;
 		int categoryEndIndex = 0;
@@ -476,14 +520,11 @@ public class Communicate {
 
 		String menuID, restID, menuName, val;
 
-		XStream xstream = new XStream(new JettisonMappedXmlDriver());
-		xstream.alias("MenuItem", MenuItem.class);
-
 		Category cat;
 		Menu menu;
 
 		if (jsonMenu.charAt(0) != '{') {
-			return null;
+		return null;
 		}
 		// parse menu
 
@@ -494,7 +535,7 @@ public class Communicate {
 		// rest id
 		start = jsonMenu.indexOf("\"restaurant_id\"");
 		finish = jsonMenu.indexOf("\"",
-				start + "\"restaurant_id\": \" ".length());
+		start + "\"restaurant_id\": \" ".length());
 		restID = extractJSONValue(jsonMenu.substring(start, finish + 1));
 		// menu name
 		start = jsonMenu.indexOf("\"menu_name\"");
@@ -536,76 +577,90 @@ public class Communicate {
 		menu.setFont(val);
 
 		start = jsonMenu.indexOf("\"menuitems\""); // find where menuitems
-													// starts
-		start = jsonMenu.indexOf("\"", start + "\"menuitems\"  ".length()); // extract
-																			// index
-																			// of
-																			// the
-																			// start
-																			// of
-																			// category
-																			// name
+		// starts
+		start = jsonMenu.indexOf("\"", start + "\"menuitems\" ".length()); // extract
+		// index
+		// of
+		// the
+		// start
+		// of
+		// category
+		// name
 		finish = jsonMenu.indexOf("\"", start + 1); // index of the closing
-													// quotation for the first
-													// category name
+		// quotation for the first
+		// category name
 
 		// this loop is responsible for finding new categories within the JSON
 		// string
 		String menuItemJson = null;
+		MenuItem mi = null;
 		for (;;) {
-			// System.out.println("start: " + start + ", finish: " + finish);
-			val = jsonMenu.substring(start + 1, finish); // extract category
-															// name
-			cat = new Category(val);
-			categoryEndIndex = jsonMenu.indexOf("]", finish);
-			// this loop is responsible for finding all menuItems within the
-			// category and adding them into the category
-			for (;;) {
-				start = jsonMenu.indexOf("{", finish + 1);
-				finish = jsonMenu.indexOf("}", start);
-				System.out.println(jsonMenu.substring(start, finish + 1));
-				menuItemJson = jsonMenu.substring(start, finish + 1);
-				MenuItem mi = (MenuItem) xstream.fromXML("{\"MenuItem\":"
-						+ menuItemJson + "}");
-				cat.addMenuItem(mi);
-				nextComma = jsonMenu.indexOf(",", finish);
-				if (nextComma == -1 || nextComma > categoryEndIndex) {
-					break;
-				}
-			}
-			menu.addCategory(cat);
-			nextComma = jsonMenu.indexOf(",", categoryEndIndex);
-			if (nextComma == -1) {
-				break;
-			}
-			start = jsonMenu.indexOf("\"", nextComma);
-			finish = jsonMenu.indexOf("\"", start + 1);
+
+		val = jsonMenu.substring(start + 1, finish);	// extract category name
+
+		// System.out.println("start: " + start + ", finish: " + finish);
+
+		cat = new Category(val);
+		categoryEndIndex = jsonMenu.indexOf("]", finish);
+		// this loop is responsible for finding all menuItems within the
+		// category and adding them into the category
+		for (;;) {
+		start = jsonMenu.indexOf("{", finish + 1);
+		finish = jsonMenu.indexOf("}", start);
+		menuItemJson = jsonMenu.substring(start, finish + 1);
+
+		//JSONValue jsonValue = JSONParser.parseStrict(menuItemJson);
+		//JSONArray iCont = jsonValue.isArray();
+
+		mi = parseJSONMenuItem(menuItemJson);
+		//mi = new MenuItem(iCont.get(0).toString(), iCont.get(1).toString(), iCont.get(2).toString(), iCont.get(3).toString(), iCont.get(4).toString(), iCont.get(5).toString(), iCont.get(6).toString()); 
+		//mi = (MenuItem)xstream.fromXML("{\"MenuItem\":" + menuItemJson + "}");
+
+
+
+		cat.addMenuItem(mi);
+		nextComma = jsonMenu.indexOf(",", finish);
+		if (nextComma == -1 || nextComma > categoryEndIndex) {
+		break;
+		}
+		}
+		menu.addCategory(cat);
+		nextComma = jsonMenu.indexOf(",", categoryEndIndex);
+		if (nextComma == -1) {
+		break;
+		}
+		start = jsonMenu.indexOf("\"", nextComma);
+		finish = jsonMenu.indexOf("\"", start + 1);
 		}
 		// font
 		start = jsonMenu.indexOf("\"restaurant_name\"");
 		finish = jsonMenu.indexOf("\"",
-				start + "\"restaurant_name\": \" ".length());
+		start + "\"restaurant_name\": \" ".length());
 		val = extractJSONValue(jsonMenu.substring(start, finish + 1));
 		menu.setRestaurantName(val);
 		return menu;
 	}
-
-	public static char[] getSHA1(String convertme)
-			throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-1");
-			byte[] sha1hash = new byte[40];
-			md.update(convertme.getBytes("iso-8859-1"));
-			sha1hash = md.digest();
-			char[] encoded = Hex.encodeHex(sha1hash);
-			return encoded;
-		} catch (NoSuchAlgorithmException none) {
-			System.err.println(none);
-			return null;
-		} catch (UnsupportedEncodingException unsupported) {
-			System.err.println(unsupported);
-			return null;
-		}
+	public static String getSHA1 (String convertme) {
+			Sha1 hashFunction = new Sha1();
+			String hash = hashFunction.hex_sha1(convertme);
+			return hash;
 	}
+//	public static char[] getSHA1(String convertme)
+//			throws NoSuchAlgorithmException, UnsupportedEncodingException {
+//		try {
+//			MessageDigest md = MessageDigest.getInstance("SHA-1");
+//			byte[] sha1hash = new byte[40];
+//			md.update(convertme.getBytes("iso-8859-1"));
+//			sha1hash = md.digest();
+//			char[] encoded = Hex.encodeHex(sha1hash);
+//			return encoded;
+//		} catch (NoSuchAlgorithmException none) {
+//			System.err.println(none);
+//			return null;
+//		} catch (UnsupportedEncodingException unsupported) {
+//			System.err.println(unsupported);
+//			return null;
+//		}
+//	}
 
 }
