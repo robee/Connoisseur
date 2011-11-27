@@ -16,5 +16,10 @@ handlers:
   
 - url: .*
   script: app.py
+  
+- url: /static/css/(.*\.appcache)
+  static_files: static/css/\1
+  mime_type: text/cache-manifest
+  upload: static/css/(.*\.appcache)
 
 

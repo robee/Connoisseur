@@ -13,22 +13,12 @@
 		<key>Tabs</key>
 		<array>
 			<dict>
-				<key>DocumentURL</key>
-				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/templates/scroll.html</string>
 				<key>StateType</key>
-				<string>DefaultTab</string>
-			</dict>
-			<dict>
-				<key>DocumentURL</key>
-				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/apiSpec.txt</string>
-				<key>StateType</key>
-				<string>DefaultTab</string>
-			</dict>
-			<dict>
-				<key>DocumentURL</key>
-				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/templates/indexBack.html</string>
-				<key>StateType</key>
-				<string>DefaultTab</string>
+				<string>PreviewTab</string>
+				<key>Title</key>
+				<string>Connoisseur</string>
+				<key>URL</key>
+				<string>file:///Users/Michael/dev/Connoisseur/connbackend/templates/index.html</string>
 			</dict>
 			<dict>
 				<key>DocumentURL</key>
@@ -43,16 +33,10 @@
 				<string>DefaultTab</string>
 			</dict>
 			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/static/css/example.appcache</string>
 				<key>StateType</key>
-				<string>PreviewTab</string>
-				<key>Title</key>
-				<string>Connoisseur</string>
-				<key>URL</key>
-				<string>file:///Users/Michael/dev/Connoisseur/connbackend/templates/indexBack.html</string>
-			</dict>
-			<dict>
-				<key>StateType</key>
-				<string>PreviewTab</string>
+				<string>DefaultTab</string>
 			</dict>
 		</array>
 	</dict>
