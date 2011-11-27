@@ -299,7 +299,7 @@ class GetMenu(webapp.RequestHandler):
             self.response.out.write('AUTH FAILED')
             return
         rest_id = self.request.get('restaurant_id')
-        menu_id = self.request.get('menu_id')
+        menu_id = menu_id = Menu.get_menus_by_rest_id(rest_id)[0].menu_id
         self.response.out.write(DocFromModels(rest_id, menu_id))
         
 
