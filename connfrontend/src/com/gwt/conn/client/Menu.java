@@ -3,6 +3,7 @@ package com.gwt.conn.client;
 import java.util.ArrayList;
 import java.util.Collections;
 
+@SuppressWarnings("unused")
 public class Menu {
 
 	// add a restaurant name field
@@ -84,7 +85,7 @@ public class Menu {
 	public void addMenuItem (String category, String itemName) {
 		for (Category c : Categories) {
 			if (c.getTitle().equalsIgnoreCase(category)) {
-				c.addMenuItem(itemName);
+				c.addMenuItem(itemName, c.getTitle());
 			}
 		}
 	}
@@ -118,7 +119,7 @@ public class Menu {
 		sb.append("\"ui_profile\": {");
 		sb.append("\"logo_url\": \"" + this.logo_url + "\", ");
 		sb.append("\"color\": \"" + this.color + "\", ");
-		sb.append("\"menu\": \"" + this.menu + "\", ");
+		sb.append("\"menu\": null, ");
 		sb.append("\"profile_id\": \"" + this.profile_id + "\", ");
 		sb.append("\"template\": \"" + this.template + "\", ");
 		sb.append("\"font\": \"" + this.font + "\"");
@@ -128,7 +129,7 @@ public class Menu {
 		//loop CATEGORY get JSON
 		for (Category c : Categories) {
 			sb.append(commaPrefix);
-			commaPrefix = ",";
+			commaPrefix = ", ";
 			sb.append(c.generateJSON());
 		}
 		sb.append("}}");

@@ -52,6 +52,7 @@ public class Dashboard {
 		// if the contents that the button would load are already visible
 		// need to use storage to save state of editor when interacting with buttons
 		storage.setItem("curDashPage", "vis"); // default to visual editor first
+		//storage.setItem("curDashPage", "dat"); // for testing
 
 		// initialize panels for widgets to be placed in
 		final VerticalPanel dashboardPan = new VerticalPanel();
@@ -74,16 +75,18 @@ public class Dashboard {
 		dashboardPan.setCellHeight(buttonPan, "0%");
 
 		// get static instances of all possible editor app contents
+		final Frame previewContent = Previewer.getPreviewer(menu);
 		final HorizontalPanel visualContent = VisualEditor.getVisualEditor(menu);
 		final HorizontalPanel dataContent = DataEditor.getDataEditor(menu);
-		final Frame previewContent = Previewer.getPreviewer(menu);
 
 		// put the dashboard panel in the root panel
 		dashboardPan.add(visualContent); // load visual editor by default
 		dashboardPan.setCellHeight(visualContent, "100%");
+		//dashboardPan.add(dataContent); // load data editor for testing
+		//dashboardPan.setCellHeight(dataContent, "100%");
 		RootPanel.get().add(dashboardPan, 0, 0);
 
-		// handler for visualButton
+		// handler for visualButton shows the visual editor
 		class VisualHandler implements ClickHandler {
 			public void onClick(ClickEvent event) {
 				String cur = storage.getItem("curDashPage");
@@ -105,7 +108,7 @@ public class Dashboard {
 		final VisualHandler visualHandler = new VisualHandler();
 		visualButton.addClickHandler(visualHandler);
 
-		// handler for dataButton
+		// handler for dataButton shows the data editor
 		class DataHandler implements ClickHandler {
 			public void onClick(ClickEvent event) {
 				String cur = storage.getItem("curDashPage");
@@ -126,7 +129,7 @@ public class Dashboard {
 		}
 		final DataHandler dataHandler = new DataHandler();
 		dataButton.addClickHandler(dataHandler);
-
+/*
 		// check for internet connection
 		String test = Communicate.getMenu("", storage.getItem("restID"), "http://connoisseurmenu.appspot.com/menu");
 
@@ -202,8 +205,10 @@ public class Dashboard {
 							"http://connoisseurmenu.appspot.com/menu/update");
 					if (result.equals("Update Successful")) {
 						// get menu because new information should be inserted after updating
-						String json = Communicate.getMenu(/*menu.getMenuID()*/"", storage.getItem("restID"),
+						String json = Communicate.getMenu("", storage.getItem("restID"),
 								"http://connoisseurmenu.appspot.com/menu");
+					//	String json = Communicate.getMenu(menu.getMenuID(), storage.getItem("restID"),
+					//			"http://connoisseurmenu.appspot.com/menu");
 						storage.setItem(menu.getName(), json);
 
 						// reset UI and deserialize to accommodate new information
@@ -218,10 +223,10 @@ public class Dashboard {
 			final PushHandler pushHandler = new PushHandler();
 			pushButton.addClickHandler(pushHandler);
 		} // end onSuccess
-
+*/
 	} // end startDashboard
 
-	/* ************************************* UNUSED/DEPRECATED CODE BELOW ************************************* */
+/* ************************************* UNUSED/DEPRECATED CODE BELOW ************************************* */
 
 	/** Called by Authenticate.java when successfully authenticated. (multiple menus version) */
 	public void loadDashboard() {

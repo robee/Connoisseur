@@ -1,12 +1,13 @@
 package com.gwt.conn.client;
 
+@SuppressWarnings("unused")
 public class MenuItem {
 	
 	private String category = null;
-	private String menuitem_id = null;
+	private String menuitem_id = "";
 	private String description = null;
 	private String menu = null;
-	private String image = null;
+	private String image = "";
 	private String price = null;
 	private String name = null;
 	
@@ -30,9 +31,27 @@ public class MenuItem {
 		this.menu = menu;
 		this.image = image;
 		this.name = name;
+		this.price = price;
 	}
+	
 	public String getName() {
 		return this.name;
+	}
+	
+	public String getImage() {
+		return this.image;
+	}
+	
+	public String getDescription() {
+		return this.description;
+	}
+	
+	public String getPrice() {
+		return this.price;
+	}
+	
+	public void setName(String newItemName) {
+		this.name = newItemName;
 	}
 	
 	public void setPrice(String price) {
@@ -43,15 +62,23 @@ public class MenuItem {
 		this.description = description;
 	}
 	
+	public void setCategory(String cat) {
+		this.category = cat;
+	}
+	
+	public void setImage(String url) {
+		this.image = url;
+	}
+	
 	public String generateJSON() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("\"category\": \"" + this.category + "\", ");
 		sb.append("\"menuitem_id\": \"" + this.menuitem_id + "\", ");
 		sb.append("\"description\": \"" + this.description + "\", ");
-		sb.append("\"menu\": \"" + this.menu + "\", ");
+		sb.append("\"menu\": null, ");
 		sb.append("\"image\": \"" + this.image + "\", ");
-		sb.append("\"price\": \"" + this.price + "\", ");
+		sb.append("\"price\": " + this.price + ", ");
 		sb.append("\"name\": \"" + this.name + "\"");
 		sb.append("}");
 		return sb.toString();

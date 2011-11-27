@@ -8,9 +8,9 @@ public class ButtonRow {
 	private HorizontalPanel buttonRow; // a row of buttons
 	private VerticalPanel page; // can modify categories or menu items through this page
 	private int posn; // position in ArrayList
-	public ButtonRow(HorizontalPanel buttonPanel, VerticalPanel pagePanel, int i) {
+	public ButtonRow(HorizontalPanel buttonPanel, VerticalPanel newPage, int i) {
 		buttonRow = buttonPanel;
-		page = pagePanel;
+		page = newPage;
 		posn = i;
 	}
 	public HorizontalPanel getButtonRow() {

@@ -8,17 +8,16 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
 
 	public String greetServer(String input) throws IllegalArgumentException {
-		// verify that the input is valid
-		String test = FieldVerifier.isValidLicenseKey(input);
+		String test = ServerFieldVerifier.isValidLicenseKey(input); // verify that the input is valid
 		if (!test.equals("")) {
-			// If the input is not valid, throw an IllegalArgumentException back to the client.
+			// if the input is not valid, throw an IllegalArgumentException back to the client
 			throw new IllegalArgumentException(test);
 		}
 		
 		String name = "";
 		String menu = "";
 		
-		// Escape data from the client to avoid cross-site script vulnerabilities.
+		// escape data from the client to avoid cross-site script vulnerabilities
 		input = escapeHtml(input);
 
 		return "STATUS" +

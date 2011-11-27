@@ -28,7 +28,7 @@ public class StorageContainer {
 	}
 	
 	/** Called whenever a new menu needs to be added to storage. */
-	public static void addMenu(final String menuName, final String json) {
+	public static void addMenu(String menuName, String json) {
 		// update number of menus
 		numMenus++;
 		
@@ -43,7 +43,7 @@ public class StorageContainer {
 	}
 	
 	/** Returns a string in JSON format representing a menu. */
-	public static String getMenu(final String menuName) {
+	public static String getMenu(String menuName) {
 		return storage.getItem(menuName);
 	}
 	
@@ -62,7 +62,7 @@ public class StorageContainer {
 	}
 	
 	/** Saves a change that was made by the user while interacting with the visual or data editor. */
-	public static void saveChange(final Menu menu) {
+	public static void saveChange(Menu menu) {
 		//storage.setItem("menu", menu.generateJSON());
 		storage.setItem(menu.getName(), menu.generateJSON());
 	}

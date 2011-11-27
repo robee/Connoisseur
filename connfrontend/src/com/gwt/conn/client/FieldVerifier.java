@@ -31,12 +31,12 @@ public class FieldVerifier {
 	}
 	
 	/** Verifies that the given string is a valid category name. */
-	public static String isValidCategoryName(String name, String[] names) {
+	public static String isValidName(String name, String[] names) {
 		String test = isLongEnoughAndNotNull(name);
 		if (!test.equals("")) return test;
 		test = isAlphanumericPlusSpaces(name);
 		if (!test.equals("")) return test;
-		test = categoryDoesntExistYet(name, names);
+		test = nameDoesntExistYet(name, names);
 		if (!test.equals("")) return test;
 		return ""; // empty string means success!
 	}
@@ -61,9 +61,9 @@ public class FieldVerifier {
 			// 0=48, 9=57
 			// a=65, z=90
 			// A=97, Z=122
-			if (str[i] < 48 || str[i] > 122) return "Alphanumeric characters and spaces only.";
-			if (str[i] > 57 && str[i] < 65) return "Alphanumeric characters and spaces only.";
-			if (str[i] > 90 && str[i] < 97) return "Alphanumeric characters and spaces only.";
+			if (str[i] < 48 || str[i] > 122) return "Alphanumeric characters or spaces only.";
+			if (str[i] > 57 && str[i] < 65) return "Alphanumeric characters or spaces only.";
+			if (str[i] > 90 && str[i] < 97) return "Alphanumeric characters or spaces only.";
 		}
 		return "";
 	}
@@ -80,10 +80,37 @@ public class FieldVerifier {
 	}
 	
 	/** Checks to see that no other menu in storage has this name already. */
-	private static String categoryDoesntExistYet(String catName, String[] catNames) {
-		for (int i=0; i < catNames.length; ++i) {
-			if (catName.equalsIgnoreCase(catNames[i])) return "A category by this name already exists.";
+	private static String nameDoesntExistYet(String name, String[] names) {
+		for (int i=0; i < names.length; ++i) {
+			if (name.equalsIgnoreCase(names[i])) return "An item by this name already exists.";
 		}
+		return "";
+	}
+	
+	/** A valid URL starts with http:// and is not null. */
+	public static String isValidURL(String url) {
+		String test = isLongEnoughAndNotNull(url);
+		if (!test.equals("")) return test;
+		if (!url.startsWith("http://")) return "URLs must start with \"http://\".";
+		return "";
+	}
+	
+	/** A valid price is a real number. */
+	public static String isValidPrice(String price) {
+		if (price == null) return "";
+		char str[] = price.toCharArray();
+		if (str[0] == '.' || str[price.length()-1] == '.') return "Cannot start or end with a decimal point.";
+		int numDecimals = 0;
+		for (int i=0; i < price.length(); ++i) {
+			if (str[i] == '.') { // count decimals
+				numDecimals++;
+				continue;
+			}
+			// from ASCII chart
+			// 0=48, 9=57
+			if (str[i] < 48 || str[i] > 57) return "Numbers or decimal points only.";
+		}
+		if (numDecimals > 1) return "There cannot be more than one decimal point.";
 		return "";
 	}
 	

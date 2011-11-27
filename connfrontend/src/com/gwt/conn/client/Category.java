@@ -17,13 +17,17 @@ public class Category {
 	
 	public void setTitle (String newTitle) {
 		this.title = newTitle;
+		for (MenuItem me : menuEntries) {
+			me.setCategory(newTitle);
+		}
 	}
 	public String getTitle() {
 		return this.title;
 	}
 	
-	public void addMenuItem(String itemName) {
+	public void addMenuItem(String itemName, String catName) {
 		MenuItem mi = new MenuItem(itemName);
+		mi.setCategory(catName);
 		menuEntries.add(mi);
 	}
 	
@@ -44,6 +48,14 @@ public class Category {
 		return menuEntries;
 	}
 	
+	public String[] getMenuItemNames() {
+		String[] menuItemNames = new String[menuEntries.size()];
+		for (int i = 0; i < menuItemNames.length; i++) {
+			menuItemNames[i] = menuEntries.get(i).getName();
+		}
+		return menuItemNames;
+	}
+	
 	public String generateJSON() {
 		StringBuilder sb = new StringBuilder();
 		String commaPrefix = "";
@@ -51,7 +63,7 @@ public class Category {
 		sb.append("\"" + getTitle() + "\": [");
 		for (MenuItem me : menuEntries) {
 			sb.append(commaPrefix);
-			commaPrefix = ",";
+			commaPrefix = ", ";
 			sb.append(me.generateJSON());
 		}
 		sb.append("]");
