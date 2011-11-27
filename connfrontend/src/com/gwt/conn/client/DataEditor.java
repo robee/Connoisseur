@@ -66,9 +66,10 @@ public class DataEditor {
 
 		// iterate out buttons for all categories and put them in navigationPan
 		for (int i=0; i < catNames.length; ++i) {
-			// setup row of buttons and attach them to navigationPan
-			buttonRows.add(createNewCategoryButtonRow(i, catNames[i], cats.get(i), menu)); // add page link to button array
-			navigationPan.add(buttonRows.get(i).getButtonRow()); // make page visible
+			// create row of buttons, and add it to buttonRows array
+			buttonRows.add(createNewCategoryButtonRow(i, catNames[i], cats.get(i), menu));
+			// attach button row to UI so it becomes visible
+			navigationPan.add(buttonRows.get(i).getButtonRow());
 		}
 		
 		// add a create new category button at bottom of navigationPan
@@ -139,7 +140,7 @@ public class DataEditor {
 						int i = cats.size()-1;
 						buttonRows.add(createNewCategoryButtonRow(i, catName, cats.get(i), menu));
 						navigationPan.insert(buttonRows.get(i).getButtonRow(), i);
-						StorageContainer.saveChange(menu); // save change anytime something changes from default
+						StorageContainer.saveChange(menu); // save change anytime something changes
 						testLabel.setText(storage.getItem("menu"));
 						sendButton.setEnabled(false);
 						submitField.setEnabled(false);
@@ -173,16 +174,6 @@ public class DataEditor {
 		return dataEditorPan;
 	} // end getDataEditor
 	
-	/** Creates a new page on which the user can modify category contents. */
-	private static VerticalPanel createNewCategoryContentPanel(Category cat) {
-		final VerticalPanel contentPage = new VerticalPanel();
-		contentPage.addStyleName("marginlessPanel");
-		
-		//TODO
-		
-		return contentPage;
-	} // end createNewCategoryContentPanel
-	
 	/** Creates a new row of buttons for the navigation panel. */
 	private static ButtonRow createNewCategoryButtonRow(final int i, final String catName, final Category cat, final Menu menu) {
 		// button declarations
@@ -202,7 +193,7 @@ public class DataEditor {
 		buttonPanel.add(upButton);
 		buttonPanel.add(downButton);
 		buttonPanel.add(deleteButton);
-		final ButtonRow buttonRow = new ButtonRow(buttonPanel, createNewCategoryContentPanel(cat), i);
+		final ButtonRow buttonRow = new ButtonRow(buttonPanel, createNewCategoryContentPanel(cat, catButton), i);
 		
 		// handler for catButton
 		class CatClickHandler implements ClickHandler {
@@ -328,6 +319,16 @@ public class DataEditor {
 		return buttonRow;
 	} // end createNewCategoryButtonRow
 	
+	/** Creates a new page on which the user can modify category contents. */
+	private static VerticalPanel createNewCategoryContentPanel(Category cat, Button catButton) {
+		final VerticalPanel contentPage = new VerticalPanel();
+		contentPage.addStyleName("marginlessPanel");
+		
+		//TODO
+		
+		return contentPage;
+	} // end createNewCategoryContentPanel
+	
 	/** Helper for finding the current page panel, which could be a category or menu item. */
 	private static VerticalPanel searchForCurrentContentPanel(ArrayList <Category> cats, String curPage) {
 		// search category names
@@ -369,7 +370,7 @@ public class DataEditor {
 		testLabel.setText(storage.getItem("menu"));
 	} // end swapCategoryButtonRows
 	
-	/** Swaps two elements of the itemButtonRows array. Note: a < b */
+	/** Swaps two elements of the miButtonRows array. Note: a < b */
 /*	private static void swapMenuItemButtonRows(final int a, final int b, final Menu menu,
 			final Category cat, ArrayList <HorizontalPanel> itemButtonRows) {
 		cat.swapMenuItems(a, b);
