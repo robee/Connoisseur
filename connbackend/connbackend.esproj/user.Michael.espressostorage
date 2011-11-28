@@ -34,7 +34,19 @@
 			</dict>
 			<dict>
 				<key>DocumentURL</key>
-				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/static/css/example.appcache</string>
+				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/static/css/exampsle.appcache</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/apiSpec.txt</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/Michael/dev/Connoisseur/connbackend/templates/indexBack.html</string>
 				<key>StateType</key>
 				<string>DefaultTab</string>
 			</dict>
