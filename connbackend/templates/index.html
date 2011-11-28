@@ -31,15 +31,16 @@
 	}
 	
 	#logo {
-		background-color:white;
+		background-color:#b42038;
+		color: white;
 		width: 150px;
-		height:38px; 
 		position:absolute; 
 		text-align:center;
 		font-family: 'Rokkitt', serif;
 		font-style: bold;
 		font-size:22px;
-		line-height:200%;	
+		line-height:200%;
+		text-shadow:0 -1px -0 rgba(0,1,0,0.5);	
 	}
 	
 	#category {
@@ -70,10 +71,7 @@
 	}
 	
 	
-	p {
-		margin-bottom:1.5em;
-		line-height:150%;
-	}
+
 	
 	header,nav,aside,section,article {
 		display:block;
@@ -191,7 +189,8 @@
 	#navScroller > li {
 		font-family: 'Rokkitt', serif;
 		font-size: 18px;
-		height:30px; line-height:30px;
+		height:30px; 
+		line-height:30px;
 	}
 	
 	#contentScroller {
@@ -307,6 +306,11 @@
 			background-color:#ffffff;
 		}
 		
+		#logo{
+			background-color:#ffffff;
+			color: #000000;
+		}
+		
 		#category a {
 			color:#333333;
 		}
@@ -315,7 +319,7 @@
 	
 	{% else%}
 	 	{%if ui_profile.color == "black" %}
-			#category{
+			#category, #logo{
 				background-color:#20418E;
 			}
 		
@@ -331,12 +335,12 @@
 			#navWrapper{
 				background-color: #424242;
 				
-		
 			}
 			
 			#navWrapper a, .item, .price, .description, #title{
 				color: #FFF;
 			}
+			
 			
 			
 		{% endif %}
@@ -358,11 +362,18 @@
 			html,body {
 			height:100%;
 		}
+		
+			p {
+		margin-bottom:1.5em;
+		line-height:150%;
+	}
 	</style>
 	<div id="page">
 	<div id="logo">
 		{% if "http" in ui_profile.logo_url %}
-			<img height="100%" style="display: block;   margin-left: auto;   margin-right: auto;" src="{{ui_profile.logo_url}}"/>			
+			<img height="100%" style="display: block;   margin-left: auto;   margin-right: auto;" src="{{ui_profile.logo_url}}"/>	
+		{% else %}
+			{{ui_profile.logo_url}}		
 		{% endif %}
 	</div>
 	
@@ -387,7 +398,7 @@
 						<li><a href="javascript:scrollToItem('{{m.menuitem_id}}')">{{m.name}}</a></li>
 
 					{% endfor %}
-					<li></li>
+					<li><a>&nbsp</a></li>
 				{% endfor %}
 			</ul>
 		</nav>
@@ -478,12 +489,19 @@
 	{% else %}
 	
 		  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine">
+		  <link href='http://fonts.googleapis.com/css?family=Niconne' rel='stylesheet' type='text/css'>
 		
 		{% if "http" in ui_profile.logo_url %}
-			<img height="10%" style="display: block;  margin-left: auto;   margin-right: auto; width:10%" src="{{ui_profile.logo_url}}"/>
+			<img height="10%" style="display: block;  margin-left: auto; margin-top:10px; margin-right: auto; width:10%" src="{{ui_profile.logo_url}}"/>
 		{% endif %}	
 		<div id="title">{{restaurant_name}}</div>
-			<img style="width:80%; margin-left:10%" src = "../static/img/hr.gif"/>
+			{% if ui_profile.color == "red" %}
+								<img style="width:80%; height:2px; margin-left:10%" src = "../static/img/hred.gif"/>
+						{%else%}
+								<img style="width:80%; height:2px; margin-left:10%" src = "../static/img/hr.gif"/>
+					{% endif %}
+		
+		
 		
 		<div id="wrapper" style="width: 95%">
 			<ul id="thelist">
@@ -496,9 +514,14 @@
 							<p class="item">{{item.name}}</p>
 							<p class="description">{{item.description}}</p>
 							<p class="price">{{item.price}}</p>
-							<img style="width:60%; margin-left:20%" src = "../static/img/hr.gif"/>
+							
 						</li>		
 					{% endfor %}
+						{% if ui_profile.color == "red" %}
+							<img style="width:60%; height:1px; margin-left:20%" src = "../static/img/hred.gif"/>
+						{%else%}
+							<img style="width:60%; height:1px; margin-left:20%" src = "../static/img/hr.gif"/>
+					{% endif %}
 				{% endfor %}
 
 			</ul>
@@ -515,7 +538,10 @@
 			
 			{% if ui_profile.color == "red" %}
 				body{
-					background: #E3E3E3;	
+					background: #FFFFFF;	
+				}
+				#wrapper{
+				background: #FFFFFF;	
 				}
 			
 			{% endif %}
@@ -527,8 +553,20 @@
 				}
 			{% endif %}
 
-		
+			 .item, .price, .description{
+			 	
+				font-family: 'Niconne', cursive;
+			}
 			
+			.item{
+				margin-top: 1.5em;
+			}
+			
+			.price{
+				margin-bottom: 1.5em;
+			}
+			
+		
 		</style>
 		
 	{% endif %}

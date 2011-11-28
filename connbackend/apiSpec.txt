@@ -163,7 +163,26 @@ SAMPLE DOC
                     "image": "http://connoisseurmenu.appspot.com/static/img/puree.jpg", 
                     "price": 6.25, 
                     "name": "Spiced Pumpkin Puree"
+                },
+                       {
+                    "category": "Soup", 
+                    "menuitem_id": "6cfb79454bc2446d", 
+                    "description": "toasted pumpkin seeds and chili toasted infused oil", 
+                    "menu": null, 
+                    "image": "http://connoisseurmenu.appspot.com/static/img/puree.jpg", 
+                    "price": 6.25, 
+                    "name": "Spiced Pumpkin Puree"
+                },
+                       {
+                    "category": "Soup", 
+                    "menuitem_id": "6cfb79454bc2446d", 
+                    "description": "toasted pumpkin seeds and chili toasted infused oil", 
+                    "menu": null, 
+                    "image": "http://connoisseurmenu.appspot.com/static/img/puree.jpg", 
+                    "price": 6.25, 
+                    "name": "Spiced Pumpkin Puree"
                 }
+                
             ], 
             "Salad": 
             [

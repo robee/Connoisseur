@@ -50,6 +50,10 @@
 				<key>StateType</key>
 				<string>DefaultTab</string>
 			</dict>
+			<dict>
+				<key>StateType</key>
+				<string>PreviewTab</string>
+			</dict>
 		</array>
 	</dict>
 </dict>
