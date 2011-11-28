@@ -129,12 +129,13 @@ public class Dashboard {
 		}
 		final DataHandler dataHandler = new DataHandler();
 		dataButton.addClickHandler(dataHandler);
-/*
+
 		// check for internet connection
-		String test = Communicate.getMenu("", storage.getItem("restID"), "http://connoisseurmenu.appspot.com/menu");
+		boolean hasInternet = Communicate.hasInternet();
+		//String test = Communicate.getMenu("", storage.getItem("restID"), "http://connoisseurmenu.appspot.com/menu");
 
 		// no internet connection, so report error
-		if (test.charAt(0) != '{') {
+		if (!hasInternet) {
 			// put everything in a popup dialog box
 			final DialogBox errorBox = new DialogBox();
 			errorBox.setAnimationEnabled(true);
@@ -201,17 +202,9 @@ public class Dashboard {
 			buttonPan.add(pushButton);
 			class PushHandler implements ClickHandler {
 				public void onClick(ClickEvent event) {
-					String result = Communicate.updateMenu(menu.getName(), storage.getItem("license"),
-							"http://connoisseurmenu.appspot.com/menu/update");
+					String result = Communicate.sync(menu.getName(), storage.getItem("restID"));
 					if (result.equals("Update Successful")) {
-						// get menu because new information should be inserted after updating
-						String json = Communicate.getMenu("", storage.getItem("restID"),
-								"http://connoisseurmenu.appspot.com/menu");
-					//	String json = Communicate.getMenu(menu.getMenuID(), storage.getItem("restID"),
-					//			"http://connoisseurmenu.appspot.com/menu");
-						storage.setItem(menu.getName(), json);
-
-						// reset UI and deserialize to accommodate new information
+						String json = Communicate.GetMenu(menu.getName());
 						RootPanel.get().remove(dashboardPan);
 						loadMenu(Communicate.deserialize(json), "menuUpdated");
 					}
@@ -219,11 +212,37 @@ public class Dashboard {
 						// report error in popup dialog box
 					}
 				}
-			}
+			}			
+			
+			
+			
+			
+			
+//			class PushHandler implements ClickHandler {
+//				public void onClick(ClickEvent event) {
+//					String result = Communicate.updateMenu(menu.getName(), storage.getItem("license"),
+//							"http://connoisseurmenu.appspot.com/menu/update");
+//					if (result.equals("Update Successful")) {
+//						// get menu because new information should be inserted after updating
+//						String json = Communicate.getMenu("", storage.getItem("restID"),
+//								"http://connoisseurmenu.appspot.com/menu");
+//					//	String json = Communicate.getMenu(menu.getMenuID(), storage.getItem("restID"),
+//					//			"http://connoisseurmenu.appspot.com/menu");
+//						storage.setItem(menu.getName(), json);
+//
+//						// reset UI and deserialize to accommodate new information
+//						RootPanel.get().remove(dashboardPan);
+//						loadMenu(Communicate.deserialize(json), "menuUpdated");
+//					}
+//					else {
+//						// report error in popup dialog box
+//					}
+//				}
+//			}
 			final PushHandler pushHandler = new PushHandler();
 			pushButton.addClickHandler(pushHandler);
 		} // end onSuccess
-*/
+
 	} // end startDashboard
 
 /* ************************************* UNUSED/DEPRECATED CODE BELOW ************************************* */

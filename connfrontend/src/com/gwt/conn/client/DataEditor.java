@@ -183,11 +183,11 @@ public class DataEditor {
 		final Button catButton = new Button(cat.getTitle());
 		catButton.addStyleName("myButton");
 		final Button upButton = new Button("^");
-		upButton.addStyleName("myButton");
+		upButton.addStyleName("myButtonSmall");
 		final Button downButton = new Button("v");
-		downButton.addStyleName("myButton");
+		downButton.addStyleName("myButtonSmall");
 		final Button deleteButton = new Button("x");
-		deleteButton.addStyleName("myButton");
+		deleteButton.addStyleName("myButtonSmall");
 
 		// construct actual buttonRow
 		final HorizontalPanel buttonPanel = new HorizontalPanel();
@@ -550,11 +550,11 @@ public class DataEditor {
 		final Button itemButton = new Button(item.getName());
 		itemButton.addStyleName("myButton");
 		final Button upButton = new Button("^");
-		upButton.addStyleName("myButton");
+		upButton.addStyleName("myButtonSmall");
 		final Button downButton = new Button("v");
-		downButton.addStyleName("myButton");
+		downButton.addStyleName("myButtonSmall");
 		final Button deleteButton = new Button("x");
-		deleteButton.addStyleName("myButton");
+		deleteButton.addStyleName("myButtonSmall");
 
 		// construct actual buttonRow
 		final HorizontalPanel buttonPanel = new HorizontalPanel();

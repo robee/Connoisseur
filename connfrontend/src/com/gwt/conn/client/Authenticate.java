@@ -140,6 +140,9 @@ public class Authenticate {
 						startupBox.hide();
 						
 						// set up storage
+						System.out.println("license: " + license);
+						System.out.println("restID " + restID);
+						
 						storage.setItem("license", license); // secret key for security
 						storage.setItem("restID", restID); // used for almost every call to the backend
 						storage.setItem("numMenus", Integer.toString(0));
@@ -149,7 +152,7 @@ public class Authenticate {
 						//for testing
 						final Menu m = new Menu("menu");
 						m.setID("236e8690d55248ff");
-						m.setRestaurantID("b686d49d8b67424aa1e347613cbb1975");
+						m.setRestaurantID(storage.getItem("restID"));
 						m.setLogoURL("http://www.virginialogos.com/Portals/57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg");
 						m.setColor("black");
 						m.setMenu("null");
