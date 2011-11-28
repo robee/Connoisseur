@@ -91,7 +91,7 @@ class MenuItem(db.Model):
     menu = db.ReferenceProperty(Menu, required=True)
     name = db.StringProperty(required=True)
     category = db.StringProperty()
-    price = db.FloatProperty(required=True)
+    price = db.StringProperty(required=True)
     image = db.StringProperty()
     description = db.StringProperty()
     
@@ -117,7 +117,7 @@ class MenuItem(db.Model):
         
     @staticmethod
     def create(name_p, menu_p, price_p=100.0, category_p="",  image_p="", description_p=""):
-        menuitem = MenuItem(menuitem_id = uuid.uuid4().hex[:16], menu=menu_p, name=name_p, price = price_p, image = image_p, description=description_p, category=category_p)
+        menuitem = MenuItem(menuitem_id = uuid.uuid4().hex[:16], menu=menu_p, name=name_p, price = str(price_p), image = image_p, description=description_p, category=category_p)
         menuitem.put()
         return menuitem
 

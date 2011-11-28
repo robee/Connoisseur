@@ -17,46 +17,58 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.Window;
 
-/** The Dashboard Class **
+/**
+ * The Dashboard Class **
  * 
- * This class is similar to a home page. From here, the user can travel to
- * all other parts of the app. That is, from here, the user can create new
- * menus, edit existing menus and schedule when certain menus go live.
+ * This class is similar to a home page. From here, the user can travel to all
+ * other parts of the app. That is, from here, the user can create new menus,
+ * edit existing menus and schedule when certain menus go live.
  * 
- * NOTE: Scheduling has not been implemented,
- *       so only one menu per restaurant is
- *       currently supported.
+ * NOTE: Scheduling has not been implemented, so only one menu per restaurant is
+ * currently supported.
  * 
  */
 
 public class Dashboard {
 
-	/** Create a remote service proxy to talk to the server-side Greeting service. */
-	private static final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
+	/**
+	 * Create a remote service proxy to talk to the server-side Greeting
+	 * service.
+	 */
+	private static final GreetingServiceAsync greetingService = GWT
+			.create(GreetingService.class);
 
-	/** Local storage for saving strings, which persist when the app is shut down.  */
+	/**
+	 * Local storage for saving strings, which persist when the app is shut
+	 * down.
+	 */
 	private static final Storage storage = StorageContainer.getStorage();
 
 	/** The message displayed to the user when there is a connection problem. */
-	private static final String SERVER_ERROR =
-			"<font color=red>A connection error occurred while attempting to contact the server.<br>" +
-					"You've been put into offline mode for the remainder of this session.<br>" +
-					"All changes you make will be saved locally; so you can work while in<br>" +
-					"offline mode, but you must eventually push your changes to the server.<br>" +
-					"Check your network connection, then restart Connoisseur to try again.<br><br></font>";
+	private static final String SERVER_ERROR = "<font color=red>A connection error occurred while attempting to contact the server.<br>"
+			+ "You've been put into offline mode for the remainder of this session.<br>"
+			+ "All changes you make will be saved locally; so you can work while in<br>"
+			+ "offline mode, but you must eventually push your changes to the server.<br>"
+			+ "Check your network connection, then restart Connoisseur to try again.<br><br></font>";
 
-	/** Called whenever a menu needs to be loaded. Parameter "message" is displayed after loading. */
+	/**
+	 * Called whenever a menu needs to be loaded. Parameter "message" is
+	 * displayed after loading.
+	 */
 	public static void loadMenu(final Menu menu, String message) {
 		// this is used so that buttons don't do anything when clicked
 		// if the contents that the button would load are already visible
-		// need to use storage to save state of editor when interacting with buttons
+		// need to use storage to save state of editor when interacting with
+		// buttons
 		storage.setItem("curDashPage", "vis"); // default to visual editor first
-		//storage.setItem("curDashPage", "dat"); // for testing
+		// storage.setItem("curDashPage", "dat"); // for testing
 
 		// initialize panels for widgets to be placed in
 		final VerticalPanel dashboardPan = new VerticalPanel();
-		dashboardPan.addStyleName("marginlessPanel"); // interacts with Connfrontend.css
+		dashboardPan.addStyleName("marginlessPanel"); // interacts with
+														// Connfrontend.css
 		dashboardPan.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		dashboardPan.setSize("100%", "100%");
 		final HorizontalPanel buttonPan = new HorizontalPanel();
@@ -76,14 +88,15 @@ public class Dashboard {
 
 		// get static instances of all possible editor app contents
 		final Frame previewContent = Previewer.getPreviewer(menu);
-		final HorizontalPanel visualContent = VisualEditor.getVisualEditor(menu);
+		final HorizontalPanel visualContent = VisualEditor
+				.getVisualEditor(menu);
 		final HorizontalPanel dataContent = DataEditor.getDataEditor(menu);
 
 		// put the dashboard panel in the root panel
 		dashboardPan.add(visualContent); // load visual editor by default
 		dashboardPan.setCellHeight(visualContent, "100%");
-		//dashboardPan.add(dataContent); // load data editor for testing
-		//dashboardPan.setCellHeight(dataContent, "100%");
+		// dashboardPan.add(dataContent); // load data editor for testing
+		// dashboardPan.setCellHeight(dataContent, "100%");
 		RootPanel.get().add(dashboardPan, 0, 0);
 
 		// handler for visualButton shows the visual editor
@@ -93,12 +106,12 @@ public class Dashboard {
 				if (cur.equals("dat")) {
 					dashboardPan.remove(dataContent);
 					cont();
-				}
-				else if (cur.equals("pre")) {
+				} else if (cur.equals("pre")) {
 					dashboardPan.remove(previewContent);
 					cont();
 				}
 			}
+
 			private void cont() {
 				storage.setItem("curDashPage", "vis");
 				dashboardPan.add(visualContent);
@@ -115,12 +128,12 @@ public class Dashboard {
 				if (cur.equals("vis")) {
 					dashboardPan.remove(visualContent);
 					cont();
-				}
-				else if (cur.equals("pre")) {
+				} else if (cur.equals("pre")) {
 					dashboardPan.remove(previewContent);
 					cont();
 				}
 			}
+
 			private void cont() {
 				storage.setItem("curDashPage", "dat");
 				dashboardPan.add(dataContent);
@@ -132,7 +145,8 @@ public class Dashboard {
 
 		// check for internet connection
 		boolean hasInternet = Communicate.hasInternet();
-		//String test = Communicate.getMenu("", storage.getItem("restID"), "http://connoisseurmenu.appspot.com/menu");
+		// String test = Communicate.getMenu("", storage.getItem("restID"),
+		// "http://connoisseurmenu.appspot.com/menu");
 
 		// no internet connection, so report error
 		if (!hasInternet) {
@@ -140,7 +154,8 @@ public class Dashboard {
 			final DialogBox errorBox = new DialogBox();
 			errorBox.setAnimationEnabled(true);
 			final VerticalPanel errorVPanel = new VerticalPanel();
-			errorVPanel.addStyleName("marginPanel"); // interacts with Connfrontend.css
+			errorVPanel.addStyleName("marginPanel"); // interacts with
+														// Connfrontend.css
 			errorVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 			final Button errorButton = new Button("Continue");
 			errorButton.addStyleName("myButton");
@@ -157,9 +172,12 @@ public class Dashboard {
 				public void onClick(ClickEvent event) { // button clicked
 					cont();
 				}
+
 				public void onKeyUp(KeyUpEvent event) { // ENTER key
-					if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) cont();
+					if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+						cont();
 				}
+
 				private void cont() {
 					errorButton.setEnabled(false);
 					errorBox.hide();
@@ -169,7 +187,8 @@ public class Dashboard {
 			errorButton.addClickHandler(errorHandler);
 		}
 
-		// internet connection detected, so attach synchronize button to the dashboard
+		// internet connection detected, so attach synchronize button to the
+		// dashboard
 		else {
 			// attach a preview button
 			final Button previewButton = new Button("Preview");
@@ -177,16 +196,17 @@ public class Dashboard {
 			buttonPan.add(previewButton);
 			class PreviewHandler implements ClickHandler {
 				public void onClick(ClickEvent event) {
+					
 					String cur = storage.getItem("curDashPage");
 					if (cur.equals("vis")) {
 						dashboardPan.remove(visualContent);
 						cont();
-					}
-					else if (cur.equals("dat")) {
+					} else if (cur.equals("dat")) {
 						dashboardPan.remove(dataContent);
 						cont();
 					}
 				}
+
 				private void cont() {
 					storage.setItem("curDashPage", "pre");
 					dashboardPan.add(previewContent);
@@ -202,52 +222,49 @@ public class Dashboard {
 			buttonPan.add(pushButton);
 			class PushHandler implements ClickHandler {
 				public void onClick(ClickEvent event) {
-					String result = Communicate.sync(menu.getName(), storage.getItem("restID"));
-					if (result.equals("Update Successful")) {
-						String json = Communicate.GetMenu(menu.getName());
-						RootPanel.get().remove(dashboardPan);
-						loadMenu(Communicate.deserialize(json), "menuUpdated");
-					}
-					else {
-						// report error in popup dialog box
-					}
+					Communicate.sync(menu.getName(), storage.getItem("restID"));
 				}
-			}			
-			
-			
-			
-			
-			
-//			class PushHandler implements ClickHandler {
-//				public void onClick(ClickEvent event) {
-//					String result = Communicate.updateMenu(menu.getName(), storage.getItem("license"),
-//							"http://connoisseurmenu.appspot.com/menu/update");
-//					if (result.equals("Update Successful")) {
-//						// get menu because new information should be inserted after updating
-//						String json = Communicate.getMenu("", storage.getItem("restID"),
-//								"http://connoisseurmenu.appspot.com/menu");
-//					//	String json = Communicate.getMenu(menu.getMenuID(), storage.getItem("restID"),
-//					//			"http://connoisseurmenu.appspot.com/menu");
-//						storage.setItem(menu.getName(), json);
-//
-//						// reset UI and deserialize to accommodate new information
-//						RootPanel.get().remove(dashboardPan);
-//						loadMenu(Communicate.deserialize(json), "menuUpdated");
-//					}
-//					else {
-//						// report error in popup dialog box
-//					}
-//				}
-//			}
+			}
+
+			// class PushHandler implements ClickHandler {
+			// public void onClick(ClickEvent event) {
+			// String result = Communicate.updateMenu(menu.getName(),
+			// storage.getItem("license"),
+			// "http://connoisseurmenu.appspot.com/menu/update");
+			// if (result.equals("Update Successful")) {
+			// // get menu because new information should be inserted after
+			// updating
+			// String json = Communicate.getMenu("", storage.getItem("restID"),
+			// "http://connoisseurmenu.appspot.com/menu");
+			// // String json = Communicate.getMenu(menu.getMenuID(),
+			// storage.getItem("restID"),
+			// // "http://connoisseurmenu.appspot.com/menu");
+			// storage.setItem(menu.getName(), json);
+			//
+			// // reset UI and deserialize to accommodate new information
+			// RootPanel.get().remove(dashboardPan);
+			// loadMenu(Communicate.deserialize(json), "menuUpdated");
+			// }
+			// else {
+			// // report error in popup dialog box
+			// }
+			// }
+			// }
 			final PushHandler pushHandler = new PushHandler();
 			pushButton.addClickHandler(pushHandler);
 		} // end onSuccess
 
 	} // end startDashboard
 
-/* ************************************* UNUSED/DEPRECATED CODE BELOW ************************************* */
+	/*
+	 *  ************************************* UNUSED/DEPRECATED CODE BELOW
+	 * *************************************
+	 */
 
-	/** Called by Authenticate.java when successfully authenticated. (multiple menus version) */
+	/**
+	 * Called by Authenticate.java when successfully authenticated. (multiple
+	 * menus version)
+	 */
 	public void loadDashboard() {
 		final HTML statusLabel = new HTML(); // dynamic HTML
 		final DialogBox dashboardBox = new DialogBox();
@@ -256,70 +273,81 @@ public class Dashboard {
 		// send the license to the server
 		greetingService.greetServer(storage.getItem("license"),
 				new AsyncCallback<String>() {
-			public void onFailure(Throwable caught) {
-				// show the RPC error message to the user
-				dashboardBox.setText("Dashboard - Offline Mode");
-				//statusLabel.setHTML(???);
+					public void onFailure(Throwable caught) {
+						// show the RPC error message to the user
+						dashboardBox.setText("Dashboard - Offline Mode");
+						// statusLabel.setHTML(???);
 
-				final DialogBox errorBox = new DialogBox();
-				errorBox.setAnimationEnabled(true);
+						final DialogBox errorBox = new DialogBox();
+						errorBox.setAnimationEnabled(true);
 
-				final VerticalPanel errorVPanel = new VerticalPanel();
-				errorVPanel.addStyleName("marginPanel"); // interacts with Connfrontend.css
-				errorVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+						final VerticalPanel errorVPanel = new VerticalPanel();
+						errorVPanel.addStyleName("marginPanel"); // interacts
+																	// with
+																	// Connfrontend.css
+						errorVPanel
+								.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 
-				final Button errorButton = new Button("Continue");
-				errorButton.addStyleName("myButton");
+						final Button errorButton = new Button("Continue");
+						errorButton.addStyleName("myButton");
 
-				final HorizontalPanel errorHPanel = new HorizontalPanel();
+						final HorizontalPanel errorHPanel = new HorizontalPanel();
 
-				errorVPanel.add(new HTML(SERVER_ERROR));
-				errorHPanel.add(errorButton);
-				errorVPanel.add(errorHPanel);
-				errorBox.setWidget(errorVPanel);
-				errorBox.center();
-				errorButton.setFocus(true);
+						errorVPanel.add(new HTML(SERVER_ERROR));
+						errorHPanel.add(errorButton);
+						errorVPanel.add(errorHPanel);
+						errorBox.setWidget(errorVPanel);
+						errorBox.center();
+						errorButton.setFocus(true);
 
-				// handler for errorButton
-				class ErrorHandler implements ClickHandler, KeyUpHandler {
-					// Fired when the user clicks Continue.
-					public void onClick(ClickEvent event) {
-						cont();
+						// handler for errorButton
+						class ErrorHandler implements ClickHandler,
+								KeyUpHandler {
+							// Fired when the user clicks Continue.
+							public void onClick(ClickEvent event) {
+								cont();
+							}
+
+							// Fired when the user presses Enter.
+							public void onKeyUp(KeyUpEvent event) {
+								if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+									cont();
+							}
+
+							private void cont() {
+								errorButton.setEnabled(false);
+								errorBox.hide();
+								finishLoad(dashboardBox, statusLabel); // void
+																		// method
+																		// below
+							}
+						}
+
+						// attach the handler
+						final ErrorHandler errorHandler = new ErrorHandler();
+						errorButton.addClickHandler(errorHandler);
+					} // end onFailure
+
+					public void onSuccess(String result) {
+						// StorageContainer.synchronizeWithBackend(); //
+						// implemented in StorageContainer.java
+						dashboardBox.setText("Dashboard");
+						statusLabel.setHTML(result);
+						finishLoad(dashboardBox, statusLabel); // void method
+																// below
 					}
-
-					// Fired when the user presses Enter.
-					public void onKeyUp(KeyUpEvent event) {
-						if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) cont();
-					}
-
-					private void cont() {
-						errorButton.setEnabled(false);
-						errorBox.hide();
-						finishLoad(dashboardBox, statusLabel); // void method below
-					}
-				}
-
-				// attach the handler
-				final ErrorHandler errorHandler = new ErrorHandler();
-				errorButton.addClickHandler(errorHandler);
-			} // end onFailure
-
-			public void onSuccess(String result) {
-				//StorageContainer.synchronizeWithBackend(); // implemented in StorageContainer.java
-				dashboardBox.setText("Dashboard");
-				statusLabel.setHTML(result);
-				finishLoad(dashboardBox, statusLabel); // void method below
-			}
-		}); // end greetServer
+				}); // end greetServer
 	} // end loadDashboard
 
 	/** Called when the dashboard needs to be loaded. */
 	private void finishLoad(final DialogBox dashboardBox, final HTML statusLabel) {
 		final VerticalPanel dashboardVPanel = new VerticalPanel();
-		dashboardVPanel.addStyleName("marginPanel"); // interacts with Connfrontend.css
+		dashboardVPanel.addStyleName("marginPanel"); // interacts with
+														// Connfrontend.css
 		dashboardVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 
-		// addStyleName makes buttons look pretty (interacts with Connfrontend.css)
+		// addStyleName makes buttons look pretty (interacts with
+		// Connfrontend.css)
 		final Button newButton = new Button("New");
 		final Button editButton = new Button("Edit");
 		final Button scheduleButton = new Button("Schedule");
@@ -355,7 +383,8 @@ public class Dashboard {
 		class ScheduleHandler implements ClickHandler {
 			public void onClick(ClickEvent event) {
 				dashboardBox.hide();
-				//scheduler.loadScheduler(dashboardBox); // implemented in Scheduler.java
+				// scheduler.loadScheduler(dashboardBox); // implemented in
+				// Scheduler.java
 			}
 		}
 
@@ -387,7 +416,8 @@ public class Dashboard {
 		final Button cancelButton = new Button("Cancel");
 		sendButton.addStyleName("myButton");
 
-		final TextBox submitField = new TextBox(); // user can input text using this
+		final TextBox submitField = new TextBox(); // user can input text using
+													// this
 		submitField.setText("menu name..."); // default text to be seen on load
 
 		final HorizontalPanel submitHPanel = new HorizontalPanel();
@@ -413,12 +443,13 @@ public class Dashboard {
 
 			/** Fired when the user presses Enter in submitField. */
 			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) submit();
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					submit();
 			}
 
 			/**
-			 * Checks the submitted menu name for validity.
-			 * If valid, loads a new menu object and starts the visual editor.
+			 * Checks the submitted menu name for validity. If valid, loads a
+			 * new menu object and starts the visual editor.
 			 */
 			private void submit() {
 				// validate menu name
@@ -430,11 +461,13 @@ public class Dashboard {
 					return;
 				}
 
-				String json = "";//createDefaultJSON(); // get default JSON object
+				String json = "";// createDefaultJSON(); // get default JSON
+									// object
 				StorageContainer.addMenu(menuName, json); // to storage
 				sendButton.setEnabled(false);
 				submitBox.hide();
-				//visualEditor.loadVisualEditor(dashboardBox, json); // start editing
+				// visualEditor.loadVisualEditor(dashboardBox, json); // start
+				// editing
 			}
 		}
 
@@ -473,7 +506,7 @@ public class Dashboard {
 		final String[] menus = StorageContainer.getMenus();
 
 		// organize UI
-		for (int i=0; i < numMenus; ++i) {
+		for (int i = 0; i < numMenus; ++i) {
 			final String menuName = menus[i];
 			final Button button = new Button(menuName);
 			button.addStyleName("myButton");
@@ -484,8 +517,9 @@ public class Dashboard {
 				/** Fired when the user clicks cancel. */
 				public void onClick(ClickEvent event) {
 					editBox.hide();
-					//String json = StorageContainer.getMenu(menuName);
-					//visualEditor.loadVisualEditor(dashboardBox, json); // start editing
+					// String json = StorageContainer.getMenu(menuName);
+					// visualEditor.loadVisualEditor(dashboardBox, json); //
+					// start editing
 				}
 			}
 

@@ -2,13 +2,24 @@ package com.gwt.conn.client;
 
 import java.util.Date;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
-import com.google.gwt.jsonp.client.JsonpRequestBuilder;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+
 
 /*
  * 
@@ -19,6 +30,41 @@ import com.google.gwt.jsonp.client.JsonpRequestBuilder;
 public class Communicate {
 	static String url = "http://connoisseurmenu.appspot.com/";
 
+	public static void showDialog(String text){
+		final DialogBox errorBox = new DialogBox();
+		errorBox.setAnimationEnabled(true);
+		final VerticalPanel errorVPanel = new VerticalPanel();
+		errorVPanel.addStyleName("marginPanel"); // interacts with
+													// Connfrontend.css
+		errorVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+		final Button errorButton = new Button("Continue");
+		errorButton.addStyleName("myButton");
+		final HorizontalPanel errorHPanel = new HorizontalPanel();
+		errorVPanel.add(new HTML(text));
+		errorHPanel.add(errorButton);
+		errorVPanel.add(errorHPanel);
+		errorBox.setWidget(errorVPanel);
+		errorBox.center();
+		errorButton.setFocus(true);
+		class ErrorHandler implements ClickHandler, KeyUpHandler {
+			public void onClick(ClickEvent event) { // button clicked
+				cont();
+			}
+
+			public void onKeyUp(KeyUpEvent event) { // ENTER key
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					cont();
+			}
+
+			private void cont() {
+				errorButton.setEnabled(false);
+				errorBox.hide();
+			}
+		}
+		final ErrorHandler errorHandler = new ErrorHandler();
+		errorButton.addClickHandler(errorHandler);
+		
+	}
 	public static String buildQueryString(String[] keys, String[] values) {
 		StringBuffer sb = new StringBuffer();
 		if (keys.length != values.length) {
@@ -51,8 +97,8 @@ public class Communicate {
 	public static boolean hasInternet() {
 		
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
-		builder.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
-		builder.setHeader("Access-Control-Allow-Origin", "*");
+//		builder.setHeader("Access-Control-Allow-Origin", "*");
+//		builder.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
 		try {
 			Request response = builder.sendRequest(null, new RequestCallback() {
 				public void onError(Request request, Throwable exception) {
@@ -82,12 +128,13 @@ public class Communicate {
 	public static String sync(String menuName, String restID) {
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url
 				+ "menu/update");
-
+		builder.setHeader("Content-Type","application/x-www-form-urlencoded");
+//		builder.setHeader("Access-Control-Allow-Origin", "*");
+//		builder.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
 		try {
-
-			builder.setHeader("Access-Control-Allow-Origin", "*");
-			builder.setHeader("Access-Control-Allow-Headers",
-					"X-Requested-With");
+			
+			
+			
 			String doc = StorageContainer.getMenu(menuName);
 
 			String timestamp = new Date().getTime() + "";
@@ -99,15 +146,18 @@ public class Communicate {
 			String[] keys = { "doc", "message", "timestamp", "message_hash",
 					"restaurant_id" };
 			String[] values = { doc, doc, timestamp, hash, restID };
-
+			
 			String postData = buildQueryString(keys, values);
-
-			Request response = builder.sendRequest("", new RequestCallback() {
+			System.out.println(postData);
+			Request response = builder.sendRequest(postData, new RequestCallback() {
 				public void onError(Request request, Throwable exception) {
+					showDialog("Sync could not be completed!");
 				}
 
 				public void onResponseReceived(Request request,
 						Response response) {
+					StorageContainer.saveChange(deserialize(response.getText()));
+					showDialog("You have successfully synchronized your Menu!");
 				}
 			});
 

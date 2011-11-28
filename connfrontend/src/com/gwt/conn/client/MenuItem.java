@@ -8,7 +8,7 @@ public class MenuItem {
 	private String description = null;
 	private String menu = null;
 	private String image = "";
-	private String price = null;
+	private String price = "0";
 	private String name = null;
 	
 	public MenuItem (String title) {
@@ -76,9 +76,9 @@ public class MenuItem {
 		sb.append("\"category\": \"" + this.category + "\", ");
 		sb.append("\"menuitem_id\": \"" + this.menuitem_id + "\", ");
 		sb.append("\"description\": \"" + this.description + "\", ");
-		sb.append("\"menu\": null, ");
+		sb.append("\"menu\": \"null\", ");
 		sb.append("\"image\": \"" + this.image + "\", ");
-		sb.append("\"price\": " + this.price + ", ");
+		sb.append("\"price\": \"" + this.price + "\", ");
 		sb.append("\"name\": \"" + this.name + "\"");
 		sb.append("}");
 		return sb.toString();

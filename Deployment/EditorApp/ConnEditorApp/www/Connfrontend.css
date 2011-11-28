@@ -1,0 +1,59 @@
+/** Add css rules here for your application. */
+
+html{
+	color:#ccc;
+}
+
+
+/** Example rules used by the template application (remove for your app) */
+h1 {
+  	font-size: 2em;
+  	font-weight: bold;
+  	color: #777777;
+  	margin: 100px 0px 70px;
+  	text-align: center;
+}
+
+.gwt-Button { 
+
+
+	background: #ccc;
+    padding: 20px 10px 10px 20px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    float: left;
+    width: 150px; 
+
+}
+
+.myButtonSmall { 
+
+	font-size: 150%;
+	background: #ccc;
+    padding: 20px 10px 10px 20px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    float: left;
+    width: 40px; 
+
+}
+
+
+
+
+
+.errorLabel {
+	color: red;
+}
+
+.marginPanel {
+  	margin: 5px;
+}
+
+.marginlessPanel {
+	margin: 0px;
+}
+
+
