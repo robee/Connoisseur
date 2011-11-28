@@ -1,5 +1,9 @@
 /** Add css rules here for your application. */
 
+html{
+	color:#ccc;
+}
+
 
 /** Example rules used by the template application (remove for your app) */
 h1 {
@@ -10,10 +14,35 @@ h1 {
   	text-align: center;
 }
 
-.myButton {
-  	display: block;
-  	font-size: 16pt;
+.myButton { 
+
+
+	background: #ccc;
+    padding: 20px 10px 10px 20px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    float: left;
+    width: 150px; 
+
 }
+
+.myButtonSmall { 
+
+	font-size: 150%;
+	background: #ccc;
+    padding: 20px 10px 10px 20px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    float: left;
+    width: 40px; 
+
+}
+
+
+
+
 
 .errorLabel {
 	color: red;

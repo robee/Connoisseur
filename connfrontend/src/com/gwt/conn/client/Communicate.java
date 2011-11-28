@@ -1,18 +1,14 @@
 package com.gwt.conn.client;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import java.util.Date;
-import com.google.gwt.http.client.*;
-import com.google.gwt.user.client.Window;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
-import java.net.URLConnection;
-import java.util.ArrayList;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.URL;
+import com.google.gwt.jsonp.client.JsonpRequestBuilder;
 
 /*
  * 
@@ -53,11 +49,18 @@ public class Communicate {
 	}
 
 	public static boolean hasInternet() {
+		
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+		builder.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
+		builder.setHeader("Access-Control-Allow-Origin", "*");
 		try {
 			Request response = builder.sendRequest(null, new RequestCallback() {
-				public void onError(Request request, Throwable exception) {}
-				public void onResponseReceived(Request request,Response response) {}
+				public void onError(Request request, Throwable exception) {
+				}
+
+				public void onResponseReceived(Request request,
+						Response response) {
+				}
 			});
 
 		} catch (RequestException e) {
@@ -77,39 +80,36 @@ public class Communicate {
 	}
 
 	public static String sync(String menuName, String restID) {
-		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url);
+		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url
+				+ "menu/update");
 
 		try {
-			builder.setHeader("Content-Type",
-					"application/x-www-form-urlencoded");
+
+			builder.setHeader("Access-Control-Allow-Origin", "*");
+			builder.setHeader("Access-Control-Allow-Headers",
+					"X-Requested-With");
 			String doc = StorageContainer.getMenu(menuName);
 
 			String timestamp = new Date().getTime() + "";
 			String secret_key = ""; // TODO get secret key from storage
 			String message = doc + secret_key + timestamp;
 			String hash = "";
-			try {
-				hash = "" + getSHA1(message + secret_key + timestamp); 
-			} catch (NoSuchAlgorithmException exc) {
-				System.err.println(exc);
-			} catch (UnsupportedEncodingException exc) {
-				System.err.println(exc);
-			}
+			hash = "" + getSHA1(message + secret_key + timestamp);
 
-			String[] keys = { "doc", "message", "timestamp", "message_hash","restaurant_id" };
+			String[] keys = { "doc", "message", "timestamp", "message_hash",
+					"restaurant_id" };
 			String[] values = { doc, doc, timestamp, hash, restID };
 
 			String postData = buildQueryString(keys, values);
 
-			Request response = builder.sendRequest(postData,
-					new RequestCallback() {
-						public void onError(Request request, Throwable exception) {
-						}
+			Request response = builder.sendRequest("", new RequestCallback() {
+				public void onError(Request request, Throwable exception) {
+				}
 
-						public void onResponseReceived(Request request,
-								Response response) {
-						}
-					});
+				public void onResponseReceived(Request request,
+						Response response) {
+				}
+			});
 
 		} catch (RequestException e) {
 			return "Update Unsuccessful";
@@ -467,6 +467,53 @@ public class Communicate {
 		return keyValuePair.substring(start + 1, finish);
 	}
 
+	private static MenuItem parseJSONMenuItem(String menuItem) {
+		String category = null;
+		String menuitem_id = null;
+		String description = null;
+		String menu = null;
+		String image = null;
+		String price = null;
+		String name = null;
+		int start = 0;
+		int finish = 0;
+
+		System.out.println(menuItem);
+
+		start = menuItem.indexOf("\"category\"");
+		finish = menuItem.indexOf("\"", start + "\"category\": \" ".length());
+		category = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		start = menuItem.indexOf("\"menuitem_id\"");
+		finish = menuItem
+				.indexOf("\"", start + "\"menuitem_id\": \" ".length());
+		menuitem_id = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		start = menuItem.indexOf("\"description\"");
+		finish = menuItem
+				.indexOf("\"", start + "\"description\": \" ".length());
+		description = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		start = menuItem.indexOf("\"menu\"");
+		finish = menuItem.indexOf("\"", start + "\"menu\": \" ".length());
+		menu = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		start = menuItem.indexOf("\"image\"");
+		finish = menuItem.indexOf("\"", start + "\"image\": \" ".length());
+		image = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		start = menuItem.indexOf("\"price\"");
+		finish = menuItem.indexOf("\"", start + "\"price\": \" ".length());
+		price = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		start = menuItem.indexOf("\"name\"");
+		finish = menuItem.indexOf("\"", start + "\"name\": \" ".length());
+		name = extractJSONValue(menuItem.substring(start, finish + 1));
+
+		return (new MenuItem(category, menuitem_id, description, menu, image,
+				price, name));
+	}
+
 	// get restaurant name
 	public static Menu deserialize(String jsonMenu) {
 		int start = 0;
@@ -475,9 +522,6 @@ public class Communicate {
 		int nextComma = 0;
 
 		String menuID, restID, menuName, val;
-
-		XStream xstream = new XStream(new JettisonMappedXmlDriver());
-		xstream.alias("MenuItem", MenuItem.class);
 
 		Category cat;
 		Menu menu;
@@ -508,7 +552,7 @@ public class Communicate {
 		start = jsonMenu.indexOf("\"logo_url\"");
 		finish = jsonMenu.indexOf("\"", start + "\"logo_url\": \" ".length());
 		val = extractJSONValue(jsonMenu.substring(start, finish + 1));
-		menu.setLogoURL(val);
+		menu.setLogo(val);
 		// color
 		start = jsonMenu.indexOf("\"color\"");
 		finish = jsonMenu.indexOf("\"", start + "\"color\": \" ".length());
@@ -536,26 +580,30 @@ public class Communicate {
 		menu.setFont(val);
 
 		start = jsonMenu.indexOf("\"menuitems\""); // find where menuitems
-													// starts
-		start = jsonMenu.indexOf("\"", start + "\"menuitems\"  ".length()); // extract
-																			// index
-																			// of
-																			// the
-																			// start
-																			// of
-																			// category
-																			// name
+		// starts
+		start = jsonMenu.indexOf("\"", start + "\"menuitems\" ".length()); // extract
+		// index
+		// of
+		// the
+		// start
+		// of
+		// category
+		// name
 		finish = jsonMenu.indexOf("\"", start + 1); // index of the closing
-													// quotation for the first
-													// category name
+		// quotation for the first
+		// category name
 
 		// this loop is responsible for finding new categories within the JSON
 		// string
 		String menuItemJson = null;
+		MenuItem mi = null;
 		for (;;) {
-			// System.out.println("start: " + start + ", finish: " + finish);
+
 			val = jsonMenu.substring(start + 1, finish); // extract category
 															// name
+
+			// System.out.println("start: " + start + ", finish: " + finish);
+
 			cat = new Category(val);
 			categoryEndIndex = jsonMenu.indexOf("]", finish);
 			// this loop is responsible for finding all menuItems within the
@@ -563,10 +611,19 @@ public class Communicate {
 			for (;;) {
 				start = jsonMenu.indexOf("{", finish + 1);
 				finish = jsonMenu.indexOf("}", start);
-				System.out.println(jsonMenu.substring(start, finish + 1));
 				menuItemJson = jsonMenu.substring(start, finish + 1);
-				MenuItem mi = (MenuItem) xstream.fromXML("{\"MenuItem\":"
-						+ menuItemJson + "}");
+
+				// JSONValue jsonValue = JSONParser.parseStrict(menuItemJson);
+				// JSONArray iCont = jsonValue.isArray();
+
+				mi = parseJSONMenuItem(menuItemJson);
+				// mi = new MenuItem(iCont.get(0).toString(),
+				// iCont.get(1).toString(), iCont.get(2).toString(),
+				// iCont.get(3).toString(), iCont.get(4).toString(),
+				// iCont.get(5).toString(), iCont.get(6).toString());
+				// mi = (MenuItem)xstream.fromXML("{\"MenuItem\":" +
+				// menuItemJson + "}");
+
 				cat.addMenuItem(mi);
 				nextComma = jsonMenu.indexOf(",", finish);
 				if (nextComma == -1 || nextComma > categoryEndIndex) {
@@ -590,22 +647,27 @@ public class Communicate {
 		return menu;
 	}
 
-	public static char[] getSHA1(String convertme)
-			throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-1");
-			byte[] sha1hash = new byte[40];
-			md.update(convertme.getBytes("iso-8859-1"));
-			sha1hash = md.digest();
-			char[] encoded = Hex.encodeHex(sha1hash);
-			return encoded;
-		} catch (NoSuchAlgorithmException none) {
-			System.err.println(none);
-			return null;
-		} catch (UnsupportedEncodingException unsupported) {
-			System.err.println(unsupported);
-			return null;
-		}
+	public static String getSHA1(String convertme) {
+		Sha1 hashFunction = new Sha1();
+		String hash = hashFunction.hex_sha1(convertme);
+		return hash;
 	}
+	// public static char[] getSHA1(String convertme)
+	// throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	// try {
+	// MessageDigest md = MessageDigest.getInstance("SHA-1");
+	// byte[] sha1hash = new byte[40];
+	// md.update(convertme.getBytes("iso-8859-1"));
+	// sha1hash = md.digest();
+	// char[] encoded = Hex.encodeHex(sha1hash);
+	// return encoded;
+	// } catch (NoSuchAlgorithmException none) {
+	// System.err.println(none);
+	// return null;
+	// } catch (UnsupportedEncodingException unsupported) {
+	// System.err.println(unsupported);
+	// return null;
+	// }
+	// }
 
 }

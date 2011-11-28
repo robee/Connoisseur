@@ -5,7 +5,7 @@ public class MenuItem {
 	
 	private String category = null;
 	private String menuitem_id = "";
-	private String description = null;
+	private String description = "";
 	private String menu = null;
 	private String image = "";
 	private String price = null;

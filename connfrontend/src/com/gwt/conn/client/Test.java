@@ -66,7 +66,7 @@ public class Test {
 		System.out.println("\n\n");
 		System.out.println(m.generateJSON());
 		*/
-		String getM = Communicate.getMenu("236e8690d55248ff", "b686d49d8b67424aa1e347613cbb1975","http://connoisseurmenu.appspot.com/menu");
-		System.out.println(getM);
+//		String getM = Communicate.getMenu("236e8690d55248ff", "b686d49d8b67424aa1e347613cbb1975","http://connoisseurmenu.appspot.com/menu");
+//		System.out.println(getM);
 	}
 }

@@ -184,11 +184,11 @@ public class DataEditor {
 		final Button catButton = new Button(cat.getTitle());
 		catButton.addStyleName("myButton");
 		final Button upButton = new Button("^");
-		upButton.addStyleName("myButton");
+		upButton.addStyleName("myButtonSmall");
 		final Button downButton = new Button("v");
-		downButton.addStyleName("myButton");
+		downButton.addStyleName("myButtonSmall");
 		final Button deleteButton = new Button("x");
-		deleteButton.addStyleName("myButton");
+		deleteButton.addStyleName("myButtonSmall");
 
 		// construct actual buttonRow
 		final HorizontalPanel buttonPanel = new HorizontalPanel();
@@ -551,11 +551,11 @@ public class DataEditor {
 		final Button itemButton = new Button(item.getName());
 		itemButton.addStyleName("myButton");
 		final Button upButton = new Button("^");
-		upButton.addStyleName("myButton");
+		upButton.addStyleName("myButtonSmall");
 		final Button downButton = new Button("v");
-		downButton.addStyleName("myButton");
+		downButton.addStyleName("myButtonSmall");
 		final Button deleteButton = new Button("x");
-		deleteButton.addStyleName("myButton");
+		deleteButton.addStyleName("myButtonSmall");
 
 		// construct actual buttonRow
 		final HorizontalPanel buttonPanel = new HorizontalPanel();
@@ -564,7 +564,7 @@ public class DataEditor {
 		buttonPanel.add(upButton);
 		buttonPanel.add(downButton);
 		buttonPanel.add(deleteButton);
-		final VerticalPanel page = createNewMenuItemContentPanel(item, itemButton, prevPage, cat.getTitle(), menu);
+		final VerticalPanel page = createNewMenuItemContentPanel(item, itemButton, prevPage, cat, menu);
 		final ButtonRow buttonRow = new ButtonRow(buttonPanel, page, i);
 		
 		// handler for itemButton
@@ -686,7 +686,7 @@ public class DataEditor {
 			final MenuItem item, // menu item for which this page is being constructed
 			final Button itemButton, // button from category page
 			final VerticalPanel prevPage, // this menu item's category page
-			final String prevPageName, // name of category page
+			final Category cat, // this menu item's category
 			final Menu menu) {
 
 		// the page to be returned
@@ -809,6 +809,8 @@ public class DataEditor {
 		imgSubmitField.addKeyUpHandler(imgHandler);
 		
 		// third, construct a horizontal panel wherein the menu item's description can be modified
+		final Label descErrorLabel = new Label();
+		descErrorLabel.addStyleName("errorLabel");
 		final Button descSendButton = new Button("Update");
 		descSendButton.addStyleName("myButton");
 		final TextArea descSubmitField = new TextArea(); // user can input text using this
@@ -819,8 +821,9 @@ public class DataEditor {
 		descSubmitPanel.addStyleName("marginlessPanel");
 		descSubmitPanel.add(descSubmitField);
 		descSubmitPanel.add(descSendButton);
-		page.add(new HTML("Description:"));
+		page.add(new HTML("Description:<br>Use \\n for new lines.<br>Use \\\" for quotes.<br>Use \\\\ for backslash."));
 		page.add(descSubmitPanel);
+		page.add(descErrorLabel);
 		page.add(new HTML("<br>"));
 
 		// add handler for description update button
@@ -831,7 +834,15 @@ public class DataEditor {
 				String newDesc = descSubmitField.getText();
 				if (newDesc.equals(item.getDescription())) return;
 
+				// check for validity
+				String test = FieldVerifier.isValidDescription(newDesc);
+				if (!test.equals("")) {
+					descErrorLabel.setText(test);
+					return;
+				}
+
 				// propagate changes
+				descErrorLabel.setText("");
 				item.setDescription(newDesc);
 				StorageContainer.saveChange(menu);
 				testLabel.setText(storage.getItem("menu"));
@@ -908,7 +919,7 @@ public class DataEditor {
 				dataEditorPan.remove(searchForCurrentContentPanel(cats, currentPage));
 				
 				// update current page in storage
-				storage.setItem("curDataPage", prevPageName);
+				storage.setItem("curDataPage", cat.getTitle());
 				
 				// mount new page
 				dataEditorPan.add(prevPage);

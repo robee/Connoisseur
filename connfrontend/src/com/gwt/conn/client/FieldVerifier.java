@@ -141,4 +141,14 @@ public class FieldVerifier {
 		return "";
 	}
 	
+	public static String isValidDescription(String desc) {
+		char str[] = desc.toCharArray();
+		for (int i=0; i < desc.length(); ++i) {
+			if (str[i] == '&') return "Character '&' is not allowed.";
+			if (str[i] == ';') return "Character ';' is not allowed.";
+			if (str[i] == '#') return "Character '#' is not allowed.";
+		}
+		return "";
+	}
+	
 } // FieldVerifier

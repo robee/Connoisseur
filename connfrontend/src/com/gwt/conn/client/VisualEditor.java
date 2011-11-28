@@ -1,7 +1,5 @@
 package com.gwt.conn.client;
 
-import java.util.ArrayList;
-
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -12,7 +10,6 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -76,13 +73,10 @@ public class VisualEditor {
 		logoSendButton.addStyleName("myButton");
 		final TextBox logoSubmitField = new TextBox(); // user can input text using this
 		logoSubmitField.setText(menu.getLogo()); // default text to be seen on load
-		final HorizontalPanel logoSubmitPanel = new HorizontalPanel();
-		logoSubmitPanel.addStyleName("marginlessPanel");
-		logoSubmitPanel.add(logoSubmitField);
-		logoSubmitPanel.add(logoSendButton);
-		navigationPan.add(new HTML("Title (regular text) or<br>Logo (image URL starting with \"http://\"):"));
-		navigationPan.add(logoSubmitPanel);
+		navigationPan.add(new HTML("Restaurant Name (regular text) or<br>Logo Image (URL starting with http://)"));
+		navigationPan.add(logoSubmitField);
 		navigationPan.add(logoErrorLabel);
+		navigationPan.add(logoSendButton);
 		navigationPan.add(new HTML("<br>"));
 
 		// add handler for image update button

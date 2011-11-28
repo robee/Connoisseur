@@ -13,8 +13,8 @@
  */
 
 body, table td, select, button {
-  font-family: Arial Unicode MS, Arial, sans-serif;
-  font-size: small;
+  font-family: Helvetica, Arial Unicode MS, Arial, sans-serif;
+  font-size: large;
 }
 pre {
   font-family: "courier new", courier;
@@ -55,12 +55,14 @@ select {
 }
 
 .gwt-Button {
-  margin: 0;
-  padding: 5px 7px;
+  margin: 4px;
+  padding: 6px 10px;
   text-decoration: none;
   cursor: pointer;
   cursor: hand;
-  font-size:small;
+  font-family: Helvetica;
+  font-weight:bold;
+  font-size:large;
   background: url("images/hborder.png") repeat-x 0px -2077px;
   border:1px solid #bbb;
   border-bottom: 1px solid #a0a0a0;
@@ -435,7 +437,8 @@ select {
   padding: 5px 4px;
   border: 1px solid #ccc;
   border-top: 1px solid #999;
-  font-size: 100%;
+
+ 
 }
 .gwt-PasswordTextBox-readonly {
   color: #888;
@@ -991,6 +994,7 @@ select {
   border: 1px solid #ccc;
   border-top: 1px solid #666;
   font-size: 100%;
+  width: 278px;
   font-family: Arial Unicode MS, Arial, sans-serif;
 }
 .gwt-TextArea-readonly {
@@ -998,11 +1002,14 @@ select {
 }
 
 .gwt-TextBox {
-  padding: 5px 4px;
+  margin: 4px;
+  padding: 6px 10px;
   border: 1px solid #ccc;
   border-top: 1px solid #999;
   font-size: small;
-  font-family: Arial Unicode MS, Arial, sans-serif;
+  font-family: Helvetica;
+  font-weight:normal;
+  font-size:x-large;
 }
 .gwt-TextBox-readonly {
   color: #888;

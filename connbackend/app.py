@@ -180,6 +180,7 @@ class MainHandler(webapp.RequestHandler):
         menu_id = Menu.get_menus_by_rest_id(rest_id)[0].menu_id
         doc = DocFromModels(rest_id, menu_id)
         doc_obj = json.loads(doc)
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.out.write(template.render('templates/index.html', doc_obj))
 
 class Preview(webapp.RequestHandler):
@@ -196,6 +197,7 @@ class Preview(webapp.RequestHandler):
             
         doc = self.request.get('doc')
         doc_obj = json.loads(doc)
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.out.write(template.render('templates/index.html', doc_obj))
 
 #check
@@ -207,6 +209,7 @@ class Update(webapp.RequestHandler):
             self.response.out.write('AUTH FAILED')
             return
         message = self.request.get('doc')
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
         if ModelsFromDoc(message):
             self.response.out.write('Update Successful')
         else:
@@ -236,7 +239,7 @@ class CreateMenu(webapp.RequestHandler):
         uiProfile = UIProfile.create(menu)
         menu_item_1 = MenuItem.create('Starter Item 1', menu, 10.00, 'Appy', 'This is a sample menu Item')
         menu_item_2 = MenuItem.create('Starter Item 2', menu, 11.00, 'Drink','This is a sample menu Item')
-        
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.out.write(DocFromModels(rest_id, menu.menu_id))
 # check
 # curl -d "menu_id=b4c5fb73c0984b73" http://localhost:8087/menu/delete 
@@ -247,7 +250,7 @@ class DeleteMenu(webapp.RequestHandler):
             self.response.out.write('AUTH FAILED')
             return
         menu_id = self.request.get('menu_id')
-       
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
         if Menu.delete_by_id(menu_id):
             self.response.out.write('Menu Successfully Deleted')
         else:
@@ -262,6 +265,7 @@ class DeleteRestaurant(webapp.RequestHandler):
             self.response.out.write('AUTH FAILED')
             return
         restaurant_id = self.request.get('restaurant_id')
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
         if Restaurant.delete_by_id(restaurant_id):
             self.response.out.write('Menu Successfully Deleted')
         else:
@@ -281,7 +285,7 @@ class CreateRestaurant(webapp.RequestHandler):
             'secret_key':rest.secret_key,
             'restaurant_id':rest.restaurant_id
         }
-        
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.out.write(json.dumps(return_obj))
 
 
@@ -300,6 +304,7 @@ class GetMenu(webapp.RequestHandler):
             return
         rest_id = self.request.get('restaurant_id')
         menu_id = menu_id = Menu.get_menus_by_rest_id(rest_id)[0].menu_id
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.out.write(DocFromModels(rest_id, menu_id))
         
 
