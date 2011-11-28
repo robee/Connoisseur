@@ -32,6 +32,7 @@ public class Authenticate {
 		
 		final DialogBox startupBox = new DialogBox(); // movable box that contains widgets
 		startupBox.setAnimationEnabled(true);
+		startupBox.setText("Connoisseur");
 		final VerticalPanel startupPanel = new VerticalPanel(); // can contain other widgets
 		startupPanel.addStyleName("marginPanel"); // interacts with Connfrontend.css
 		startupPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
@@ -41,8 +42,9 @@ public class Authenticate {
 			
 			// load dashboard if license key has been submitted before
 			if (storage.getLength() > 0) {
+				boolean internet = Communicate.hasInternet();
 				StorageContainer.initStorage(); // prepares storage for interaction
-				Dashboard.loadMenu(Communicate.deserialize(storage.getItem("menu")), "");
+				Dashboard.loadMenu(Communicate.deserialize(storage.getItem("menu")), "", internet);
 				//Dashboard.loadDashboard();
 			}
 			
@@ -98,8 +100,10 @@ public class Authenticate {
 					
 					/** Checks the submitted license key for validity. Loads the dashboard if valid. */
 					private void submit() {
-						String license = submitLicense.getText(); // unused for now
-						String restID = submitRestID.getText(); // not sure how to validate yet
+						String license = submitLicense.getText();
+						String restID = submitRestID.getText();
+						boolean result = Communicate.authenticate(restID, license);
+						//TODO
 				/*		int returnFlag = 0; // so that both tests can be done
 						licenseErrorLabel.setText("");
 						restErrorLabel.setText("");
@@ -139,21 +143,20 @@ public class Authenticate {
 						submitRestID.setEnabled(false);
 						startupBox.hide();
 						
-						// set up storage
-						System.out.println("license: " + license);
-						System.out.println("restID " + restID);
-						
-						storage.setItem("license", license); // secret key for security
+						// set up storagestorage.setItem("license", license); // secret key for security
 						storage.setItem("restID", restID); // used for almost every call to the backend
 						storage.setItem("numMenus", Integer.toString(0));
 						StorageContainer.initStorage();
 						StorageContainer.addMenu("menu", json);
 						
+						// check for internet connection (affects whether some things load)
+						boolean internet = Communicate.hasInternet();
+						
 						//for testing
 						final Menu m = new Menu("menu");
 						m.setID("236e8690d55248ff");
+						m.setLogo("http://www.virginialogos.com/Portals/57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg");
 						m.setRestaurantID(storage.getItem("restID"));
-						m.setLogoURL("http://www.virginialogos.com/Portals/57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg");
 						m.setColor("black");
 						m.setMenu("null");
 						m.setProfile("259fdb7df24a4f6d");
@@ -163,9 +166,9 @@ public class Authenticate {
 						m.addMenuItem("Drink", "Starter Item 2");
 						m.addCategory("Appy");
 						m.addMenuItem("Appy", "Starter Item 1");
-						Dashboard.loadMenu(m, "");
+						Dashboard.loadMenu(m, "", internet);
 						
-						//Dashboard.loadMenu(Communicate.deserialize(json), "firstTime");
+						//Dashboard.loadMenu(Communicate.deserialize(json), "firstTime", internet);
 						//Dashboard.loadDashboard();
 					} // end submit
 				} // MyHandler

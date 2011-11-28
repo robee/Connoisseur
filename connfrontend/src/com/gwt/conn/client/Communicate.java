@@ -552,7 +552,7 @@ public class Communicate {
 		start = jsonMenu.indexOf("\"logo_url\"");
 		finish = jsonMenu.indexOf("\"", start + "\"logo_url\": \" ".length());
 		val = extractJSONValue(jsonMenu.substring(start, finish + 1));
-		menu.setLogoURL(val);
+		menu.setLogo(val);
 		// color
 		start = jsonMenu.indexOf("\"color\"");
 		finish = jsonMenu.indexOf("\"", start + "\"color\": \" ".length());

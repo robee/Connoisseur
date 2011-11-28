@@ -30,9 +30,24 @@ public class FieldVerifier {
 		return ""; // empty string means success!
 	}
 	
-	/** Verifies that the given string is a valid category name. */
+	/** Verifies that the given string is a valid menu or category name. */
 	public static String isValidName(String name, String[] names) {
 		String test = isLongEnoughAndNotNull(name);
+		if (!test.equals("")) return test;
+		test = isLessThanOrEqualTo16Chars(name);
+		if (!test.equals("")) return test;
+		test = isAlphanumericPlusSpaces(name);
+		if (!test.equals("")) return test;
+		test = nameDoesntExistYet(name, names);
+		if (!test.equals("")) return test;
+		return ""; // empty string means success!
+	}
+	
+	/** Verifies that the given string is a valid menu item name. */
+	public static String isValidItemName(String name, String[] names) {
+		String test = isLongEnoughAndNotNull(name);
+		if (!test.equals("")) return test;
+		test = isLessThanOrEqualTo26Chars(name);
 		if (!test.equals("")) return test;
 		test = isAlphanumericPlusSpaces(name);
 		if (!test.equals("")) return test;
@@ -44,8 +59,20 @@ public class FieldVerifier {
 	/** Checks to see if the given string has a length of at least 4. */
 	private static String isLongEnoughAndNotNull(String name) {
 		if (name == null) return "Must be at least 4 characters long.";
-		else if (name.length() < 4) return "Must be at least 4 characters long.";
-		else return "";
+		if (name.length() < 4) return "Must be at least 4 characters long.";
+		return "";
+	}
+	
+	/** Checks to see if the given string has a length of at most 16. */
+	private static String isLessThanOrEqualTo16Chars(String name) {
+		if (name.length() > 16) return "Must be at most 16 characters long.";
+		return "";
+	}
+	
+	/** Checks to see if the given string has a length of at most 26. */
+	private static String isLessThanOrEqualTo26Chars(String name) {
+		if (name.length() > 26) return "Must be at most 26 characters long.";
+		return "";
 	}
 	
 	/**
@@ -111,6 +138,16 @@ public class FieldVerifier {
 			if (str[i] < 48 || str[i] > 57) return "Numbers or decimal points only.";
 		}
 		if (numDecimals > 1) return "There cannot be more than one decimal point.";
+		return "";
+	}
+	
+	public static String isValidDescription(String desc) {
+		char str[] = desc.toCharArray();
+		for (int i=0; i < desc.length(); ++i) {
+			if (str[i] == '&') return "Character '&' is not allowed.";
+			if (str[i] == ';') return "Character ';' is not allowed.";
+			if (str[i] == '#') return "Character '#' is not allowed.";
+		}
 		return "";
 	}
 	

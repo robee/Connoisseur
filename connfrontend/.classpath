@@ -4,5 +4,13 @@
 	<classpathentry kind="src" output="test-classes" path="test"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+<<<<<<< HEAD
+	<classpathentry kind="lib" path="/Users/jesselubin/Documents/School/Fall11/CS446/Connoisseur/httpclient-4.1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/jesselubin/Documents/School/Fall11/CS446/Connoisseur/json-20080701.jar"/>
+	<classpathentry kind="lib" path="/Users/jesselubin/Documents/School/Fall11/CS446/Connoisseur/jettison-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/jesselubin/Documents/School/Fall11/CS446/Connoisseur/commons-codec-1.5.jar"/>
+	<classpathentry kind="lib" path="/Users/jesselubin/Documents/School/Fall11/CS446/Connoisseur/xstream-1.4.2.jar"/>
+=======
+>>>>>>> aac8a09f8d122ccbd4eb6fc643c8ad8b451325c6
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
