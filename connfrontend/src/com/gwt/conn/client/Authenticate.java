@@ -41,8 +41,9 @@ public class Authenticate {
 			
 			// load dashboard if license key has been submitted before
 			if (storage.getLength() > 0) {
+				boolean internet = Communicate.hasInternet();
 				StorageContainer.initStorage(); // prepares storage for interaction
-				Dashboard.loadMenu(Communicate.deserialize(storage.getItem("menu")), "");
+				Dashboard.loadMenu(Communicate.deserialize(storage.getItem("menu")), "", internet);
 				//Dashboard.loadDashboard();
 			}
 			
@@ -98,8 +99,10 @@ public class Authenticate {
 					
 					/** Checks the submitted license key for validity. Loads the dashboard if valid. */
 					private void submit() {
-						String license = submitLicense.getText(); // unused for now
-						String restID = submitRestID.getText(); // not sure how to validate yet
+						String license = submitLicense.getText();
+						String restID = submitRestID.getText();
+						boolean result = Communicate.authenticate(restID, license);
+						//TODO
 				/*		int returnFlag = 0; // so that both tests can be done
 						licenseErrorLabel.setText("");
 						restErrorLabel.setText("");
@@ -146,11 +149,14 @@ public class Authenticate {
 						StorageContainer.initStorage();
 						StorageContainer.addMenu("menu", json);
 						
+						// check for internet connection (affects whether some things load)
+						boolean internet = Communicate.hasInternet();
+						
 						//for testing
 						final Menu m = new Menu("menu");
 						m.setID("236e8690d55248ff");
 						m.setRestaurantID("b686d49d8b67424aa1e347613cbb1975");
-						m.setLogoURL("http://www.virginialogos.com/Portals/57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg");
+						m.setLogo("http://www.virginialogos.com/Portals/57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg");
 						m.setColor("black");
 						m.setMenu("null");
 						m.setProfile("259fdb7df24a4f6d");
@@ -160,9 +166,9 @@ public class Authenticate {
 						m.addMenuItem("Drink", "Starter Item 2");
 						m.addCategory("Appy");
 						m.addMenuItem("Appy", "Starter Item 1");
-						Dashboard.loadMenu(m, "");
+						Dashboard.loadMenu(m, "", internet);
 						
-						//Dashboard.loadMenu(Communicate.deserialize(json), "firstTime");
+						//Dashboard.loadMenu(Communicate.deserialize(json), "firstTime", internet);
 						//Dashboard.loadDashboard();
 					} // end submit
 				} // MyHandler

@@ -6,7 +6,7 @@ import java.util.Collections;
 @SuppressWarnings("unused")
 public class Menu {
 
-	// add a restaurant name field
+	// private fields that represent a menu object and menu JSON object
 	private String menuName = null;
 	private String restaurantID = null;
 	private String id = null;
@@ -17,15 +17,14 @@ public class Menu {
 	private String template = null;
 	private String font = null;
 	private String restaurant_name = null;
-	
-	private ArrayList <Category> Categories = new ArrayList<Category>();
+	private ArrayList <Category> categories = new ArrayList<Category>();
 	
 	public void swapCategories(int first, int second) {
-		Collections.swap(Categories, first, second);
+		Collections.swap(categories, first, second);
 	}
 	
 	public ArrayList<Category> getCategories() {
-		return this.Categories;
+		return this.categories;
 	}
 	
 	public Menu (String menuName) {
@@ -36,6 +35,10 @@ public class Menu {
 		return this.menuName;
 	}
 	
+	public void setRestaurantName(String restName) {
+		this.restaurant_name = restName;
+	}
+	
 	public void setRestaurantID (String id) {
 		this.restaurantID = id;
 	}
@@ -43,12 +46,23 @@ public class Menu {
 	public void setID (String id) {
 		this.id = id;
 	}
-	public void setLogoURL(String logoURL) {
+	
+	public String getLogo() {
+		return this.logo_url;
+	}
+	
+	public void setLogo(String logoURL) {
 		this.logo_url = logoURL;
 	}
+	
 	public void setColor(String color) {
 		this.color = color;
 	}
+	
+	public String getColor() {
+		return this.color;
+	}
+	
 	public void setMenu(String menu) {
 		this.menu = menu;
 	}
@@ -61,48 +75,51 @@ public class Menu {
 		this.template = template;
 	}
 	
+	public String getTemplate() {
+		return this.template;
+	}
+	
 	public void setFont(String newFont) {
 		this.font = newFont;
 	}
 	
 	public String[] getCategoryNames() {
-		String [] categoryNames = new String[Categories.size()];
+		String [] categoryNames = new String[categories.size()];
 		for (int i = 0; i < categoryNames.length; i++) {
-			categoryNames[i] = Categories.get(i).getTitle();
+			categoryNames[i] = categories.get(i).getTitle();
 		}
 		return categoryNames;
 	}
 
 	public void addCategory(String newCategoryName) {
 		Category newCat = new Category (newCategoryName);
-		Categories.add(newCat);
+		categories.add(newCat);
 	}
 	
 	public void addCategory(Category newCategory) {
-		Categories.add(newCategory);
+		categories.add(newCategory);
 	}
 	
 	public void addMenuItem (String category, String itemName) {
-		for (Category c : Categories) {
+		for (Category c : categories) {
 			if (c.getTitle().equalsIgnoreCase(category)) {
 				c.addMenuItem(itemName, c.getTitle());
 			}
 		}
 	}
+	
 	public void deleteMenuItem (String category, String itemName) {
-		for (Category c : Categories) {
+		for (Category c : categories) {
 			if (c.getTitle().equalsIgnoreCase(category)) {
 				c.deleteMenuItem(itemName);
 			}
 		}
 	}
-	public void setRestaurantName(String restName) {
-		this.restaurant_name = restName;
-	}
+	
 	public void deleteCategory (String category) {
-		for (int i = 0; i < Categories.size(); i++) {
-			if (Categories.get(i).getTitle().equalsIgnoreCase(category)) {
-				Categories.remove(i);
+		for (int i = 0; i < categories.size(); i++) {
+			if (categories.get(i).getTitle().equalsIgnoreCase(category)) {
+				categories.remove(i);
 				break;
 			}
 		}
@@ -127,7 +144,7 @@ public class Menu {
 		sb.append("\"restaurant_name\": \"" + this.restaurant_name + "\", ");
 		sb.append("\"menuitems\": {");
 		//loop CATEGORY get JSON
-		for (Category c : Categories) {
+		for (Category c : categories) {
 			sb.append(commaPrefix);
 			commaPrefix = ", ";
 			sb.append(c.generateJSON());
@@ -135,5 +152,6 @@ public class Menu {
 		sb.append("}}");
 		
 		return sb.toString();
-	}	
-}
+	}
+	
+} // Menu

@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-//import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -44,6 +44,7 @@ public class DataEditor {
 		// testing
 		testLabel.setText(storage.getItem("menu"));
 		//RootPanel.get().add(testLabel, 0, 500);
+		
 		// this is used so that buttons don't do anything when clicked
 		// if the contents that the button would load are already visible
 		// need to use storage to save state of editor when interacting with buttons
@@ -482,13 +483,13 @@ public class DataEditor {
 						if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) submit();
 					}
 
-					// checks the submitted category name for valid format
-					// if valid, loads a new category object and row of buttons
+					// checks the submitted menu item name for valid format
+					// if valid, loads a new menu item object and row of buttons
 					private void submit() {
 						// validate category name
 						String itemName = submitField.getText();
 						String[] itemNames = cat.getMenuItemNames();
-						String test = FieldVerifier.isValidName(itemName, itemNames);
+						String test = FieldVerifier.isValidItemName(itemName, itemNames);
 						if (!test.equals("")) {
 							errorLabel.setText(test);
 							submitField.selectAll();
@@ -729,7 +730,7 @@ public class DataEditor {
 
 				// check for validity
 				String[] itemNames = menu.getCategoryNames();
-				String test = FieldVerifier.isValidName(newItemName, itemNames);
+				String test = FieldVerifier.isValidItemName(newItemName, itemNames);
 				if (!test.equals("")) {
 					nameErrorLabel.setText(test);
 					nameSubmitField.selectAll();
@@ -893,7 +894,7 @@ public class DataEditor {
 		priceSubmitField.addKeyUpHandler(priceHandler);
 
 		// finally, construct a back button to back to this menu item's category page
-		final Button backButton = new Button("Go Back");
+		final Button backButton = new Button("< Go Back");
 		backButton.addStyleName("myButton");
 		page.add(backButton);
 

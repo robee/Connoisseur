@@ -47,12 +47,11 @@ public class Dashboard {
 					"Check your network connection, then restart Connoisseur to try again.<br><br></font>";
 
 	/** Called whenever a menu needs to be loaded. Parameter "message" is displayed after loading. */
-	public static void loadMenu(final Menu menu, String message) {
+	public static void loadMenu(final Menu menu, String message, boolean internet) { //TODO
 		// this is used so that buttons don't do anything when clicked
 		// if the contents that the button would load are already visible
 		// need to use storage to save state of editor when interacting with buttons
 		storage.setItem("curDashPage", "vis"); // default to visual editor first
-		//storage.setItem("curDashPage", "dat"); // for testing
 
 		// initialize panels for widgets to be placed in
 		final VerticalPanel dashboardPan = new VerticalPanel();
@@ -76,14 +75,12 @@ public class Dashboard {
 
 		// get static instances of all possible editor app contents
 		final Frame previewContent = Previewer.getPreviewer(menu);
-		final HorizontalPanel visualContent = VisualEditor.getVisualEditor(menu);
+		final HorizontalPanel visualContent = VisualEditor.getVisualEditor(menu, previewContent, internet);
 		final HorizontalPanel dataContent = DataEditor.getDataEditor(menu);
 
 		// put the dashboard panel in the root panel
 		dashboardPan.add(visualContent); // load visual editor by default
 		dashboardPan.setCellHeight(visualContent, "100%");
-		//dashboardPan.add(dataContent); // load data editor for testing
-		//dashboardPan.setCellHeight(dataContent, "100%");
 		RootPanel.get().add(dashboardPan, 0, 0);
 
 		// handler for visualButton shows the visual editor
@@ -92,17 +89,10 @@ public class Dashboard {
 				String cur = storage.getItem("curDashPage");
 				if (cur.equals("dat")) {
 					dashboardPan.remove(dataContent);
-					cont();
+					storage.setItem("curDashPage", "vis");
+					dashboardPan.add(visualContent);
+					dashboardPan.setCellHeight(visualContent, "100%");
 				}
-				else if (cur.equals("pre")) {
-					dashboardPan.remove(previewContent);
-					cont();
-				}
-			}
-			private void cont() {
-				storage.setItem("curDashPage", "vis");
-				dashboardPan.add(visualContent);
-				dashboardPan.setCellHeight(visualContent, "100%");
 			}
 		}
 		final VisualHandler visualHandler = new VisualHandler();
@@ -114,94 +104,27 @@ public class Dashboard {
 				String cur = storage.getItem("curDashPage");
 				if (cur.equals("vis")) {
 					dashboardPan.remove(visualContent);
-					cont();
+					storage.setItem("curDashPage", "dat");
+					dashboardPan.add(dataContent);
+					dashboardPan.setCellHeight(dataContent, "100%");
 				}
-				else if (cur.equals("pre")) {
-					dashboardPan.remove(previewContent);
-					cont();
-				}
-			}
-			private void cont() {
-				storage.setItem("curDashPage", "dat");
-				dashboardPan.add(dataContent);
-				dashboardPan.setCellHeight(dataContent, "100%");
 			}
 		}
 		final DataHandler dataHandler = new DataHandler();
 		dataButton.addClickHandler(dataHandler);
-/*
-		// check for internet connection
-		String test = Communicate.getMenu("", storage.getItem("restID"), "http://connoisseurmenu.appspot.com/menu");
 
 		// no internet connection, so report error
-		if (test.charAt(0) != '{') {
-			// put everything in a popup dialog box
-			final DialogBox errorBox = new DialogBox();
-			errorBox.setAnimationEnabled(true);
-			final VerticalPanel errorVPanel = new VerticalPanel();
-			errorVPanel.addStyleName("marginPanel"); // interacts with Connfrontend.css
-			errorVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-			final Button errorButton = new Button("Continue");
-			errorButton.addStyleName("myButton");
-			final HorizontalPanel errorHPanel = new HorizontalPanel();
-			errorVPanel.add(new HTML(SERVER_ERROR));
-			errorHPanel.add(errorButton);
-			errorVPanel.add(errorHPanel);
-			errorBox.setWidget(errorVPanel);
-			errorBox.center();
-			errorButton.setFocus(true);
-
-			// handler for errorButton
-			class ErrorHandler implements ClickHandler, KeyUpHandler {
-				public void onClick(ClickEvent event) { // button clicked
-					cont();
-				}
-				public void onKeyUp(KeyUpEvent event) { // ENTER key
-					if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) cont();
-				}
-				private void cont() {
-					errorButton.setEnabled(false);
-					errorBox.hide();
-				}
-			}
-			final ErrorHandler errorHandler = new ErrorHandler();
-			errorButton.addClickHandler(errorHandler);
-		}
+		if (internet == false) showNoInternetError();
 
 		// internet connection detected, so attach synchronize button to the dashboard
 		else {
-			// attach a preview button
-			final Button previewButton = new Button("Preview");
-			previewButton.addStyleName("myButton");
-			buttonPan.add(previewButton);
-			class PreviewHandler implements ClickHandler {
-				public void onClick(ClickEvent event) {
-					String cur = storage.getItem("curDashPage");
-					if (cur.equals("vis")) {
-						dashboardPan.remove(visualContent);
-						cont();
-					}
-					else if (cur.equals("dat")) {
-						dashboardPan.remove(dataContent);
-						cont();
-					}
-				}
-				private void cont() {
-					storage.setItem("curDashPage", "pre");
-					dashboardPan.add(previewContent);
-					dashboardPan.setCellHeight(previewContent, "100%");
-				}
-			}
-			final PreviewHandler previewHandler = new PreviewHandler();
-			previewButton.addClickHandler(previewHandler);
-
 			// attach a push-to-server button
 			final Button pushButton = new Button("Synchronize");
 			pushButton.addStyleName("myButton");
 			buttonPan.add(pushButton);
 			class PushHandler implements ClickHandler {
 				public void onClick(ClickEvent event) {
-					String result = Communicate.updateMenu(menu.getName(), storage.getItem("license"),
+			/*		String result = Communicate.updateMenu(menu.getName(), storage.getItem("license"),
 							"http://connoisseurmenu.appspot.com/menu/update");
 					if (result.equals("Update Successful")) {
 						// get menu because new information should be inserted after updating
@@ -218,14 +141,56 @@ public class Dashboard {
 					else {
 						// report error in popup dialog box
 					}
+					//TODO
+					// check for internet connection again in case it was lost
+					boolean internetStill = Communicate.hasInternet();
+					if (internetStill) Communicate.sync(menu.getName(), storage.getItem("restID"));
+					else {
+						buttonPan.remove(pushButton);
+						showNoInternetError();
+					}*/
 				}
 			}
 			final PushHandler pushHandler = new PushHandler();
 			pushButton.addClickHandler(pushHandler);
-		} // end onSuccess
-*/
+		} // yes internet
 	} // end startDashboard
+	
+	public static void showNoInternetError() {
+		// put everything in a popup dialog box
+		final DialogBox errorBox = new DialogBox();
+		errorBox.setAnimationEnabled(true);
+		final VerticalPanel errorVPanel = new VerticalPanel();
+		errorVPanel.addStyleName("marginPanel"); // interacts with Connfrontend.css
+		errorVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+		final Button errorButton = new Button("Continue");
+		errorButton.addStyleName("myButton");
+		final HorizontalPanel errorHPanel = new HorizontalPanel();
+		errorVPanel.add(new HTML(SERVER_ERROR));
+		errorHPanel.add(errorButton);
+		errorVPanel.add(errorHPanel);
+		errorBox.setWidget(errorVPanel);
+		errorBox.center();
+		errorButton.setFocus(true);
 
+		// handler for errorButton
+		class ErrorHandler implements ClickHandler, KeyUpHandler {
+			public void onClick(ClickEvent event) { // button clicked
+				cont();
+			}
+			public void onKeyUp(KeyUpEvent event) { // ENTER key
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) cont();
+			}
+			private void cont() {
+				errorButton.setEnabled(false);
+				errorBox.hide();
+			}
+		}
+		final ErrorHandler errorHandler = new ErrorHandler();
+		errorButton.addClickHandler(errorHandler);
+		errorButton.addKeyUpHandler(errorHandler);
+	} // showNoInternetError
+	
 /* ************************************* UNUSED/DEPRECATED CODE BELOW ************************************* */
 
 	/** Called by Authenticate.java when successfully authenticated. (multiple menus version) */

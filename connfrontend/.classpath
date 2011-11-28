@@ -4,10 +4,10 @@
 	<classpathentry kind="src" output="test-classes" path="test"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/dmitry/Eclipse Projects/httpcomponents-client-4.1.2/lib/httpclient-4.1.2.jar"/>
-	<classpathentry kind="lib" path="/home/dmitry/xstream-1.4.2.jar"/>
-	<classpathentry kind="lib" path="/home/dmitry/xstream/json-20080701.jar"/>
-	<classpathentry kind="lib" path="/home/dmitry/xstream/jettison-1.2.jar"/>
-	<classpathentry kind="lib" path="/home/dmitry/Eclipse Projects/commons-codec-1.5/commons-codec-1.5.jar"/>
+	<classpathentry kind="lib" path="/Users/jesselubin/Documents/School/Fall11/CS446/Connoisseur/httpclient-4.1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/jesselubin/Documents/School/Fall11/CS446/Connoisseur/json-20080701.jar"/>
+	<classpathentry kind="lib" path="/Users/jesselubin/Documents/School/Fall11/CS446/Connoisseur/jettison-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/jesselubin/Documents/School/Fall11/CS446/Connoisseur/commons-codec-1.5.jar"/>
+	<classpathentry kind="lib" path="/Users/jesselubin/Documents/School/Fall11/CS446/Connoisseur/xstream-1.4.2.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
