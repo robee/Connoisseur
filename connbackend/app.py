@@ -130,13 +130,13 @@ def DocFromModels(rest_id, menu_id):
     obj['ui_profile']= grab_vars(ui_profile)
     obj['ui_profile']['menu']='null'
     obj['menuitems']={}
-
+    
     for menuitem in menuitems:
         category = menuitem.category
         menu_item_dict = grab_vars(menuitem)
         menu_item_dict['menu']='null'
         if obj['menuitems'].has_key(category):
-            obj['menuitems'][category] = list(obj['menuitems'][category]).append(menu_item_dict)
+            obj['menuitems'][category].append(menu_item_dict)
         else:
             obj['menuitems'][category] = [menu_item_dict]
 
@@ -219,6 +219,7 @@ class Update(webapp.RequestHandler):
         if message == '':
             menu_id = Menu.get_menus_by_rest_id(rest_id)[0].menu_id
             doc = DocFromModels(rest_id, menu_id)
+            logging.info(doc)
             self.response.out.write(doc)
         elif ModelsFromDoc(message, rest_id):
             menu_id = Menu.get_menus_by_rest_id(rest_id)[0].menu_id
@@ -300,7 +301,7 @@ class CreateRestaurant(webapp.RequestHandler):
             'restaurant_id':rest.restaurant_id
         }
         
-        menu = Menu.create(self.request.get('name'), rest)
+        menu = Menu.create('menu', rest)
         uiProfile = UIProfile.create(menu)
         menu_item_1 = MenuItem.create('Starter Item 1', menu, 10.00, 'Appy', 'This is a sample menu Item')
         menu_item_2 = MenuItem.create('Starter Item 2', menu, 11.00, 'Drink','This is a sample menu Item')

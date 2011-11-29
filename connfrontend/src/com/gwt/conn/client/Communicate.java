@@ -232,7 +232,7 @@ public class Communicate {
 						storage.setItem("authenticated?", "no");
 						return;
 					}
-					StorageContainer.saveChange(deserialize(response.getText()));
+					storage.setItem("menu", response.getText());
 					
 					if (authenticating) storage.setItem("authenticated?", "yes");
 					else showDialog("You have successfully synchronized your menu!");
