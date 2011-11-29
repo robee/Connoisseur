@@ -139,7 +139,7 @@ public class Communicate {
 			
 			
 			String doc = StorageContainer.getMenu(menuName);
-
+			
 			String timestamp = new Date().getTime() + "";
 			String secret_key = ""; // TODO get secret key from storage
 			String message = doc + secret_key + timestamp;
@@ -160,7 +160,7 @@ public class Communicate {
 				public void onResponseReceived(Request request,
 						Response response) {
 					StorageContainer.saveChange(deserialize(response.getText()));
-					showDialog("You have successfully synchronized your Menu!");
+					//showDialog("You have successfully synchronized your Menu!");
 				}
 			});
 

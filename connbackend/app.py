@@ -128,13 +128,13 @@ def DocFromModels(rest_id, menu_id):
     obj['restaurant_name']=rest.name
     obj['menu_name']= menu.name
     obj['ui_profile']= grab_vars(ui_profile)
-    obj['ui_profile']['menu']=None
+    obj['ui_profile']['menu']='null'
     obj['menuitems']={}
 
     for menuitem in menuitems:
         category = menuitem.category
         menu_item_dict = grab_vars(menuitem)
-        menu_item_dict['menu']=None
+        menu_item_dict['menu']='null'
         if obj['menuitems'].has_key(category):
             obj['menuitems'][category] = list(obj['menuitems'][category]).append(menu_item_dict)
         else:
@@ -215,7 +215,12 @@ class Update(webapp.RequestHandler):
         rest_id=self.request.get('restaurant_id')
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         self.response.headers.add_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Access-Control-Allow-Headers Origin, Access-Control-Allow-Origin, Access-Control-All')
-        if ModelsFromDoc(message, rest_id):
+        
+        if message == '':
+            menu_id = Menu.get_menus_by_rest_id(rest_id)[0].menu_id
+            doc = DocFromModels(rest_id, menu_id)
+            self.response.out.write(doc)
+        elif ModelsFromDoc(message, rest_id):
             menu_id = Menu.get_menus_by_rest_id(rest_id)[0].menu_id
             doc = DocFromModels(rest_id, menu_id)
             self.response.out.write(doc)

@@ -21,9 +21,14 @@
 	<key>AllowInlineMediaPlayback</key>
 	<false/>
 	<key>OpenAllWhitelistURLsInWebView</key>
-	<false/>
+	<true/>
 	<key>ExternalHosts</key>
-	<array/>
+	<array>
+		<string>www.connoisseurmenu.appspot.com</string>
+		<string>*</string>
+	</array>
+	<key>New item</key>
+	<string></string>
 	<key>Plugins</key>
 	<dict>
 		<key>com.phonegap.accelerometer</key>
