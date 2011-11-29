@@ -65,6 +65,7 @@ public class StorageContainer {
 	public static void saveChange(Menu menu) {
 		//storage.setItem("menu", menu.generateJSON());
 		storage.setItem(menu.getName(), menu.generateJSON());
+		Previewer.updatePreview(menu);
 	}
 	
 } // StorageContainer

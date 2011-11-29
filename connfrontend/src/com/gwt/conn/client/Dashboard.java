@@ -38,6 +38,9 @@ public class Dashboard {
 	/** Local storage for saving strings, which persist when the app is shut down.  */
 	private static final Storage storage = StorageContainer.getStorage();
 
+	/** This is the editor UI. */
+	private static final VerticalPanel dashboardPan = new VerticalPanel();
+	
 	/** The message displayed to the user when there is a connection problem. */
 	private static final String SERVER_ERROR =
 			"<font color=red>A connection error occurred while attempting to contact the server.<br>" +
@@ -54,7 +57,6 @@ public class Dashboard {
 		storage.setItem("curDashPage", "vis"); // default to visual editor first
 
 		// initialize panels for widgets to be placed in
-		final VerticalPanel dashboardPan = new VerticalPanel();
 		dashboardPan.addStyleName("marginlessPanel"); // interacts with Connfrontend.css
 		dashboardPan.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		dashboardPan.setSize("100%", "100%");
@@ -124,31 +126,13 @@ public class Dashboard {
 			buttonPan.add(pushButton);
 			class PushHandler implements ClickHandler {
 				public void onClick(ClickEvent event) {
-			/*		String result = Communicate.updateMenu(menu.getName(), storage.getItem("license"),
-							"http://connoisseurmenu.appspot.com/menu/update");
-					if (result.equals("Update Successful")) {
-						// get menu because new information should be inserted after updating
-						String json = Communicate.getMenu("", storage.getItem("restID"),
-								"http://connoisseurmenu.appspot.com/menu");
-					//	String json = Communicate.getMenu(menu.getMenuID(), storage.getItem("restID"),
-					//			"http://connoisseurmenu.appspot.com/menu");
-						storage.setItem(menu.getName(), json);
-
-						// reset UI and deserialize to accommodate new information
-						RootPanel.get().remove(dashboardPan);
-						loadMenu(Communicate.deserialize(json), "menuUpdated");
-					}
-					else {
-						// report error in popup dialog box
-					}
-					//TODO
 					// check for internet connection again in case it was lost
 					boolean internetStill = Communicate.hasInternet();
 					if (internetStill) Communicate.sync(menu.getName(), storage.getItem("restID"));
 					else {
 						buttonPan.remove(pushButton);
 						showNoInternetError();
-					}*/
+					}
 				}
 			}
 			final PushHandler pushHandler = new PushHandler();
@@ -190,6 +174,31 @@ public class Dashboard {
 		errorButton.addClickHandler(errorHandler);
 		errorButton.addKeyUpHandler(errorHandler);
 	} // showNoInternetError
+	
+	public static void fullscreen(String url) {
+		// this button closes the fullscreen preview
+		final Button quitButton = new Button("x");
+		final Frame fullPreview = new Frame();
+		fullPreview.getElement().setAttribute("style", "width:100%; height:100%; border:0");
+		fullPreview.setUrl(url);
+		
+		// modify UI
+		RootPanel.get().remove(dashboardPan);
+		RootPanel.get().add(fullPreview, 0, 0);
+		RootPanel.get().add(quitButton, 0, 0);
+
+		// handler for quitButton
+		class QuitHandler implements ClickHandler {
+			public void onClick(ClickEvent event) {
+				// reset UI
+				RootPanel.get().remove(fullPreview);
+				RootPanel.get().remove(quitButton);
+				RootPanel.get().add(dashboardPan, 0, 0);
+			}
+		}
+		final QuitHandler quitHandler = new QuitHandler();
+		quitButton.addClickHandler(quitHandler);
+	}
 	
 /* ************************************* UNUSED/DEPRECATED CODE BELOW ************************************* */
 

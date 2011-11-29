@@ -1,22 +1,10 @@
 /** Add css rules here for your application. */
 
-html{
+.html {
 	color:#ccc;
 }
 
-
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  	font-size: 2em;
-  	font-weight: bold;
-  	color: #777777;
-  	margin: 100px 0px 70px;
-  	text-align: center;
-}
-
 .myButton { 
-
-
 	background: #ccc;
     padding: 20px 10px 10px 20px;
     border-radius: 10px;
@@ -24,11 +12,9 @@ h1 {
     -moz-border-radius: 10px;
     float: left;
     width: 150px; 
-
 }
 
 .myButtonSmall { 
-
 	font-size: 150%;
 	background: #ccc;
     padding: 20px 10px 10px 20px;
@@ -39,10 +25,6 @@ h1 {
     width: 40px; 
 
 }
-
-
-
-
 
 .errorLabel {
 	color: red;
@@ -56,4 +38,15 @@ h1 {
 	margin: 0px;
 }
 
+/** Standard tablet screen size: 1024x768 */
+.navigationPanel {
+	width: 1%;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 25%;
+}
 
+.contentPanel {
+	width: 100%;
+	height: 100%;
+}

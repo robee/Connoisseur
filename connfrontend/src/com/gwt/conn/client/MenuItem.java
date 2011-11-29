@@ -73,13 +73,13 @@ public class MenuItem {
 	public String generateJSON() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("\"category\": \"" + this.category + "\", ");
-		sb.append("\"menuitem_id\": \"" + this.menuitem_id + "\", ");
-		sb.append("\"description\": \"" + this.description + "\", ");
-		sb.append("\"menu\": null, ");
-		sb.append("\"image\": \"" + this.image + "\", ");
-		sb.append("\"price\": " + this.price + ", ");
-		sb.append("\"name\": \"" + this.name + "\"");
+		sb.append("\"category\":\"" + this.category + "\",");
+		sb.append("\"menuitem_id\":\"" + this.menuitem_id + "\",");
+		sb.append("\"description\":\"" + this.description + "\",");
+		sb.append("\"menu\":null,");
+		sb.append("\"image\":\"" + this.image + "\",");
+		sb.append("\"price\":" + this.price + ",");
+		sb.append("\"name\":\"" + this.name + "\"");
 		sb.append("}");
 		return sb.toString();
 	}

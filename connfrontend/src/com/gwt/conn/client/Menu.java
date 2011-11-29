@@ -130,23 +130,23 @@ public class Menu {
 		String commaPrefix = "";
 		
 		sb.append("{");
-		sb.append("\"menu_id\": \"" + this.id + "\", ");
-		sb.append("\"restaurant_id\": \"" + this.restaurantID + "\", ");
-		sb.append("\"menu_name\": \"" + this.menuName + "\", ");
-		sb.append("\"ui_profile\": {");
-		sb.append("\"logo_url\": \"" + this.logo_url + "\", ");
-		sb.append("\"color\": \"" + this.color + "\", ");
-		sb.append("\"menu\": null, ");
-		sb.append("\"profile_id\": \"" + this.profile_id + "\", ");
-		sb.append("\"template\": \"" + this.template + "\", ");
-		sb.append("\"font\": \"" + this.font + "\"");
-		sb.append("}, ");
-		sb.append("\"restaurant_name\": \"" + this.restaurant_name + "\", ");
-		sb.append("\"menuitems\": {");
+		sb.append("\"menu_id\":\"" + this.id + "\",");
+		sb.append("\"restaurant_id\":\"" + this.restaurantID + "\",");
+		sb.append("\"menu_name\":\"" + this.menuName + "\",");
+		sb.append("\"ui_profile\":{");
+		sb.append("\"logo_url\":\"" + this.logo_url + "\",");
+		sb.append("\"color\":\"" + this.color + "\",");
+		sb.append("\"menu\":null,");
+		sb.append("\"profile_id\":\"" + this.profile_id + "\",");
+		sb.append("\"template\":\"" + this.template + "\",");
+		sb.append("\"font\":\"" + this.font + "\"");
+		sb.append("},");
+		sb.append("\"restaurant_name\":\"" + this.restaurant_name + "\",");
+		sb.append("\"menuitems\":{");
 		//loop CATEGORY get JSON
 		for (Category c : categories) {
 			sb.append(commaPrefix);
-			commaPrefix = ", ";
+			commaPrefix = ",";
 			sb.append(c.generateJSON());
 		}
 		sb.append("}}");

@@ -52,6 +52,7 @@ public class DataEditor {
 
 		// add styles to global widgets
 		dataEditorPan.addStyleName("marginlessPanel");
+		dataEditorPan.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		navigationPan.addStyleName("marginPanel");
 		nullPage.addStyleName("marginlessPanel");
 

@@ -1,5 +1,5 @@
 /**
- * The file contains styles for GWT widgets in the Clean theme.
+ * The file contains styles for GWT widgets in the Clean theme, in RTL mode.
  *
  * In order to maintain cross-browser compatibility, the following syntax is
  * used to create IE6 specific style rules:
@@ -26,7 +26,7 @@ body {
   border: 0px;
   padding: 0px;
   background: #fff;
-  direction: ltr;
+  direction: rtl;
 }
 a, a:visited {
   color: #0066cc;
@@ -48,7 +48,7 @@ select {
  * name below, and attach it to the DOM.  Use a timer to detect when the
  * element's height and width are set to 5px.
  */
-.gwt-Reference-clean {
+.gwt-Reference-clean-rtl {
   height: 5px;
   width: 5px;
   zoom: 1;
@@ -155,7 +155,7 @@ select {
 
 .gwt-DialogBox .Caption {
   background: #F1F1F1;
-  padding: 4px 8px 4px 4px;
+  padding: 4px 4px 4px 8px;
   cursor: default;
   font-family: Arial Unicode MS, Arial, sans-serif;
   font-weight: bold;
@@ -248,9 +248,9 @@ select {
   cursor: hand;
 }
 .gwt-DisclosurePanel .content {
-  border-left: 3px solid #e7e7e7;
-  padding: 4px 0px 4px 8px;
-  margin-left: 6px;
+  border-right: 3px solid #e7e7e7;
+  padding: 4px 8px 4px 0px;
+  margin-right: 6px;
 }
 
 .gwt-FileUpload {
@@ -321,7 +321,7 @@ select {
   padding: 0px;
   margin: 0px;
   border: 0px;
-  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
   background: white;
 }
 .gwt-MenuBar-horizontal .gwt-MenuItemSeparator .menuSeparatorInner {
@@ -331,14 +331,14 @@ select {
 }
 .gwt-MenuBar-vertical {
   margin-top: 0px;
-  margin-left: 0px;
+  margin-right: 0px;
   background: white;
 }
 .gwt-MenuBar-vertical table {
   border-collapse: collapse;
 }
 .gwt-MenuBar-vertical .gwt-MenuItem {
-  padding: 2px 40px 2px 1px;
+  padding: 2px 1px 2px 40px;
 }
 .gwt-MenuBar-vertical .gwt-MenuItemSeparator {
   padding: 2px 0px;
@@ -351,13 +351,13 @@ select {
   overflow: hidden;
 }
 .gwt-MenuBar-vertical .subMenuIcon {
-  padding-right: 4px;
+  padding-left: 4px;
 }
 .gwt-MenuBar-vertical .subMenuIcon-selected {
   background: #E3E8F3;
 }
 .gwt-MenuBarPopup {
-  margin: 0px 0px 0px 3px;
+  margin: 0px 3px 0px 0px;
 }
 .gwt-MenuBarPopup .menuPopupTopCenter {
   background: url(images/hborder.png) 0px -12px repeat-x;
@@ -569,7 +569,7 @@ select {
 .gwt-PushButton-down,
 .gwt-PushButton-down-hovering,
 .gwt-PushButton-down-disabled {
-  padding: 4px 4px 2px 6px;
+  padding: 4px 6px 2px 4px;
   outline:none;
 }
 .gwt-PushButton-down {
@@ -609,52 +609,52 @@ select {
   margin: 0px;
 }
 .gwt-RichTextToolbar .gwt-PushButton-up {
-  padding: 0px 1px 0px 0px;
-  margin-right: 4px;
+  padding: 0px 0px 0px 1px;
+  margin-left: 4px;
   margin-bottom: 4px;
   border-width: 1px; 
 }
 .gwt-RichTextToolbar .gwt-PushButton-up-hovering {
-  margin-right: 4px;
+  margin-left: 4px;
   margin-bottom: 4px;
-  padding: 0px 1px 0px 0px;
+  padding: 0px 0px 0px 1px;
   border-width: 1px; 
 }
 .gwt-RichTextToolbar .gwt-PushButton-down {
-  margin-right: 4px;
+  margin-left: 4px;
   margin-bottom: 4px;
-  padding: 0px 0px 0px 1px;
+  padding: 0px 1px 0px 0px;
   border-width: 1px; 
 }
 .gwt-RichTextToolbar .gwt-PushButton-down-hovering {
-  margin-right: 4px;
+  margin-left: 4px;
   margin-bottom: 4px;
-  padding: 0px 0px 0px 1px;
+  padding: 0px 1px 0px 0px;
   border-width: 1px; 
 }
 .gwt-RichTextToolbar .gwt-ToggleButton-up {
-  margin-right: 4px;
+  margin-left: 4px;
   margin-bottom: 4px;
-  padding: 0px 1px 0px 0px;
+  padding: 0px 0px 0px 1px;
   border:1px solid #bbb;
   border-bottom: 1px solid #a0a0a0;
 }
 .gwt-RichTextToolbar .gwt-ToggleButton-up-hovering {
-  margin-right: 4px;
+  margin-left: 4px;
+  margin-bottom: 4px;
+  padding: 0px 0px 0px 1px;
+  border-width: 1px;
+}
+.gwt-RichTextToolbar .gwt-ToggleButton-down {
+  margin-left: 4px;
   margin-bottom: 4px;
   padding: 0px 1px 0px 0px;
   border-width: 1px;
 }
-.gwt-RichTextToolbar .gwt-ToggleButton-down {
-  margin-right: 4px;
-  margin-bottom: 4px;
-  padding: 0px 0px 0px 1px;
-  border-width: 1px;
-}
 .gwt-RichTextToolbar .gwt-ToggleButton-down-hovering {
-  margin-right: 4px;
+  margin-left: 4px;
   margin-bottom: 4px;
-  padding: 0px 0px 0px 1px;
+  padding: 0px 1px 0px 0px;
   border-width: 1px;
 }
 
@@ -685,7 +685,7 @@ select {
   border: 1px solid #bbbbbb;
   border-bottom: 0px;
   background: white;
-  padding: 2px 2px 10px 5px;
+  padding: 2px 5px 10px 2px;
 }
 .gwt-DecoratedStackPanel .gwt-StackPanelItem {
   cursor: pointer;
@@ -869,7 +869,7 @@ select {
 .gwt-TabBar .gwt-TabBarRest {
 }
 .gwt-TabBar .gwt-TabBarItem {
-  margin-left: 4px;
+  margin-right: 4px;
   padding: 4px 8px 4px 8px;
   cursor: pointer;
   cursor: hand;
@@ -910,7 +910,7 @@ select {
 }
 .gwt-DecoratedTabBar .gwt-TabBarItem {
   border-collapse: collapse;
-  margin-left: 4px;
+  margin-right: 4px;
 }
 .gwt-DecoratedTabBar .tabTopCenter {
   padding: 0px;
@@ -1046,7 +1046,7 @@ select {
 .gwt-ToggleButton-down,
 .gwt-ToggleButton-down-hovering,
 .gwt-ToggleButton-down-disabled {
-  padding: 4px 4px 2px 6px;
+  padding: 4px 6px 2px 4px;
 }
 .gwt-ToggleButton-down {
   background-position: 0 -513px;
@@ -1076,17 +1076,18 @@ select {
   white-space: nowrap;
   cursor: hand;
   cursor: pointer;
+  zoom: 1;
 }
 .gwt-Tree .gwt-TreeItem-selected {
   background: #ebeff9;
 }
 .gwt-TreeItem .gwt-RadioButton input,
 .gwt-TreeItem .gwt-CheckBox input {
-  margin-left: 0px;
+  margin-right: 0px;
 }
 * html .gwt-TreeItem .gwt-RadioButton input,
 * html .gwt-TreeItem .gwt-CheckBox input {
-  margin-left: -4px;
+  margin-right: -4px;
 }
 
 .gwt-DateBox {
@@ -1214,7 +1215,7 @@ td.datePickerMonth {
   border: 1px solid #bbbbbb;
   border-bottom: 0px;
   background: white;
-  padding: 2px 2px 10px 5px;
+  padding: 2px 5px 10px 2px;
 }
 
 .gwt-TabLayoutPanel {
@@ -1222,7 +1223,7 @@ td.datePickerMonth {
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
   background: #ccc;
   padding-top: 6px;
-  padding-left: 5px;
+  padding-right: 5px;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelContentContainer {
   border-color: #ccc;
@@ -1234,7 +1235,7 @@ td.datePickerMonth {
   padding: 6px;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
-  margin-left: 4px;
+  margin-right: 4px;
   padding: 4px 8px 4px 8px;
   cursor: pointer;
   cursor: hand;
