@@ -221,7 +221,19 @@ public class Communicate {
 
 				public void onResponseReceived(Request request,
 						Response response) {
+					System.out.println("response.getText() - " + response.getText());
+					if (response.getText().equals( "ERROR: Incomplete or Malformed doc") && authenticating){
+						showDialog("Invalid Restaurant ID");
+						storage.setItem("authenticated?", "no");
+						return;
+					}
+					else if ( response.getText().equals("ERROR: Incomplete or Malformed doc") && ! authenticating){
+						showDialog("Synchronize could not be completed.");
+						storage.setItem("authenticated?", "no");
+						return;
+					}
 					StorageContainer.saveChange(deserialize(response.getText()));
+					
 					if (authenticating) storage.setItem("authenticated?", "yes");
 					else showDialog("You have successfully synchronized your menu!");
 				}

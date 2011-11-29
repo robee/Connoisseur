@@ -73,7 +73,7 @@ public class VisualEditor {
 		logoSendButton.addStyleName("myButton");
 		final TextBox logoSubmitField = new TextBox(); // user can input text using this
 		logoSubmitField.setText(menu.getLogo()); // default text to be seen on load
-		navigationPan.add(new HTML("Restaurant Name (regular text):<br><i>or</i><br>Logo (URL starting with \"http://\"):"));
+		navigationPan.add(new HTML("Logo (URL starting with \"http://\"):"));
 		navigationPan.add(logoSubmitField);
 		navigationPan.add(logoErrorLabel);
 		final VerticalPanel logoPan = new VerticalPanel();
@@ -206,24 +206,24 @@ public class VisualEditor {
 		// finally, if there's an internet connection, construct a refresh previewer button
 		if (internet) {
 			// finally, construct a refresh button button for the previewer
-			final Button fullButton = new Button("Fullscreen");
-			fullButton.addStyleName("myButton");
-			final HorizontalPanel fullPan = new HorizontalPanel();
-			fullPan.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
-			fullPan.addStyleName("marginPanel");
-			fullPan.add(new HTML("Preview:&nbsp"));
-			fullPan.add(fullButton);
-			navigationPan.add(fullPan);
-
-			// add handler for refresh button
-			class FullscreenHandler implements ClickHandler {
-				// fired when the user clicks go back
-				public void onClick(ClickEvent event) {
-					Dashboard.fullscreen(previewer.getUrl());
-				}
-			} // FullscreenHandler
-			final FullscreenHandler fullHandler = new FullscreenHandler();
-			fullButton.addClickHandler(fullHandler);
+//			final Button fullButton = new Button("Fullscreen");
+//			fullButton.addStyleName("myButton");
+//			final HorizontalPanel fullPan = new HorizontalPanel();
+//			fullPan.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+//			fullPan.addStyleName("marginPanel");
+//			fullPan.add(new HTML("Preview:&nbsp"));
+//			fullPan.add(fullButton);
+//			navigationPan.add(fullPan);
+//
+//			// add handler for refresh button
+//			class FullscreenHandler implements ClickHandler {
+//				// fired when the user clicks go back
+//				public void onClick(ClickEvent event) {
+//					Dashboard.fullscreen(previewer.getUrl());
+//				}
+//			} // FullscreenHandler
+//			final FullscreenHandler fullHandler = new FullscreenHandler();
+//			fullButton.addClickHandler(fullHandler);
 		} // if internet
 		
 		return visEditorPan;

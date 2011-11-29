@@ -136,7 +136,7 @@ public class Menu {
 		sb.append("\"ui_profile\":{");
 		sb.append("\"logo_url\":\"" + this.logo_url + "\",");
 		sb.append("\"color\":\"" + this.color + "\",");
-		sb.append("\"menu\":null,");
+		sb.append("\"menu\":\"null\",");
 		sb.append("\"profile_id\":\"" + this.profile_id + "\",");
 		sb.append("\"template\":\"" + this.template + "\",");
 		sb.append("\"font\":\"" + this.font + "\"");

@@ -24,9 +24,6 @@ class Restaurant(db.Model):
     def delete_by_id(r_id):
         
         rest = Restaurant.get_by_id(r_id)
-        
-       
-            
         menus = Menu.get_menus_by_rest_id(r_id)
         for menu in menus:
             Menu.delete_by_id(menu.menu_id)

@@ -66,51 +66,51 @@ PASSCODE = '4a0e36be6e7d439f83ef8aa8d3f4a40f'
 """
 
 def ModelsFromDoc(jsonString, rest_id):
-    #try:
-    obj = json.loads(jsonString)
+    try:
+        obj = json.loads(jsonString)
     
    
-    profile_id = obj['ui_profile']['profile_id']
+        profile_id = obj['ui_profile']['profile_id']
 
-    # Create or Update Rest
-    rest = Restaurant.get_by_id(rest_id)
-    rest.name = obj['restaurant_name']
+        # Create or Update Rest
+        rest = Restaurant.get_by_id(rest_id)
+        rest.name = obj['restaurant_name']
 
-    #Create or Update Menu
-    menu = Menu.get_menus_by_rest_id(rest_id)[0]
+        #Create or Update Menu
+        menu = Menu.get_menus_by_rest_id(rest_id)[0]
 
-    menu.name = obj['menu_name']
-    menu.resturant = rest
+        menu.name = obj['menu_name']
+        menu.resturant = rest
 
-    #Create or Update UI Profile
-    UIProfile.delete_by_menu(menu)
-    ui_profile = UIProfile.create(menu)
-    ui_profile.template = obj['ui_profile']['template']
-    ui_profile.color = obj['ui_profile']['color']
-    ui_profile.font = obj['ui_profile']['font']
-    ui_profile.logo_url = obj['ui_profile']['logo_url']
-    #logging.info(str(obj))
-    #Create or Update menuitems
+        #Create or Update UI Profile
+        UIProfile.delete_by_menu(menu)
+        ui_profile = UIProfile.create(menu)
+        ui_profile.template = obj['ui_profile']['template']
+        ui_profile.color = obj['ui_profile']['color']
+        ui_profile.font = obj['ui_profile']['font']
+        ui_profile.logo_url = obj['ui_profile']['logo_url']
+        #logging.info(str(obj))
+        #Create or Update menuitems
 
-    MenuItem.delete_by_menu(menu)
-    menu_items_dict = obj['menuitems']
-    logging.info(type(menu_items_dict))
-    for category in menu_items_dict.keys():
-        category_list = menu_items_dict[category]
-        for menu_item_dict in category_list:
-            menuitem=MenuItem.create(   menu_item_dict['name'],
-                                            menu, 
-                                            menu_item_dict['price'], 
-                                            category,  
-                                            menu_item_dict['image'], 
-                                            menu_item_dict['description'])
-            menuitem.put()
-    ui_profile.put()
-    menu.put()
-    rest.put()
-    return True
-    #except:
-    #    return False
+        MenuItem.delete_by_menu(menu)
+        menu_items_dict = obj['menuitems']
+        logging.info(type(menu_items_dict))
+        for category in menu_items_dict.keys():
+            category_list = menu_items_dict[category]
+            for menu_item_dict in category_list:
+                menuitem=MenuItem.create(   menu_item_dict['name'],
+                                                menu, 
+                                                menu_item_dict['price'], 
+                                                category,  
+                                                menu_item_dict['image'], 
+                                                menu_item_dict['description'])
+                menuitem.put()
+        ui_profile.put()
+        menu.put()
+        rest.put()
+        return True
+    except:
+        return False
 
 def DocFromModels(rest_id, menu_id):
     # try:
