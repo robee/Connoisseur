@@ -102,31 +102,11 @@ public class Authenticate {
 					private void submit() {
 						String license = submitLicense.getText();
 						String restID = submitRestID.getText();
-						boolean result = Communicate.authenticate(restID, license);
+						boolean result = Communicate.authenticate(restID, license, restErrorLabel, licenseErrorLabel);
+						if (result == false) return;
+						
 						//TODO
-				/*		int returnFlag = 0; // so that both tests can be done
-						licenseErrorLabel.setText("");
-						restErrorLabel.setText("");
 						
-						// validate license
-						String result = FieldVerifier.isValidLicenseKey(license); // from FieldVerifier.java
-						if (!result.equals("")) { // error
-							licenseErrorLabel.setText("You submitted an invalid license key.");
-							submitLicense.selectAll();
-							returnFlag = 1;
-						}
-						
-						// validate restID
-						result = FieldVerifier.isValidRestaurantID(restID);
-						if (!result.equals("")) { // error
-							restErrorLabel.setText("You submitted an invalid restaurant ID.");
-							submitRestID.selectAll();
-							returnFlag = 1;
-						}
-						
-						// don't do anything until the errors are resolved
-						if (returnFlag == 1) return;
-						*/
 						String json = "{\"menu_id\": \"236e8690d55248ff\", \"restaurant_id\": \"b686d49d8b67424aa1e347613cbb1975\", " +
 							"\"menu_name\": \"menu\", \"ui_profile\": {\"logo_url\": \"http://www.virginialogos.com/Portals/" +
 							"57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg\", \"color\": \"black\", \"menu\": null, \"profile_id\": " +

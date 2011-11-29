@@ -9,6 +9,7 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.jsonp.client.JsonpRequestBuilder;
+import com.google.gwt.user.client.ui.Label;
 
 /*
  * 
@@ -44,8 +45,30 @@ public class Communicate {
 		return sb.toString();
 	}
 
-	public static boolean authenticate(String rest_id, String secret_key) {
-		//sync();
+	public static boolean authenticate(String restID, String license, Label restErrorLabel, Label licenseErrorLabel) {
+		int returnFlag = 0; // so that both tests can be done
+		licenseErrorLabel.setText("");
+		restErrorLabel.setText("");
+		
+		// validate license
+		String result = FieldVerifier.isValidLicenseKey(license); // from FieldVerifier.java
+		if (!result.equals("")) { // error
+			licenseErrorLabel.setText(result);
+			returnFlag = 1;
+		}
+		
+		// validate restID
+		result = FieldVerifier.isValidRestaurantID(restID);
+		if (!result.equals("")) { // error
+			restErrorLabel.setText(result);
+			returnFlag = 1;
+		}
+		
+		// don't do anything until the errors are resolved
+		if (returnFlag == 1) return false;
+		
+		//TODO
+		
 		return true;
 	}
 
