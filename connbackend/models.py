@@ -119,7 +119,7 @@ class MenuItem(db.Model):
         return MenuItem.all().filter('menuitem_id =', i_id).get()
         
     @staticmethod
-    def create(name_p, menu_p, price_p=100.0, category_p="",  image_p="", description_p=""):
+    def create(name_p, menu_p, price_p=100.0, category_p="",  image_p="http://bit.ly/igQVlk", description_p=""):
         menuitem = MenuItem(menuitem_id = uuid.uuid4().hex[:16], menu=menu_p, name=name_p, price = str(price_p), image = image_p, description=description_p, category=category_p)
         menuitem.put()
         return menuitem
