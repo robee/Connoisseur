@@ -76,6 +76,9 @@ public class Authenticate {
 				startupPanel.add(restErrorLabel);
 				startupPanel.add(new HTML("<br>"));
 				buttonPanel.add(submitButton);
+				final HTML commError = new HTML();
+				commError.addStyleName("errorLabel");
+				buttonPanel.add(commError);
 				startupPanel.add(buttonPanel);
 				
 				// setup startupBox, which is what will be seen by the user
@@ -100,85 +103,43 @@ public class Authenticate {
 					
 					/** Checks the submitted license key for validity. Loads the dashboard if valid. */
 					private void submit() {
+						// check submit fields
 						String license = submitLicense.getText();
 						String restID = submitRestID.getText();
-						boolean result = Communicate.authenticate(restID, license);
-						//TODO
-				/*		int returnFlag = 0; // so that both tests can be done
+						int returnFlag = 0; // so that both tests can be done
 						licenseErrorLabel.setText("");
 						restErrorLabel.setText("");
 						
 						// validate license
 						String result = FieldVerifier.isValidLicenseKey(license); // from FieldVerifier.java
 						if (!result.equals("")) { // error
-							licenseErrorLabel.setText("You submitted an invalid license key.");
-							submitLicense.selectAll();
+							licenseErrorLabel.setText(result);
 							returnFlag = 1;
 						}
 						
 						// validate restID
 						result = FieldVerifier.isValidRestaurantID(restID);
 						if (!result.equals("")) { // error
-							restErrorLabel.setText("You submitted an invalid restaurant ID.");
-							submitRestID.selectAll();
+							restErrorLabel.setText(result);
 							returnFlag = 1;
 						}
 						
 						// don't do anything until the errors are resolved
 						if (returnFlag == 1) return;
-						*/
-//						String json = "{\"menu_id\": \"\", \"restaurant_id\": \""+restID +"\", " +
-//							"\"menu_name\": \"menu\", \"ui_profile\": {\"logo_url\": \"http://www.virginialogos.com/Portals/" +
-//							"57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg\", \"color\": \"black\", \"menu\": \"\", \"profile_id\": " +
-//							"\"259fdb7df24a4f6d\", \"template\": \"classy\", \"font\": \"Helvetica\"}, \"restaurant_name\": " +
-//							"\"restaurantTest\", \"menuitems\": {\"Drink\": [{\"category\": \"Drink\", \"menuitem_id\": " +
-//							"\"24c0206c962a4903\", \"description\": \"\", \"menu\": \"\", \"image\": \"This is a sample menu Item\", " +
-//							"\"price\": \"11.0\", \"name\": \"Starter Item 2\"}], \"Appy\": [{\"category\": \"Appy\", \"menuitem_id\": " +
-//							"\"6c1bd016d5b54dc9\", \"description\": \"\", \"menu\": \"\" , \"image\": \"This is a sample menu Item\", " +
-//							"\"price\": \"10.0\", \"name\": \"Starter Item 1\"}]}}"; 
+						storage.setItem("menu", "");
 						
-						// clean up
-						submitButton.setEnabled(false);
-						submitLicense.setEnabled(false);
-						submitRestID.setEnabled(false);
-						startupBox.hide();
-						
-						// set up storagestorage.setItem("license", license); // secret key for security
-						storage.setItem("restID", restID); // used for almost every call to the backend
-						storage.setItem("numMenus", Integer.toString(0));
-						StorageContainer.initStorage();
-						StorageContainer.addMenu("menu", "");
-//						
-//						// check for internet connection (affects whether some things load)
-//						boolean internet = Communicate.hasInternet();
-//						
-//						//for testing
-//						final Menu m = new Menu("menu");
-//						m.setID("236e8690d55248ff");
-//						m.setLogo("http://www.virginialogos.com/Portals/57ad7180-c5e7-49f5-b282-c6475cdb7ee7/Food.jpg");
-//						m.setRestaurantID(storage.getItem("restID"));
-//						m.setColor("black");
-//						m.setMenu("null");
-//						m.setProfile("259fdb7df24a4f6d");
-//						m.setTemplate("classy");
-//						m.setFont("Helvetica");
-//						m.addCategory("Drink");
-//						m.addMenuItem("Drink", "Starter Item 2");
-//						m.addCategory("Appy");
-//						m.addMenuItem("Appy", "Starter Item 1");
-//						Dashboard.loadMenu(m, "", Communicate.hasInternet());
-						Communicate.sync("menu", storage.getItem("restID"));
-						Dashboard.loadMenu(Communicate.deserialize(json), "firstTime");
-						Dashboard.loadDashboard();
+						// attempt to authenticate
+						Communicate.authenticate(restID, license, commError, startupBox, submitButton, submitLicense, submitRestID);
+
 					} // end submit
 				} // MyHandler
-				
+			
 				// attach the handler
 				final MyHandler handler = new MyHandler();
 				submitButton.addClickHandler(handler);
 				submitLicense.addKeyUpHandler(handler);
 				submitRestID.addKeyUpHandler(handler);
-			} // else load authenti=cation UI
+			} // else load authentication UI
 			
 		} // if storage supported
 		

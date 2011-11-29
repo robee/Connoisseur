@@ -13,11 +13,14 @@ import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.storage.client.Storage;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
@@ -28,14 +31,17 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 
 public class Communicate {
-	static String url = "http://connoisseurmenu.appspot.com/";
+	
+	/** Local storage for saving strings, which persist when the app is shut down.  */
+	private static final Storage storage = StorageContainer.getStorage();
+	
+	private static final String url = "http://connoisseurmenu.appspot.com/";
 
 	public static void showDialog(String text){
 		final DialogBox errorBox = new DialogBox();
 		errorBox.setAnimationEnabled(true);
 		final VerticalPanel errorVPanel = new VerticalPanel();
-		errorVPanel.addStyleName("marginPanel"); // interacts with
-													// Connfrontend.css
+		errorVPanel.addStyleName("marginPanel"); // interacts with Connfrontend.css
 		errorVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		final Button errorButton = new Button("Continue");
 		errorButton.addStyleName("myButton");
@@ -46,6 +52,7 @@ public class Communicate {
 		errorBox.setWidget(errorVPanel);
 		errorBox.center();
 		errorButton.setFocus(true);
+		
 		class ErrorHandler implements ClickHandler, KeyUpHandler {
 			public void onClick(ClickEvent event) { // button clicked
 				cont();
@@ -62,9 +69,9 @@ public class Communicate {
 			}
 		}
 		final ErrorHandler errorHandler = new ErrorHandler();
-		errorButton.addClickHandler(errorHandler);
-		
+		errorButton.addClickHandler(errorHandler);	
 	}
+	
 	public static String buildQueryString(String[] keys, String[] values) {
 		StringBuffer sb = new StringBuffer();
 		if (keys.length != values.length) {
@@ -90,9 +97,66 @@ public class Communicate {
 		return sb.toString();
 	}
 
-	public static boolean authenticate(String rest_id, String secret_key) {
-		//sync();
-		return true;
+	public static void authenticate(final String restID, final String license,
+			final HTML commError, final DialogBox startupBox, final Button submitButton,
+			final TextBox submitLicense, final TextBox submitRestID) {
+		// attempt to sync with server
+		storage.setItem("authenticated?", "null");
+		String result = sync("menu", restID, true); // true because authenticating
+		if (!result.equals("")) {
+			commError.setText("<br>No internet connection detected.");
+			return;
+		}
+
+		// hide authentication submission form and replace with an "Authenticating..." message
+		submitButton.setEnabled(false);
+		submitLicense.setEnabled(false);
+		submitRestID.setEnabled(false);
+		startupBox.hide();
+		final DialogBox authBox = new DialogBox();
+		authBox.setAnimationEnabled(true);
+		final VerticalPanel authPanel = new VerticalPanel();
+		authPanel.addStyleName("marginPanel"); // interacts with Connfrontend.css
+		authPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+		authPanel.add(new HTML("Authenticating..."));
+		authBox.setWidget(authPanel);
+		authBox.center();
+		
+		// repeat a timer until the value of "authenticated?" changes
+		final Timer timer = new Timer() {
+			public void run() {
+				// authentication unsuccessful
+				if (storage.getItem("authenticated?").equals("no")) {
+					// report error and show authentication form again
+					authBox.hide();
+					commError.setText("<br>Something went wrong. Please try again.");
+					submitButton.setEnabled(true);
+					submitLicense.setEnabled(true);
+					submitRestID.setEnabled(true);
+					startupBox.center();
+					this.cancel();
+				}
+				
+				// authentication successful
+				else if (storage.getItem("authenticated?").equals("yes")) {
+					// save license and restaurant id and setup storage
+					authBox.hide();
+					storage.setItem("license", license); // secret key for security
+					storage.setItem("restID", restID); // used for almost every call to the backend
+					storage.setItem("numMenus", Integer.toString(0));
+					StorageContainer.initStorage();
+					
+					// go to dashboard (true meaning there is internet since we were able to authenticate)
+					// "firstTime" causes a popup box to appear explaining how to use Connoisseur
+					this.cancel();
+					Dashboard.loadMenu(deserialize(storage.getItem("menu")), "firstTime", true);
+					
+				}
+			}
+		};		
+		
+		// repeat once every half second
+		timer.scheduleRepeating(500); // 500 milliseconds
 	}
 
 	public static boolean hasInternet() {
@@ -124,20 +188,17 @@ public class Communicate {
 		return "Update Successful";
 	}
 
-	public static String GetMenu(String menuName) {
+	/*public static String GetMenu(String menuName) {
 		return StorageContainer.getMenu(menuName);
-	}
+	}*/
 
-	public static String sync(String menuName, String restID) {
+	public static String sync(String menuName, String restID, final boolean authenticating) {
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url
 				+ "menu/update");
 		builder.setHeader("Content-Type","application/x-www-form-urlencoded");
 //		builder.setHeader("Access-Control-Allow-Origin", "*");
 //		builder.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
 		try {
-			
-			
-			
 			String doc = StorageContainer.getMenu(menuName);
 			
 			String timestamp = new Date().getTime() + "";
@@ -154,13 +215,15 @@ public class Communicate {
 			System.out.println(postData);
 			Request response = builder.sendRequest(postData, new RequestCallback() {
 				public void onError(Request request, Throwable exception) {
-					showDialog("Sync could not be completed!");
+					if (authenticating) storage.setItem("authenticated?", "no");
+					else showDialog("Synchronize could not be completed.");
 				}
 
 				public void onResponseReceived(Request request,
 						Response response) {
 					StorageContainer.saveChange(deserialize(response.getText()));
-					//showDialog("You have successfully synchronized your Menu!");
+					if (authenticating) storage.setItem("authenticated?", "yes");
+					else showDialog("You have successfully synchronized your menu!");
 				}
 			});
 
@@ -168,7 +231,7 @@ public class Communicate {
 			return "Update Unsuccessful";
 		}
 
-		return "Update Successful";
+		return ""; // asynchronous callback, so whether or not successful is determined later
 	}
 
 	// public static String updateMenu(String menuName, String restID,

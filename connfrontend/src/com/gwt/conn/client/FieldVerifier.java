@@ -12,11 +12,16 @@ public class FieldVerifier {
 	 *  Returns the default json object for the app if valid.
 	 *  Returns an error otherwise.
 	 */
-	public static String isValidLicenseKey(String license, String restID, String menuName) {
-		String test = isLongEnoughAndNotNull(restID);
+	public static String isValidLicenseKey(String license) {
+		String test = isLongEnoughAndNotNull(license);
 		if (!test.equals("")) return "You submitted an invalid license key.";
 		return test;
-		//return Communicate.createMenu(menuName, restID, "http://connoisseurmenu.appspot.com/menu/create");
+	}
+	
+	public static String isValidRestaurantID(String restID) {
+		String test = isLongEnoughAndNotNull(restID);
+		if (!test.equals("")) return "You submitted an invalid restaurant ID.";
+		return test;
 	}
 	
 	/** Verifies that the given string is a valid menu name. */

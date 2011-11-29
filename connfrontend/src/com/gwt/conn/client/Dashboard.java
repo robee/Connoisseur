@@ -52,7 +52,8 @@ public class Dashboard {
 	
 	/** The message displayed to the user when there is a connection problem. */
 
-	private static final String SERVER_ERROR = "<font color=red>A connection error occurred while attempting to contact the server.<br>"
+	private static final String SERVER_ERROR =
+			"<font color=red>A connection error occurred while attempting to contact the server.<br>"
 			+ "You've been put into offline mode for the remainder of this session.<br>"
 			+ "All changes you make will be saved locally; so you can work while in<br>"
 			+ "offline mode, but you must eventually push your changes to the server.<br>"
@@ -62,18 +63,16 @@ public class Dashboard {
 	 * Called whenever a menu needs to be loaded. Parameter "message" is
 	 * displayed after loading.
 	 */
-	public static void loadMenu(final Menu menu, String message,
-			boolean internet) { // TODO
+	public static void loadMenu(final Menu menu, String message, boolean internet) {
 		// this is used so that buttons don't do anything when clicked
 		// if the contents that the button would load are already visible
 		// need to use storage to save state of editor when interacting with
 		// buttons
 		storage.setItem("curDashPage", "vis"); // default to visual editor first
+		
 		// initialize panels for widgets to be placed in
-
 		final VerticalPanel dashboardPan = new VerticalPanel();
-		dashboardPan.addStyleName("marginlessPanel"); // interacts with
-														// Connfrontend.css
+		dashboardPan.addStyleName("marginlessPanel"); // interacts with Connfrontend.css
 
 		dashboardPan.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		dashboardPan.setSize("100%", "100%");
@@ -94,7 +93,6 @@ public class Dashboard {
 
 		// get static instances of all possible editor app contents
 		final Frame previewContent = Previewer.getPreviewer(menu);
-
 		final HorizontalPanel visualContent = VisualEditor.getVisualEditor(
 				menu, previewContent, internet);
 		final HorizontalPanel dataContent = DataEditor.getDataEditor(menu);
@@ -135,10 +133,8 @@ public class Dashboard {
 		final DataHandler dataHandler = new DataHandler();
 		dataButton.addClickHandler(dataHandler);
 
-		if (internet == false)
-			showNoInternetError();
-		// internet connection detected, so attach synchronize button to the
-		// dashboard
+		if (internet == false) showNoInternetError();
+		// internet connection detected, so attach synchronize button to the dashboard
 		else {
 			// attach a push-to-server button
 			final Button pushButton = new Button("Synchronize");
@@ -148,9 +144,10 @@ public class Dashboard {
 				public void onClick(ClickEvent event) {
 
 					boolean internetStill = Communicate.hasInternet();
-					if (internetStill)
-						Communicate.sync(menu.getName(),
-								storage.getItem("restID"));
+					if (internetStill) {
+						// false because not authenticating
+						Communicate.sync(menu.getName(), storage.getItem("restID"), false);
+					}
 					else {
 						buttonPan.remove(pushButton);
 						showNoInternetError();
@@ -163,6 +160,7 @@ public class Dashboard {
 		}
 	}
 
+	/** Called when no internet connection is detected in order to inform the user. */
 	public static void showNoInternetError() {
 		// put everything in a popup dialog box
 		final DialogBox errorBox = new DialogBox();
@@ -202,6 +200,7 @@ public class Dashboard {
 		errorButton.addKeyUpHandler(errorHandler);
 	} // showNoInternetError
 
+	/** Called by visual editor when the fullscreen button is pressed. */
 	public static void fullscreen(String url) {
 		// this button closes the fullscreen preview
 		final Button quitButton = new Button("x");
@@ -228,11 +227,6 @@ public class Dashboard {
 	}
 	
 /* ************************************* UNUSED/DEPRECATED CODE BELOW ************************************* */
-
-	/*
-	 *  ************************************* UNUSED/DEPRECATED CODE BELOW
-	 * *************************************
-	 */
 
 	/**
 	 * Called by Authenticate.java when successfully authenticated. (multiple
