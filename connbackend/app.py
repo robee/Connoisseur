@@ -65,11 +65,11 @@ PASSCODE = '4a0e36be6e7d439f83ef8aa8d3f4a40f'
 }
 """
 
-def ModelsFromDoc(jsonString):
+def ModelsFromDoc(jsonString, rest_id):
     #try:
     obj = json.loads(jsonString)
     
-    rest_id = obj['restaurant_id']
+   
     profile_id = obj['ui_profile']['profile_id']
 
     # Create or Update Rest
@@ -83,7 +83,8 @@ def ModelsFromDoc(jsonString):
     menu.resturant = rest
 
     #Create or Update UI Profile
-    ui_profile = UIProfile.get_by_menu(menu)
+    UIProfile.delete_by_menu(menu)
+    ui_profile = UIProfile.create(menu)
     ui_profile.template = obj['ui_profile']['template']
     ui_profile.color = obj['ui_profile']['color']
     ui_profile.font = obj['ui_profile']['font']
@@ -91,22 +92,13 @@ def ModelsFromDoc(jsonString):
     #logging.info(str(obj))
     #Create or Update menuitems
 
+    MenuItem.delete_by_menu(menu)
     menu_items_dict = obj['menuitems']
     logging.info(type(menu_items_dict))
     for category in menu_items_dict.keys():
         category_list = menu_items_dict[category]
-        logging.info(type(category_list))
         for menu_item_dict in category_list:
-            logging.info(type(menu_item_dict))
-            menuitem = MenuItem.get_by_id(menu_item_dict['menuitem_id'])
-            if menuitem:
-                menuitem.name = menu_item_dict['name']
-                menuitem.category = category
-                menuitem.price = float(menu_item_dict['price'])
-                menuitem.image = menu_item_dict['image']
-                menuitem.description = menu_item_dict['description']
-            else:
-                menuitem=MenuItem.create(   menu_item_dict['name'],
+            menuitem=MenuItem.create(   menu_item_dict['name'],
                                             menu, 
                                             menu_item_dict['price'], 
                                             category,  
@@ -169,7 +161,6 @@ class MainHandler(webapp.RequestHandler):
     def options(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         self.response.headers.add_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Access-Control-Allow-Headers Origin, Access-Control-Allow-Origin, Access-Control-All')
-    
     def get(self):
         if AUTH_ENABLED and not verifyMessage(self.request): 
             self.response.out.write('AUTH FAILED')
@@ -217,12 +208,15 @@ class Update(webapp.RequestHandler):
         if AUTH_ENABLED and not verifyMessage(self.request): 
             self.response.out.write('AUTH FAILED')
             return
+        
         message = self.request.get('doc')
+        logging.info(str(self.request))
         logging.info(message)
+        rest_id=self.request.get('restaurant_id')
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         self.response.headers.add_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Access-Control-Allow-Headers Origin, Access-Control-Allow-Origin, Access-Control-All')
-        if ModelsFromDoc(message):
-            menu_id = Menu.get_menus_by_rest_id(self.request.get('restaurant_id'))[0].menu_id
+        if ModelsFromDoc(message, rest_id):
+            menu_id = Menu.get_menus_by_rest_id(rest_id)[0].menu_id
             doc = DocFromModels(rest_id, menu_id)
             self.response.out.write(doc)
         else:

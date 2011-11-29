@@ -99,6 +99,12 @@ class MenuItem(db.Model):
     @staticmethod
     def get_by_menu(menu):
         return MenuItem.all().filter('menu =', menu).fetch(1000)
+    
+    @staticmethod
+    def delete_by_menu(menu):
+        menu_items = MenuItem.get_by_menu(menu)
+        for menu_item in menu_items:
+            menu_item.delete()
         
     @staticmethod
     def delete_by_id(i_id):
@@ -147,7 +153,7 @@ class UIProfile(db.Model):
         
         return True
         
-        
+       
     @staticmethod
     def get_by_id(profile_id):
         return UIProfile.all().filter('profile_id =', profile_id).get()
@@ -157,6 +163,9 @@ class UIProfile(db.Model):
         return UIProfile.all().filter('menu =', menu).get()
 
 
-
+    @staticmethod
+    def delete_by_menu(menu):
+        ui_profile = UIProfile.get_by_menu(menu)
+        ui_profile.delete()
 
 

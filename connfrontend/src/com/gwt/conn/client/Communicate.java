@@ -97,6 +97,7 @@ public class Communicate {
 	public static boolean hasInternet() {
 		
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+		builder.setHeader("Content-Type","application/x-www-form-urlencoded");
 //		builder.setHeader("Access-Control-Allow-Origin", "*");
 //		builder.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
 		try {
@@ -106,6 +107,7 @@ public class Communicate {
 
 				public void onResponseReceived(Request request,
 						Response response) {
+					
 				}
 			});
 
@@ -602,7 +604,7 @@ public class Communicate {
 		start = jsonMenu.indexOf("\"logo_url\"");
 		finish = jsonMenu.indexOf("\"", start + "\"logo_url\": \" ".length());
 		val = extractJSONValue(jsonMenu.substring(start, finish + 1));
-		menu.setLogoURL(val);
+		menu.setLogo(val);
 		// color
 		start = jsonMenu.indexOf("\"color\"");
 		finish = jsonMenu.indexOf("\"", start + "\"color\": \" ".length());

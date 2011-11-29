@@ -15,7 +15,7 @@ public class FieldVerifier {
 	public static String isValidLicenseKey(String license) {
 		String test = isLongEnoughAndNotNull(license);
 		if (!test.equals("")) return test;
-		test = isAlphanumericPlusSpaces(license);
+		test = isAlphanumeric(license);
 		if (!test.equals("")) return test;
 		return ""; // success!
 	}
@@ -26,7 +26,7 @@ public class FieldVerifier {
 	public static String isValidRestaurantID(String restID) {
 		String test = isLongEnoughAndNotNull(restID);
 		if (!test.equals("")) return test;
-		test = isAlphanumericPlusSpaces(restID);
+		test = isAlphanumeric(restID);
 		if (!test.equals("")) return test;
 		return "";
 	}
@@ -42,11 +42,9 @@ public class FieldVerifier {
 	 * Checks to see if the given string consists entirely of letters, numbers or spaces,
 	 * with no spaces at the beginning or end.
 	 */
-	private static String isAlphanumericPlusSpaces(String name) {
+	private static String isAlphanumeric(String name) {
 		char str[] = name.toCharArray();
-		if (str[0] == ' ' || str[name.length()-1] == ' ') return "Cannot start or end with a space.";
 		for (int i=0; i < name.length(); ++i) {
-			if (str[i] == ' ') continue; // ignore spaces
 			// from ASCII chart
 			// 0=48, 9=57
 			// a=65, z=90

@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-//import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -44,6 +44,7 @@ public class DataEditor {
 		// testing
 		testLabel.setText(storage.getItem("menu"));
 		//RootPanel.get().add(testLabel, 0, 500);
+		
 		// this is used so that buttons don't do anything when clicked
 		// if the contents that the button would load are already visible
 		// need to use storage to save state of editor when interacting with buttons
@@ -482,13 +483,13 @@ public class DataEditor {
 						if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) submit();
 					}
 
-					// checks the submitted category name for valid format
-					// if valid, loads a new category object and row of buttons
+					// checks the submitted menu item name for valid format
+					// if valid, loads a new menu item object and row of buttons
 					private void submit() {
 						// validate category name
 						String itemName = submitField.getText();
 						String[] itemNames = cat.getMenuItemNames();
-						String test = FieldVerifier.isValidName(itemName, itemNames);
+						String test = FieldVerifier.isValidItemName(itemName, itemNames);
 						if (!test.equals("")) {
 							errorLabel.setText(test);
 							submitField.selectAll();
@@ -563,7 +564,7 @@ public class DataEditor {
 		buttonPanel.add(upButton);
 		buttonPanel.add(downButton);
 		buttonPanel.add(deleteButton);
-		final VerticalPanel page = createNewMenuItemContentPanel(item, itemButton, prevPage, cat.getTitle(), menu);
+		final VerticalPanel page = createNewMenuItemContentPanel(item, itemButton, prevPage, cat, menu);
 		final ButtonRow buttonRow = new ButtonRow(buttonPanel, page, i);
 		
 		// handler for itemButton
@@ -685,7 +686,7 @@ public class DataEditor {
 			final MenuItem item, // menu item for which this page is being constructed
 			final Button itemButton, // button from category page
 			final VerticalPanel prevPage, // this menu item's category page
-			final String prevPageName, // name of category page
+			final Category cat, // this menu item's category
 			final Menu menu) {
 
 		// the page to be returned
@@ -729,7 +730,7 @@ public class DataEditor {
 
 				// check for validity
 				String[] itemNames = menu.getCategoryNames();
-				String test = FieldVerifier.isValidName(newItemName, itemNames);
+				String test = FieldVerifier.isValidItemName(newItemName, itemNames);
 				if (!test.equals("")) {
 					nameErrorLabel.setText(test);
 					nameSubmitField.selectAll();
@@ -808,6 +809,8 @@ public class DataEditor {
 		imgSubmitField.addKeyUpHandler(imgHandler);
 		
 		// third, construct a horizontal panel wherein the menu item's description can be modified
+		final Label descErrorLabel = new Label();
+		descErrorLabel.addStyleName("errorLabel");
 		final Button descSendButton = new Button("Update");
 		descSendButton.addStyleName("myButton");
 		final TextArea descSubmitField = new TextArea(); // user can input text using this
@@ -818,8 +821,9 @@ public class DataEditor {
 		descSubmitPanel.addStyleName("marginlessPanel");
 		descSubmitPanel.add(descSubmitField);
 		descSubmitPanel.add(descSendButton);
-		page.add(new HTML("Description:"));
+		page.add(new HTML("Description:<br>Use \\n for new lines.<br>Use \\\" for quotes.<br>Use \\\\ for backslash."));
 		page.add(descSubmitPanel);
+		page.add(descErrorLabel);
 		page.add(new HTML("<br>"));
 
 		// add handler for description update button
@@ -830,7 +834,15 @@ public class DataEditor {
 				String newDesc = descSubmitField.getText();
 				if (newDesc.equals(item.getDescription())) return;
 
+				// check for validity
+				String test = FieldVerifier.isValidDescription(newDesc);
+				if (!test.equals("")) {
+					descErrorLabel.setText(test);
+					return;
+				}
+
 				// propagate changes
+				descErrorLabel.setText("");
 				item.setDescription(newDesc);
 				StorageContainer.saveChange(menu);
 				testLabel.setText(storage.getItem("menu"));
@@ -893,7 +905,7 @@ public class DataEditor {
 		priceSubmitField.addKeyUpHandler(priceHandler);
 
 		// finally, construct a back button to back to this menu item's category page
-		final Button backButton = new Button("Go Back");
+		final Button backButton = new Button("< Go Back");
 		backButton.addStyleName("myButton");
 		page.add(backButton);
 
@@ -907,7 +919,7 @@ public class DataEditor {
 				dataEditorPan.remove(searchForCurrentContentPanel(cats, currentPage));
 				
 				// update current page in storage
-				storage.setItem("curDataPage", prevPageName);
+				storage.setItem("curDataPage", cat.getTitle());
 				
 				// mount new page
 				dataEditorPan.add(prevPage);

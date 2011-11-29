@@ -14,6 +14,7 @@ h1 {
   	text-align: center;
 }
 
+<<<<<<< HEAD
 .myButton{ 
 
 
@@ -28,6 +29,9 @@ h1 {
 }
 
 .gwt-Button { 
+=======
+.myButton { 
+>>>>>>> b112c08b9cdfb15ae81a383e386c2664fb058943
 
 
 	background: #ccc;
