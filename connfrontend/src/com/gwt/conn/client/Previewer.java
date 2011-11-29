@@ -23,8 +23,10 @@ public class Previewer {
 	public static Frame getPreviewer(Menu menu) {
 		// this widget allows web pages to be seen in an HTML iframe
 		frame.getElement().setAttribute("style", "width:100%; height:100%; border:0");
-		frame.setUrl("http://connoisseurmenu.appspot.com/preview?restaurant_id=" + storage.getItem("restID")
-			+ "&doc=" + URL.encode(storage.getItem(menu.getName()))); // encoded for HTTP
+		String url = "http://connoisseurmenu.appspot.com/preview?restaurant_id=" + storage.getItem("restID")
+				+ "&doc=" + URL.encode(storage.getItem(menu.getName()));
+		System.out.println(url);
+		frame.setUrl(url); // encoded for HTTP
 		return frame;
 	}
 	

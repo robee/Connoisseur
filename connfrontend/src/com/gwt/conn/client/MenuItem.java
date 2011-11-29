@@ -8,7 +8,7 @@ public class MenuItem {
 	private String description = "";
 	private String menu = null;
 	private String image = "";
-	private String price = null;
+	private String price = "0";
 	private String name = null;
 	
 	public MenuItem (String title) {

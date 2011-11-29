@@ -91,7 +91,7 @@ class MenuItem(db.Model):
     menu = db.ReferenceProperty(Menu, required=True)
     name = db.StringProperty(required=True)
     category = db.StringProperty()
-    price = db.FloatProperty(required=True)
+    price = db.StringProperty(required=True)
     image = db.StringProperty()
     description = db.StringProperty()
     
@@ -99,6 +99,12 @@ class MenuItem(db.Model):
     @staticmethod
     def get_by_menu(menu):
         return MenuItem.all().filter('menu =', menu).fetch(1000)
+    
+    @staticmethod
+    def delete_by_menu(menu):
+        menu_items = MenuItem.get_by_menu(menu)
+        for menu_item in menu_items:
+            menu_item.delete()
         
     @staticmethod
     def delete_by_id(i_id):
@@ -117,7 +123,7 @@ class MenuItem(db.Model):
         
     @staticmethod
     def create(name_p, menu_p, price_p=100.0, category_p="",  image_p="", description_p=""):
-        menuitem = MenuItem(menuitem_id = uuid.uuid4().hex[:16], menu=menu_p, name=name_p, price = price_p, image = image_p, description=description_p, category=category_p)
+        menuitem = MenuItem(menuitem_id = uuid.uuid4().hex[:16], menu=menu_p, name=name_p, price = str(price_p), image = image_p, description=description_p, category=category_p)
         menuitem.put()
         return menuitem
 
@@ -147,7 +153,7 @@ class UIProfile(db.Model):
         
         return True
         
-        
+       
     @staticmethod
     def get_by_id(profile_id):
         return UIProfile.all().filter('profile_id =', profile_id).get()
@@ -157,6 +163,9 @@ class UIProfile(db.Model):
         return UIProfile.all().filter('menu =', menu).get()
 
 
-
+    @staticmethod
+    def delete_by_menu(menu):
+        ui_profile = UIProfile.get_by_menu(menu)
+        ui_profile.delete()
 
 
