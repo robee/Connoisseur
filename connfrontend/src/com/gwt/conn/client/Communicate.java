@@ -91,6 +91,7 @@ public class Communicate {
 	}
 
 	public static boolean authenticate(String rest_id, String secret_key) {
+		//sync();
 		return true;
 	}
 

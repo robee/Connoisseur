@@ -16,16 +16,23 @@ public class Previewer {
 	/** Local storage for saving strings, which persist when the app is shut down.  */
 	private static final Storage storage = StorageContainer.getStorage();
 	
+	/** The iframe containing a rendered preview. */
+	private static final Frame frame = new Frame();
+	
 	/** Called when the previewer needs to be loaded. */
-	public static Frame getPreviewer(final Menu menu) {
+	public static Frame getPreviewer(Menu menu) {
 		// this widget allows web pages to be seen in an HTML iframe
-		final Frame frame = new Frame();
 		frame.getElement().setAttribute("style", "width:100%; height:100%; border:0");
 		String url = "http://connoisseurmenu.appspot.com/preview?restaurant_id=" + storage.getItem("restID")
 				+ "&doc=" + URL.encode(storage.getItem(menu.getName()));
 		System.out.println(url);
 		frame.setUrl(url); // encoded for HTTP
 		return frame;
+	}
+	
+	public static void updatePreview(Menu menu) {
+		frame.setUrl("http://connoisseurmenu.appspot.com/preview?restaurant_id=" + storage.getItem("restID")
+			+ "&doc=" + URL.encode(storage.getItem(menu.getName())));
 	}
 
 } // Previewer

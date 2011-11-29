@@ -7,7 +7,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.http.client.URL;
 import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Frame;
@@ -44,26 +43,27 @@ public class VisualEditor {
 		//RootPanel.get().add(testLabel, 0, 500);
 
 		// add styles to global widgets
-		visEditorPan.addStyleName("marginlessPanel");
-		navigationPan.addStyleName("marginPanel");
+		visEditorPan.addStyleName("contentPanel");
 		nullPage.addStyleName("marginlessPanel");
+		navigationPan.addStyleName("navigationPanel");
+		navigationPan.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 
 		// visual editor has a navigation pane that the user can modify menu fields in
 		// nullPage contains an error message saying that no internet connection exists
 		final VerticalPanel errorPan = new VerticalPanel();
-		errorPan.add(new HTML("<b>Offline Mode</b><br>No internet connection.<br>Reset Connoisseur to try again."));
+		errorPan.add(new HTML("<b>Offline Mode</b><br>No internet connection.<br>Restart Connoisseur to try again."));
 		nullPage.add(errorPan);
 		visEditorPan.add(navigationPan);
-		visEditorPan.setCellWidth(navigationPan, "33.3%");
+		visEditorPan.setCellWidth(navigationPan, "0%");
 
 		// if there is internet, load the previewer
 		if (internet) {
 			visEditorPan.add(previewer);
-			visEditorPan.setCellWidth(previewer, "66.7%");
+			visEditorPan.setCellWidth(previewer, "100%");
 		}
 		else { // otherwise load the null page
 			visEditorPan.add(nullPage);
-			visEditorPan.setCellWidth(nullPage, "66.7%");
+			visEditorPan.setCellWidth(nullPage, "100%");
 		}
 
 		// first, construct a horizontal panel wherein the menu's logo text or image URL can be modified
@@ -73,10 +73,14 @@ public class VisualEditor {
 		logoSendButton.addStyleName("myButton");
 		final TextBox logoSubmitField = new TextBox(); // user can input text using this
 		logoSubmitField.setText(menu.getLogo()); // default text to be seen on load
-		navigationPan.add(new HTML("Restaurant Name (regular text) or<br>Logo Image (URL starting with http://)"));
+		navigationPan.add(new HTML("Restaurant Name (regular text):<br><i>or</i><br>Logo (URL starting with \"http://\"):"));
 		navigationPan.add(logoSubmitField);
 		navigationPan.add(logoErrorLabel);
-		navigationPan.add(logoSendButton);
+		final VerticalPanel logoPan = new VerticalPanel();
+		logoPan.setStyleName("marginlessPanel");
+		logoPan.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+		logoPan.add(logoSendButton);
+		navigationPan.add(logoPan);
 		navigationPan.add(new HTML("<br>"));
 
 		// add handler for image update button
@@ -131,8 +135,12 @@ public class VisualEditor {
 		colorList.addItem("black"); // 0
 		colorList.addItem("white"); // 1
 		colorList.addItem("red"); // 2
-		navigationPan.add(new HTML("Color Scheme:"));
-		navigationPan.add(colorList);
+		final HorizontalPanel colorPan = new HorizontalPanel();
+		colorPan.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+		colorPan.addStyleName("marginPanel");
+		colorPan.add(new HTML("Color Scheme:&nbsp"));
+		colorPan.add(colorList);
+		navigationPan.add(colorPan);
 		navigationPan.add(new HTML("<br>"));
 
 		// add handler for color change
@@ -164,8 +172,12 @@ public class VisualEditor {
 		final ListBox tempList = new ListBox();
 		tempList.addItem("classy"); // 0
 		tempList.addItem("modern"); // 1
-		navigationPan.add(new HTML("Template:"));
-		navigationPan.add(tempList);
+		final HorizontalPanel tempPan = new HorizontalPanel();
+		tempPan.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+		tempPan.addStyleName("marginPanel");
+		tempPan.add(new HTML("Template:&nbsp"));
+		tempPan.add(tempList);
+		navigationPan.add(tempPan);
 		navigationPan.add(new HTML("<br>"));
 
 		// add handler for template change
@@ -194,32 +206,25 @@ public class VisualEditor {
 		// finally, if there's an internet connection, construct a refresh previewer button
 		if (internet) {
 			// finally, construct a refresh button button for the previewer
-			final Button refreshButton = new Button("Refresh Preview");
-			refreshButton.addStyleName("myButton");
-			navigationPan.add(refreshButton);
+			final Button fullButton = new Button("Fullscreen");
+			fullButton.addStyleName("myButton");
+			final HorizontalPanel fullPan = new HorizontalPanel();
+			fullPan.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+			fullPan.addStyleName("marginPanel");
+			fullPan.add(new HTML("Preview:&nbsp"));
+			fullPan.add(fullButton);
+			navigationPan.add(fullPan);
 
 			// add handler for refresh button
-			class RefreshHandler implements ClickHandler {
+			class FullscreenHandler implements ClickHandler {
 				// fired when the user clicks go back
 				public void onClick(ClickEvent event) {
-					// check for internet connection again in case it was lost
-					boolean internetStill = Communicate.hasInternet();
-					if (internetStill) {
-						previewer.setUrl("http://connoisseurmenu.appspot.com/preview?restaurant_id=" +
-								storage.getItem("restID") + "&doc=" + URL.encode(storage.getItem(menu.getName())));
-					}
-					else {
-						visEditorPan.remove(previewer);
-						visEditorPan.add(nullPage);
-						visEditorPan.setCellWidth(nullPage, "66.7%");
-						navigationPan.remove(refreshButton);
-						Dashboard.showNoInternetError();
-					}
+					Dashboard.fullscreen(previewer.getUrl());
 				}
-			} // RefreshHandler
-			final RefreshHandler refreshHandler = new RefreshHandler();
-			refreshButton.addClickHandler(refreshHandler);
-		}
+			} // FullscreenHandler
+			final FullscreenHandler fullHandler = new FullscreenHandler();
+			fullButton.addClickHandler(fullHandler);
+		} // if internet
 		
 		return visEditorPan;
 	} // end getVisualEditor

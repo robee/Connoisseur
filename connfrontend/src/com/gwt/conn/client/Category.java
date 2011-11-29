@@ -60,10 +60,10 @@ public class Category {
 		StringBuilder sb = new StringBuilder();
 		String commaPrefix = "";
 		
-		sb.append("\"" + getTitle() + "\": [");
+		sb.append("\"" + getTitle() + "\":[");
 		for (MenuItem me : menuEntries) {
 			sb.append(commaPrefix);
-			commaPrefix = ", ";
+			commaPrefix = ",";
 			sb.append(me.generateJSON());
 		}
 		sb.append("]");

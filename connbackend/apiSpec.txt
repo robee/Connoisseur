@@ -153,28 +153,47 @@ SAMPLE DOC
     "restaurant_name": "Updated TEST", 
     "menuitems": 
     {
-            "Drink": 
+            "Soup": 
             [
                 {
-                    "category": "Drink", 
+                    "category": "Soup", 
                     "menuitem_id": "6cfb79454bc2446d", 
-                    "description": "UPDATED", 
+                    "description": "toasted pumpkin seeds and chili toasted infused oil", 
                     "menu": null, 
-                    "image": "This is a sample menu Item", 
-                    "price": 11.0, 
-                    "name": "Starter Item 2"
+                    "image": "http://connoisseurmenu.appspot.com/static/img/puree.jpg", 
+                    "price": 6.25, 
+                    "name": "Spiced Pumpkin Puree"
+                },
+                       {
+                    "category": "Soup", 
+                    "menuitem_id": "6cfb79454bc2446d", 
+                    "description": "toasted pumpkin seeds and chili toasted infused oil", 
+                    "menu": null, 
+                    "image": "http://connoisseurmenu.appspot.com/static/img/puree.jpg", 
+                    "price": 6.25, 
+                    "name": "Spiced Pumpkin Puree"
+                },
+                       {
+                    "category": "Soup", 
+                    "menuitem_id": "6cfb79454bc2446d", 
+                    "description": "toasted pumpkin seeds and chili toasted infused oil", 
+                    "menu": null, 
+                    "image": "http://connoisseurmenu.appspot.com/static/img/puree.jpg", 
+                    "price": 6.25, 
+                    "name": "Spiced Pumpkin Puree"
                 }
+                
             ], 
-            "Appy": 
+            "Salad": 
             [
                 {
                     "category": "Updated Appy", 
                     "menuitem_id": "18aedbf42a8b41ad", 
                     "description": "", 
                     "menu": null, 
-                    "image": "Updated This is a sample menu Item", 
-                    "price": 1000.0, 
-                    "name": "Updated Starter Item 1"
+                    "image": "http://connoisseurmenu.appspot.com/static/img/arugula.jpg", 
+                    "price": 5.95, 
+                    "name": "Arugula Salad"
                 }
             ]
     }

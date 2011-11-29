@@ -47,6 +47,9 @@ public class Dashboard {
 	 */
 	private static final Storage storage = StorageContainer.getStorage();
 
+	/** This is the editor UI. */
+	private static final VerticalPanel dashboardPan = new VerticalPanel();
+	
 	/** The message displayed to the user when there is a connection problem. */
 
 	private static final String SERVER_ERROR = "<font color=red>A connection error occurred while attempting to contact the server.<br>"
@@ -67,9 +70,11 @@ public class Dashboard {
 		// buttons
 		storage.setItem("curDashPage", "vis"); // default to visual editor first
 		// initialize panels for widgets to be placed in
+
 		final VerticalPanel dashboardPan = new VerticalPanel();
 		dashboardPan.addStyleName("marginlessPanel"); // interacts with
 														// Connfrontend.css
+
 		dashboardPan.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		dashboardPan.setSize("100%", "100%");
 		final HorizontalPanel buttonPan = new HorizontalPanel();
@@ -141,6 +146,7 @@ public class Dashboard {
 			buttonPan.add(pushButton);
 			class PushHandler implements ClickHandler {
 				public void onClick(ClickEvent event) {
+
 					boolean internetStill = Communicate.hasInternet();
 					if (internetStill)
 						Communicate.sync(menu.getName(),
@@ -195,6 +201,33 @@ public class Dashboard {
 		errorButton.addClickHandler(errorHandler);
 		errorButton.addKeyUpHandler(errorHandler);
 	} // showNoInternetError
+
+	public static void fullscreen(String url) {
+		// this button closes the fullscreen preview
+		final Button quitButton = new Button("x");
+		final Frame fullPreview = new Frame();
+		fullPreview.getElement().setAttribute("style", "width:100%; height:100%; border:0");
+		fullPreview.setUrl(url);
+		
+		// modify UI
+		RootPanel.get().remove(dashboardPan);
+		RootPanel.get().add(fullPreview, 0, 0);
+		RootPanel.get().add(quitButton, 0, 0);
+
+		// handler for quitButton
+		class QuitHandler implements ClickHandler {
+			public void onClick(ClickEvent event) {
+				// reset UI
+				RootPanel.get().remove(fullPreview);
+				RootPanel.get().remove(quitButton);
+				RootPanel.get().add(dashboardPan, 0, 0);
+			}
+		}
+		final QuitHandler quitHandler = new QuitHandler();
+		quitButton.addClickHandler(quitHandler);
+	}
+	
+/* ************************************* UNUSED/DEPRECATED CODE BELOW ************************************* */
 
 	/*
 	 *  ************************************* UNUSED/DEPRECATED CODE BELOW

@@ -1,5 +1,5 @@
 	<!DOCTYPE html>
-<html manifest="../static/css/example.appcache">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
@@ -31,15 +31,16 @@
 	}
 	
 	#logo {
-		background-color:white;
+		background-color:#b42038;
+		color: white;
 		width: 150px;
-		height:38px; 
 		position:absolute; 
 		text-align:center;
 		font-family: 'Rokkitt', serif;
 		font-style: bold;
 		font-size:22px;
-		line-height:200%;	
+		line-height:200%;
+		text-shadow:0 -1px -0 rgba(0,1,0,0.5);	
 	}
 	
 	#category {
@@ -70,10 +71,7 @@
 	}
 	
 	
-	p {
-		margin-bottom:1.5em;
-		line-height:150%;
-	}
+
 	
 	header,nav,aside,section,article {
 		display:block;
@@ -85,10 +83,9 @@
 	}
 	
 	.item{
-		margin-top: 5%;
 		font-size: 26px;
 		text-align: center;
-		margin-bottom: 4px;
+		font-size: 24px;
 	}
 	
 	#page {
@@ -192,7 +189,8 @@
 	#navScroller > li {
 		font-family: 'Rokkitt', serif;
 		font-size: 18px;
-		height:30px; line-height:30px;
+		height:30px; 
+		line-height:30px;
 	}
 	
 	#contentScroller {
@@ -292,20 +290,25 @@
 	
 	.description{
 		text-align: center;
-		font-size: 22px;
+		font-size: 20px;
 	}
 
 	#title{
 		text-align:center;
-		font-family: 'Rokkitt', serif;
 		font-style: bold;
-		font-size:42px;
+		font-size:82px;
+		font-family: 'Tangerine', serif;
 	}
 
 	{% if ui_profile.color == "white" %}
 		
 		#category{
 			background-color:#ffffff;
+		}
+		
+		#logo{
+			background-color:#ffffff;
+			color: #000000;
 		}
 		
 		#category a {
@@ -316,7 +319,7 @@
 	
 	{% else%}
 	 	{%if ui_profile.color == "black" %}
-			#category{
+			#category, #logo{
 				background-color:#20418E;
 			}
 		
@@ -332,12 +335,12 @@
 			#navWrapper{
 				background-color: #424242;
 				
-		
 			}
 			
 			#navWrapper a, .item, .price, .description, #title{
 				color: #FFF;
 			}
+			
 			
 			
 		{% endif %}
@@ -359,11 +362,18 @@
 			html,body {
 			height:100%;
 		}
+		
+			p {
+		margin-bottom:1.5em;
+		line-height:150%;
+	}
 	</style>
 	<div id="page">
 	<div id="logo">
 		{% if "http" in ui_profile.logo_url %}
-			<img height="100%" style="display: block;   margin-left: auto;   margin-right: auto;" src="{{ui_profile.logo_url}}"/>			
+			<img height="100%" style="display: block;   margin-left: auto;   margin-right: auto;" src="{{ui_profile.logo_url}}"/>	
+		{% else %}
+			{{ui_profile.logo_url}}		
 		{% endif %}
 	</div>
 	
@@ -388,7 +398,7 @@
 						<li><a href="javascript:scrollToItem('{{m.menuitem_id}}')">{{m.name}}</a></li>
 
 					{% endfor %}
-					<li></li>
+					<li><a>&nbsp</a></li>
 				{% endfor %}
 			</ul>
 		</nav>
@@ -478,28 +488,40 @@
 
 	{% else %}
 	
-	
+		  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine">
+		  <link href='http://fonts.googleapis.com/css?family=Niconne' rel='stylesheet' type='text/css'>
 		
 		{% if "http" in ui_profile.logo_url %}
-			<img height="100%" style="display: block;  width:10%; margin-left: auto;   margin-right: auto;" src="{{ui_profile.logo_url}}"/>
+			<img height="10%" style="display: block;  margin-left: auto; margin-top:10px; margin-right: auto; width:10%" src="{{ui_profile.logo_url}}"/>
 		{% endif %}	
 		<div id="title">{{restaurant_name}}</div>
+			{% if ui_profile.color == "red" %}
+								<img style="width:80%; height:2px; margin-left:10%" src = "../static/img/hred.gif"/>
+						{%else%}
+								<img style="width:80%; height:2px; margin-left:10%" src = "../static/img/hr.gif"/>
+					{% endif %}
+		
 		
 		
 		<div id="wrapper" style="width: 95%">
 			<ul id="thelist">
 				{%for category in menuitems.items %}
 					<li id="{{category.menuitem_id}}">
-						<p style="text-decoration:underline" class="item">{{category.0}}</p>
+						<p style="text-decoration:underline; font-size:28px" class="item">{{category.0}}</p>
 					</li>
 					{% for item in category.1%}
 						<li id="{{item.menuitem_id}}">
 							<p class="item">{{item.name}}</p>
 							<p class="description">{{item.description}}</p>
 							<p class="price">{{item.price}}</p>
-							<img style="width:60%; margin-left:20%" src = "../static/img/hr.gif"/>
+							
 						</li>		
 					{% endfor %}
+						{% if ui_profile.color == "red" %}
+							<img style="width:60%; height:1px; margin-left:20%" src = "../static/img/hred.gif"/>
+						{%else%}
+							<img style="width:60%; height:1px; margin-left:20%" src = "../static/img/hr.gif"/>
+					{% endif %}
 				{% endfor %}
 
 			</ul>
@@ -516,7 +538,10 @@
 			
 			{% if ui_profile.color == "red" %}
 				body{
-					background: #E3E3E3;	
+					background: #FFFFFF;	
+				}
+				#wrapper{
+				background: #FFFFFF;	
 				}
 			
 			{% endif %}
@@ -528,8 +553,20 @@
 				}
 			{% endif %}
 
-		
+			 .item, .price, .description{
+			 	
+				font-family: 'Niconne', cursive;
+			}
 			
+			.item{
+				margin-top: 1.5em;
+			}
+			
+			.price{
+				margin-bottom: 1.5em;
+			}
+			
+		
 		</style>
 		
 	{% endif %}
