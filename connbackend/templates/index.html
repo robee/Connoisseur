@@ -15,7 +15,6 @@
 <link href='http://fonts.googleapis.com/css?family=Corben:400,700|Rokkitt:400,700' rel='stylesheet' type='text/css'>
 <style type="text/css" media="all">
 
-	
 	body,ul,li,header,nav,aside,section,article,p {
 		padding:0;
 		margin:0;
@@ -371,7 +370,7 @@
 	<div id="page">
 	<div id="logo">
 		{% if "http" in ui_profile.logo_url %}
-			<img height="100%" style="display: block;   margin-left: auto;   margin-right: auto;" src="{{ui_profile.logo_url}}"/>	
+			<img height="40px" style="display: block;   margin-left: auto;   margin-right: auto;" src="{{ui_profile.logo_url}}"/>	
 		{% else %}
 			{{ui_profile.logo_url}}		
 		{% endif %}
@@ -395,7 +394,7 @@
 					<li id="{{category.0}}"><a><b>{{category.0}}</b></a></li>
 					{% for m in category.1 %}
 
-						<li><a href="javascript:scrollToItem('{{m.menuitem_id}}')">{{m.name}}</a></li>
+						<li><a href="javascript:scrollToItem('a{{m.menuitem_id}}')">{{m.name}}</a></li>
 
 					{% endfor %}
 					<li><a>&nbsp</a></li>
@@ -409,7 +408,7 @@
 			<ul id="thelist">
 				{%for category in menuitems.items %}
 					{% for item in category.1 %}
-					<li id="{{item.menuitem_id}}">
+					<li id="a{{item.menuitem_id}}">
 							<div>
 								<p class="item">{{item.name}}</p>
 								{%if item.image %}
@@ -436,7 +435,7 @@
 			items = [
 			{% for category in menuitems.items %}
 				{% for item in category.1 %}
-					'{{item.menuitem_id}}',
+					'a{{item.menuitem_id}}',
 				{% endfor %}
 			{% endfor %}
 			'category'
@@ -506,11 +505,11 @@
 		<div id="wrapper" style="width: 95%">
 			<ul id="thelist">
 				{%for category in menuitems.items %}
-					<li id="{{category.menuitem_id}}">
+					<li id="a{{category.menuitem_id}}">
 						<p style="text-decoration:underline; font-size:28px" class="item">{{category.0}}</p>
 					</li>
 					{% for item in category.1%}
-						<li id="{{item.menuitem_id}}">
+						<li id="a{{item.menuitem_id}}">
 							<p class="item">{{item.name}}</p>
 							<p class="description">{{item.description}}</p>
 							<p class="price">{{item.price}}</p>
