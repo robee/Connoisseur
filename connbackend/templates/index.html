@@ -11,9 +11,11 @@
 <script type="text/javascript" src="../static/js/jquery-1.6.4.min.js"></script>
 
 
+
 <link href='http://fonts.googleapis.com/css?family=Corben:400,700|Rokkitt:400,700' rel='stylesheet' type='text/css'>
 <style type="text/css" media="all">
 
+	
 	body,ul,li,header,nav,aside,section,article,p {
 		padding:0;
 		margin:0;
@@ -491,8 +493,10 @@
 		
 		{% if "http" in ui_profile.logo_url %}
 			<img height="10%" style="display: block;  margin-left: auto; margin-top:10px; margin-right: auto; width:10%" src="{{ui_profile.logo_url}}"/>
+		{% else %}	
+			<div style="margin-top:25px" id="title">{{ui_profile.logo_url}}</div>
 		{% endif %}	
-		<div id="title">{{restaurant_name}}</div>
+		
 			{% if ui_profile.color == "red" %}
 								<img style="width:80%; height:2px; margin-left:10%" src = "../static/img/hred.gif"/>
 						{%else%}
@@ -501,7 +505,7 @@
 		
 		
 		
-		<div id="wrapper" style="width: 95%">
+		<div id="wrapper" style="width: 95%; margin-top:25px">
 			<ul id="thelist">
 				{%for category in menuitems.items %}
 					<li id="a{{category.menuitem_id}}">
@@ -528,8 +532,11 @@
 		<style>
 		
 			{% if ui_profile.color == "white" %}
-				body{
-					background: #E3E3E3;	
+					body{
+					background: #FFFFFF;	
+				}
+				#wrapper{
+				background: #FFFFFF;	
 				}
 			
 			{% endif %}
