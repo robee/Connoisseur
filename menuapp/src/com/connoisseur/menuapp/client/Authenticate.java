@@ -28,7 +28,7 @@ public class Authenticate {
 	
 	/** This is essentially the main method for the menu app. */
 	public static void go() {
-		//storage.clear(); // uncomment to completely reset app
+		storage.clear(); // uncomment to completely reset app
 		
 		final DialogBox startupBox = new DialogBox(); // movable box that contains widgets
 		startupBox.setAnimationEnabled(true);

@@ -1,3 +1,2 @@
 # Module connfrontend
 # RPC service class, partial path of RPC policy file
-com.gwt.conn.client.GreetingService, 974A0791C34B779B0867B5B10924E7CE.gwt.rpc
